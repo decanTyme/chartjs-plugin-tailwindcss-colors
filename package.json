@@ -12,8 +12,12 @@
     "dist"
   ],
   "scripts": {
+    "prepare": "cross-env NODE_ENV=production yarn build",
     "watch": "parcel watch",
+    "dev": "concurrently \"parcel watch\" \"yarn test:dev\"",
     "build": "parcel build",
+    "test": "jest",
+    "test:dev": "jest --watch",
     "format:checkonly": "prettier . -c",
     "format": "prettier . -w",
     "lint": "eslint .",
@@ -33,20 +37,38 @@
     "tailwindcss",
     "colors"
   ],
+  "dependencies": {
+    "color-name": "^1.1.4",
+    "tiny-invariant": "^1.2.0"
+  },
   "devDependencies": {
     "@parcel/packager-ts": "^2.4.1",
     "@parcel/transformer-typescript-types": "^2.4.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
+    "@types/color-name": "^1.1.1",
+    "@types/jest": "^27.4.1",
+    "@types/tailwindcss": "^3.0.10",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",
+    "canvas": "^2.9.1",
+    "chart.js": "^3.7.1",
+    "concurrently": "^7.1.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.13.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
+    "jest": "^27.5.1",
     "parcel": "^2.4.1",
     "prettier": "^2.6.2",
     "semantic-release": "^19.0.2",
+    "tailwindcss": "^3.0.24",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
+  },
+  "peerDependencies": {
+    "chart.js": "^3.7.1",
+    "tailwindcss": "^3.0.24"
   }
 }
