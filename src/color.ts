@@ -35,7 +35,7 @@ export const flattenColorPalette = (
     )
   )
 
-export function parseColor(value: string | undefined): Color | undefined {
+export function parseColor(value: string): Color | undefined {
   if (!value) return undefined
 
   value = value.trim()

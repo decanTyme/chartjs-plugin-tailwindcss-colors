@@ -1,9 +1,16 @@
-export type StringIndexable<T = string> = { readonly [key: string]: T }
+export type Maybe<T> = T | undefined | null
+export type MaybeArray<T> = T | Array<T>
 
-export interface ParsableOptions extends StringIndexable {
+export interface ParsableOptions extends Record<string, MaybeArray<string>> {
   color: string
   borderColor: string
-  backgroundColor: string
+  backgroundColor: MaybeArray<string>
+  hoverBorderColor: string
+  hoverBackgroundColor: string
+  pointBackgroundColor: string
+  pointBorderColor: string
+  pointHoverBackgroundColor: string
+  pointHoverBorderColor: string
 }
 
 export type Color = {
