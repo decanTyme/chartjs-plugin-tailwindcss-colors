@@ -39,6 +39,8 @@
   ],
   "dependencies": {
     "color-name": "^1.1.4",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
@@ -48,6 +50,8 @@
     "@semantic-release/git": "^10.0.1",
     "@types/color-name": "^1.1.1",
     "@types/jest": "^27.4.1",
+    "@types/lodash.get": "^4.4.7",
+    "@types/lodash.set": "^4.3.7",
     "@types/tailwindcss": "^3.0.10",
     "@typescript-eslint/eslint-plugin": "^5.20.0",
     "@typescript-eslint/parser": "^5.20.0",

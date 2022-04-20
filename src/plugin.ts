@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { Plugin } from "chart.js"
+import set from "lodash.set"
+import get from "lodash.get"
 import resolveConfig from "tailwindcss/resolveConfig"
 import { TailwindConfig } from "tailwindcss/tailwind-config"
 import invariant from "tiny-invariant"
@@ -60,26 +62,23 @@ const twColorsPlugin = (
         "pointBackgroundColor",
         "pointHoverBackgroundColor",
         "pointHoverBorderColor",
+        "fill.above",
+        "fill.below",
       ]
 
-      // Ignoring some typings here since Chart.js's typings
-      // itself has its own problems (i.e., too broad),
-      // or maybe I overlooked something?
       parsableOpts.forEach((parsableOpt) => {
         const defaultOpt = defaults[parsableOpt]
         const chartOpt = chart.options[<keyof typeof chart.options>parsableOpt]
 
         chart.data.datasets?.forEach((dataset) => {
-          const datasetOpt =
-            // @ts-ignore - ts(7053)
-            dataset[<keyof typeof chart.data.datasets>parsableOpt]
-
-          // @ts-ignore - ts(7053)
-          dataset[<keyof typeof chart.data.datasets>parsableOpt] =
+          set(
+            dataset,
+            parsableOpt,
             parseTailwindColor(
-              datasetOpt ||
+              get(dataset, parsableOpt) ||
                 (chartOpt?.toString().includes("-") ? chartOpt : defaultOpt)
             )
+          )
         })
       })
     },
