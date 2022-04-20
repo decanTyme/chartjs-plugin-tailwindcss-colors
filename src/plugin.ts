@@ -4,7 +4,7 @@ import resolveConfig from "tailwindcss/resolveConfig"
 import { TailwindConfig } from "tailwindcss/tailwind-config"
 import invariant from "tiny-invariant"
 import { flattenColorPalette, formatColor, parseColor } from "./color"
-import { ParsableOptions } from "./types"
+import { Maybe, MaybeArray, ParsableOptions } from "./types"
 import { hasAlpha, twColorValidator } from "./utils"
 
 const twColorsPlugin = (
@@ -22,8 +22,8 @@ const twColorsPlugin = (
   const isValidTwColor = twColorValidator(flattenedColorPalette)
 
   const parseTailwindColor = (
-    name: string | Array<string>
-  ): string | Array<string> | undefined => {
+    name: MaybeArray<string>
+  ): Maybe<MaybeArray<string>> => {
     if (!name) return undefined
 
     if (Array.isArray(name))
@@ -54,8 +54,10 @@ const twColorsPlugin = (
         "color",
         "borderColor",
         "backgroundColor",
-        "pointBackgroundColor",
+        "hoverBorderColor",
+        "hoverBackgroundColor",
         "pointBorderColor",
+        "pointBackgroundColor",
         "pointHoverBackgroundColor",
         "pointHoverBorderColor",
       ]
