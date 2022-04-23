@@ -76,7 +76,7 @@ const twColorsPlugin = (
             parsableOpt,
             parseTailwindColor(
               get(dataset, parsableOpt) ||
-                (chartOpt?.toString().includes("-") ? chartOpt : defaultOpt)
+                (isValidTwColor(<string>chartOpt) ? chartOpt : defaultOpt)
             )
           )
         })
