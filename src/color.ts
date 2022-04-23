@@ -7,7 +7,7 @@ import {
   TailwindColorGroup,
   TailwindThemeColors,
 } from "tailwindcss/tailwind-config"
-import { Color } from "./types"
+import { Color, Maybe } from "./types"
 
 const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
@@ -35,7 +35,7 @@ export const flattenColorPalette = (
     )
   )
 
-export function parseColor(value: string): Color | undefined {
+export function parseColor(value: string): Maybe<Color> {
   if (!value) return undefined
 
   value = value.trim()
