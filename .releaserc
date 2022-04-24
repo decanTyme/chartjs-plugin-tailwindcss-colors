@@ -23,6 +23,27 @@
     ],
     "@semantic-release/npm",
     [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/main.js",
+            "label": "CommonJS distribution",
+            "name": "chartjs-plugin-tailwindcss-colors-v${nextRelease.gitTag}.js"
+          },
+          {
+            "path": "dist/main.esm.js",
+            "label": "ESM distribution",
+            "name": "chartjs-plugin-tailwindcss-colors-v${nextRelease.gitTag}.esm.js"
+          },
+          {
+            "path": "dist/types.d.ts",
+            "label": "Types"
+          }
+        ]
+      }
+    ],
+    [
       "@semantic-release/git",
       {
         "assets": [
@@ -30,7 +51,7 @@
           "yarn.lock",
           "docs/CHANGELOG.md"
         ],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        "message": "chore(release): v${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
   ]
