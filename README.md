@@ -38,7 +38,7 @@ const chart = new Chart(ctx, config)
 
 And that's about it, you're good to go!
 
-> **NOTE**: Only tested with vanilla JS and `react-chartjs-2` using `chart@3.7.1` as of initial release. If you encounter any problems with other frameworks and versions of Chart.js, please feel free to drop by or maybe submit to the [issue tracker](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues)!
+> **NOTE**: Only tested with vanilla JS and `react-chartjs-2` using `chart.js@3.7.1` as of initial release. If you encounter any problems with other frameworks and versions of Chart.js, please feel free to drop by or maybe submit to the [issue tracker](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues)!
 
 ## Why did I even make this?
 
