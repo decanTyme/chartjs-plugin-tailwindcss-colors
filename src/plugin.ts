@@ -74,17 +74,14 @@ const twColorsPlugin = (
 
       parsableOpts.forEach((parsableOpt) => {
         const defaultOpt = defaults[parsableOpt]
-        const chartOpt = chart.options[<keyof typeof chart.options>parsableOpt]
+        const chartOpt = get(chart.options, parsableOpt)
 
         chart.data.datasets?.forEach((dataset) => {
-          set(
-            dataset,
-            parsableOpt,
-            parseTailwindColor(
-              get(dataset, parsableOpt) ||
-                (isValidTwColor(<string>chartOpt) ? chartOpt : defaultOpt)
-            )
-          )
+          const color =
+            get(dataset, parsableOpt) ||
+            (isValidTwColor(<string>chartOpt) ? chartOpt : defaultOpt)
+
+          set(dataset, parsableOpt, parseTailwindColor(color))
         })
       })
     },

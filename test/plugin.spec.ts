@@ -54,7 +54,7 @@ describe("Plugin works as expected", () => {
     chart.destroy()
   })
 
-  test("If it correctly parses valid colors", () => {
+  test("If it correctly parses valid default colors", () => {
     expect(chart.data.datasets[0].borderColor).toEqual("rgb(239 68 68)")
   })
 
