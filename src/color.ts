@@ -93,7 +93,7 @@ export function parseColor(value: string): Maybe<Color> {
   return undefined
 }
 
-export function formatColor({ mode, color, alpha }: Partial<Color>) {
+export function formatColor({ mode, color, alpha }: Color) {
   if (!color) return undefined
   return `${mode}(${color?.join(" ")}${alpha ? ` / ${alpha}` : ""})`
 }
