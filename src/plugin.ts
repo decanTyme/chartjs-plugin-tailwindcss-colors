@@ -34,8 +34,12 @@ const twColorsPlugin = (
     if (hasAlpha(name)) {
       const [color, alpha] = name.split("/")
 
+      const parsedColor = parseColor(<string>parseTailwindColor(color))
+
+      if (!parsedColor) return undefined
+
       return formatColor({
-        ...parseColor(<string>parseTailwindColor(color)),
+        ...parsedColor,
         alpha: parseInt(alpha, 10) / 100,
       })
     }
@@ -44,9 +48,11 @@ const twColorsPlugin = (
     // (i.e., hex or rgb forms) should be returned as-is
     if (!isValidTwColor(name)) return name
 
-    return formatColor({
-      ...parseColor(flattenedColorPalette[name]),
-    })
+    const parsedColor = parseColor(flattenedColorPalette[name])
+
+    if (!parsedColor) return undefined
+
+    return formatColor(parsedColor)
   }
 
   return {
