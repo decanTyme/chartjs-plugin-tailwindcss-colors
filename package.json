@@ -25,7 +25,7 @@
     "stylecheck": "yarn format:checkonly && yarn lint",
     "stylefix": "yarn format && yarn lint:fix"
   },
-  "homepage": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors",
+  "homepage": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors#readme",
   "bugs": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues",
   "repository": {
     "type": "git",
