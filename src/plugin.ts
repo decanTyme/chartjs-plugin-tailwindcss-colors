@@ -57,7 +57,7 @@ const twColorsPlugin = (
 
   return {
     id: "tailwindcss-colors",
-    beforeInit: (chart) => {
+    afterInit: (chart) => {
       const parsableOpts = [
         "color",
         "borderColor",
@@ -70,6 +70,7 @@ const twColorsPlugin = (
         "pointHoverBorderColor",
         "fill.above",
         "fill.below",
+        "fill",
       ]
 
       parsableOpts.forEach((parsableOpt) => {
@@ -81,7 +82,13 @@ const twColorsPlugin = (
             get(dataset, parsableOpt) ||
             (isValidTwColor(<string>chartOpt) ? chartOpt : defaultOpt)
 
-          set(dataset, parsableOpt, parseTailwindColor(color))
+          if (color) {
+            if (typeof color === "boolean") {
+              // Manually set for boolean fill option values,
+              // otherwise fill won't work
+              set(dataset, parsableOpt, { target: "origin" })
+            } else set(dataset, parsableOpt, parseTailwindColor(color))
+          }
         })
       })
     },
