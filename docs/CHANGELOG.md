@@ -1,3 +1,10 @@
+# [1.0.0-alpha.4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2022-05-11)
+
+
+### Bug Fixes
+
+* **plugin:** Manually set fill target for boolean fill values ([5c0729d](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/5c0729d4231fd4ea1cc043bf82334a1a616c39d7))
+
 # [1.0.0-alpha.3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.2...v1.0.0-alpha.3) (2022-04-24)
 
 
