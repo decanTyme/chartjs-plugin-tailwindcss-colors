@@ -1,3 +1,10 @@
+# [1.0.0-alpha.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2022-06-04)
+
+
+### Bug Fixes
+
+* **plugin:** use `beforeUpdate` hook for subsequent rerender parsing ([97f3fdc](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/97f3fdca428fd503991c6e6ec27e102eebc400f8))
+
 # [1.0.0-alpha.4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.3...v1.0.0-alpha.4) (2022-05-11)
 
 

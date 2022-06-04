@@ -1,6 +1,6 @@
 {
   "name": "chartjs-plugin-tailwindcss-colors",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "author": "Danry Parens Patriae Ague <ague.danryparenspatriae@gmail.com>",
   "description": "Colorize your Chart.js components using TailwindCSS!",
   "license": "MIT",
