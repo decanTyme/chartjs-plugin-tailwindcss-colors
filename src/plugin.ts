@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { Plugin } from "chart.js"
+import type { Chart, Plugin } from "chart.js"
 import set from "lodash.set"
 import get from "lodash.get"
 import resolveConfig from "tailwindcss/resolveConfig"
@@ -55,43 +55,40 @@ const twColorsPlugin = (
     return formatColor(parsedColor)
   }
 
+  const plugin = (chart: Chart) => {
+    const parsableOpts = [
+      "color",
+      "borderColor",
+      "backgroundColor",
+      "hoverBorderColor",
+      "hoverBackgroundColor",
+      "pointBorderColor",
+      "pointBackgroundColor",
+      "pointHoverBackgroundColor",
+      "pointHoverBorderColor",
+      "fill.above",
+      "fill.below",
+      "fill",
+    ]
+
+    parsableOpts.forEach((parsableOpt) => {
+      const defaultOpt = defaults[parsableOpt]
+      const chartOpt = get(chart.options, parsableOpt)
+
+      chart.data.datasets?.forEach((dataset) => {
+        const color =
+          get(dataset, parsableOpt) ||
+          (isValidTwColor(chartOpt) ? chartOpt : defaultOpt)
+
+        if (color) set(dataset, parsableOpt, parseTailwindColor(color))
+      })
+    })
+  }
+
   return {
     id: "tailwindcss-colors",
-    afterInit: (chart) => {
-      const parsableOpts = [
-        "color",
-        "borderColor",
-        "backgroundColor",
-        "hoverBorderColor",
-        "hoverBackgroundColor",
-        "pointBorderColor",
-        "pointBackgroundColor",
-        "pointHoverBackgroundColor",
-        "pointHoverBorderColor",
-        "fill.above",
-        "fill.below",
-        "fill",
-      ]
-
-      parsableOpts.forEach((parsableOpt) => {
-        const defaultOpt = defaults[parsableOpt]
-        const chartOpt = get(chart.options, parsableOpt)
-
-        chart.data.datasets?.forEach((dataset) => {
-          const color =
-            get(dataset, parsableOpt) ||
-            (isValidTwColor(<string>chartOpt) ? chartOpt : defaultOpt)
-
-          if (color) {
-            if (typeof color === "boolean") {
-              // Manually set for boolean fill option values,
-              // otherwise fill won't work
-              set(dataset, parsableOpt, { target: "origin" })
-            } else set(dataset, parsableOpt, parseTailwindColor(color))
-          }
-        })
-      })
-    },
+    beforeInit: plugin,
+    beforeUpdate: plugin,
   }
 }
 
