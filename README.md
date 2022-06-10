@@ -2,6 +2,8 @@
 
 ![yarn-current](https://img.shields.io/badge/Yarn-v1-blue) ![npm peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js) ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors) [![npm (latest)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors/alpha)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/latest) [![CI](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml)
 
+<p align="center">⚠️ This project is still under development ⚠️</p>
+
 > Colorize your [Chart.js](https://www.chartjs.org/) components using [TailwindCSS](https://tailwindcss.com/)!
 
 This plugin integrates your existing TailwindCSS colors configuration so you can continue to use it on your Chart.js components, without the hassle.
