@@ -12,7 +12,8 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "cross-env NODE_ENV=production yarn build",
+    "prepare": "yarn test",
+    "prepublishOnly": "cross-env NODE_ENV=production yarn build",
     "watch": "parcel watch",
     "dev": "concurrently \"parcel watch\" \"yarn test:dev\"",
     "build": "parcel build",
@@ -49,7 +50,7 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/color-name": "^1.1.1",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^29.2.6",
     "@types/lodash.get": "^4.4.7",
     "@types/lodash.set": "^4.3.7",
     "@types/tailwindcss": "^3.0.10",
@@ -63,12 +64,13 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "jest": "^27.5.1",
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1",
     "parcel": "^2.4.1",
     "prettier": "^2.6.2",
     "semantic-release": "^19.0.2",
     "tailwindcss": "^3.0.24",
-    "ts-jest": "^27.1.4",
+    "ts-jest": "^29.0.5",
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
