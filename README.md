@@ -75,6 +75,12 @@ Now if a chart's parsable option is not configured, it will fallback to the valu
 
 > **NOTE**: Since this plugin is still on its initial release, there might be other overlooked color options left to be parsed. As such, feedback is highly encouraged!
 
+## Why did I even make this?
+
+I absolutely _love_ how fast I can prototype things with TailwindCSS. However, keeping my Chart.js component's colors consistent with my TailwindCSS config has been pretty much a hassle, to say the least. While you can just use TailwindCSS's `resolveConfig` [helper function](https://tailwindcss.com/docs/configuration#referencing-in-java-script), it is far more intuitive and convenient to just use TailwindCSS classes directly rather than something like `fullConfig.theme.colors.red[500]`. What's more, it doesn't even handle opacity, which is something I use all the time.
+
+That's why this plugin was made in order to seamlessly blend Chart.js's color options with my TailwindCSS workflow. Now I'm sharing this with all of you!
+
 ## Contributing
 
 For making feature requests and other related information, please refer to the [contributing guidelines](CONTRIBUTING.md).
