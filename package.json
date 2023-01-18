@@ -75,6 +75,6 @@
   },
   "peerDependencies": {
     "chart.js": "^3.7.1",
-    "tailwindcss": "^3.0.24"
+    "tailwindcss": "^3.0.0"
   }
 }
