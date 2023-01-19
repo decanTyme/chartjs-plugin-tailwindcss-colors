@@ -1,3 +1,12 @@
+# [1.0.0-alpha.6](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2023-01-19)
+
+
+### Bug Fixes
+
+* **deps:** update `canvas` to 2.11.0 ([79b8c47](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/79b8c47a49a80d2ed2d21f479a615fe8c90dfb98))
+* **deps:** update `tailwindcss` peer dependency semver range ([5fde3ef](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/5fde3effdecba4cbf7c29f0a12773725e25003b4))
+* **deps:** update `tiny-invariant` to 1.3.1 ([333e565](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/333e565db5f36282ed1e41f82cf64da3fceb7f33))
+
 # [1.0.0-alpha.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.4...v1.0.0-alpha.5) (2022-06-04)
 
 
