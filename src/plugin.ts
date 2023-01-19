@@ -17,7 +17,7 @@ const twColorsPlugin = (
     theme: { colors },
   } = resolveConfig(tailwindConfig)
 
-  invariant(colors, "Undefined TailwindCSS theme colors")
+  invariant(colors, "TailwindCSS theme colors is undefined!")
 
   const flattenedColorPalette = flattenColorPalette(colors)
 
