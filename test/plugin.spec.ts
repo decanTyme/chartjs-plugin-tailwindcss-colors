@@ -26,7 +26,7 @@ describe("Plugin works as expected", () => {
 
   beforeEach(() => {
     ctx = document.createElement("canvas").getContext("2d")
-    invariant(ctx, "Failed to initialize canvas")
+    invariant(ctx, "Failed to initialize canvas!")
 
     chart = new Chart(ctx, {
       type: "bar",

@@ -11,7 +11,7 @@ const {
   theme: { colors },
 } = resolveConfig(tailwindConfig)
 
-invariant(colors, "Undefined TailwindCSS theme colors")
+invariant(colors, "TailwindCSS theme colors is undefined!")
 
 const colorPalette = flattenColorPalette(colors)
 const isValidTwColor = twColorValidator(colorPalette)
