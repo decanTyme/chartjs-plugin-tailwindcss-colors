@@ -19,24 +19,24 @@ const twColorsPlugin = (
 
   invariant(colors, "TailwindCSS theme colors is undefined!")
 
-  const flattenedColorPalette = flattenColorPalette(colors)
+  const colorPalette = flattenColorPalette(colors)
 
-  const isValidTwColor = twColorValidator(flattenedColorPalette)
+  const isValidTwColor = twColorValidator(colorPalette)
 
   const parseTailwindColor = (
-    name: MaybeArray<string>
+    value: MaybeArray<string>
   ): Maybe<MaybeArray<string>> => {
-    if (!name) return undefined
+    if (!value) return null
 
-    if (Array.isArray(name))
-      return name.map((val) => <string>parseTailwindColor(val))
+    if (Array.isArray(value))
+      return value.map((_val) => <string>parseTailwindColor(_val))
 
-    if (hasAlpha(name)) {
-      const [color, alpha] = name.split("/")
+    if (hasAlpha(value)) {
+      const [color, alpha] = value.split("/")
 
       const parsedColor = parseColor(<string>parseTailwindColor(color))
 
-      if (!parsedColor) return undefined
+      if (!parsedColor) return null
 
       return formatColor({
         ...parsedColor,
@@ -44,13 +44,9 @@ const twColorsPlugin = (
       })
     }
 
-    // Anything that is not a tailwindcss valid color format
-    // (i.e., hex or rgb forms) should be returned as-is
-    if (!isValidTwColor(name)) return name
+    const parsedColor = parseColor(colorPalette[value] ?? value)
 
-    const parsedColor = parseColor(flattenedColorPalette[name])
-
-    if (!parsedColor) return undefined
+    if (!parsedColor) return null
 
     return formatColor(parsedColor)
   }

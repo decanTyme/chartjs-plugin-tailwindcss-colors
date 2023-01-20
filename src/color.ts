@@ -36,7 +36,7 @@ export const flattenColorPalette = (
   )
 
 export function parseColor(value: string): Maybe<Color> {
-  if (!value) return undefined
+  if (!value) return null
 
   value = value.trim()
   if (value === "transparent") {
@@ -90,10 +90,10 @@ export function parseColor(value: string): Maybe<Color> {
     }
   }
 
-  return undefined
+  return null
 }
 
 export function formatColor({ mode, color, alpha }: Color) {
-  if (!color) return undefined
+  if (!color) return null
   return `${mode}(${color?.join(" ")}${alpha ? ` / ${alpha}` : ""})`
 }
