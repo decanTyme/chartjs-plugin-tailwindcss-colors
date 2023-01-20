@@ -2,7 +2,7 @@
 // Copyright (c) Tailwind Labs, Inc. (https://tailwindcss.com/)
 // and used under the terms of the MIT license
 
-import namedColors, { RGB } from "color-name"
+import namedColors from "color-name"
 import {
   TailwindColorGroup,
   TailwindThemeColors,
