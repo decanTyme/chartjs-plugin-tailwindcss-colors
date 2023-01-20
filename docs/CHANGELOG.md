@@ -1,3 +1,10 @@
+# [1.0.0-alpha.8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2023-01-20)
+
+
+### Bug Fixes
+
+* improve alpha detection regex ([d515409](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/d515409f6f93ca8f200bc6d3e30bc42523517339))
+
 # [1.0.0-alpha.7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2023-01-20)
 
 
