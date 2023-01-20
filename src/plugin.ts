@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { Chart, Plugin } from "chart.js"
-import set from "lodash.set"
 import get from "lodash.get"
+import set from "lodash.set"
 import resolveConfig from "tailwindcss/resolveConfig"
 import { TailwindConfig } from "tailwindcss/tailwind-config"
 import invariant from "tiny-invariant"
+
 import { flattenColorPalette, formatColor, parseColor } from "./color"
-import { Maybe, MaybeArray, ParsableOptions } from "./types"
-import { hasAlpha, twColorValidator } from "./utils"
+import { MaybeArray, ParsableOptions } from "./types"
+import { hasValidAlpha, isValidArray, twColorValidator } from "./utils"
 
 const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
@@ -25,18 +26,17 @@ const twColorsPlugin = (
 
   const parseTailwindColor = (
     value: MaybeArray<string>
-  ): Maybe<MaybeArray<string>> => {
-    if (!value) return null
+  ): MaybeArray<string> => {
+    invariant(value, `Invalid value: ${value}`)
 
-    if (Array.isArray(value))
+    if (isValidArray(value)) {
       return value.map((_val) => <string>parseTailwindColor(_val))
+    }
 
-    if (hasAlpha(value)) {
+    if (hasValidAlpha(value)) {
       const [color, alpha] = value.split("/")
 
       const parsedColor = parseColor(<string>parseTailwindColor(color))
-
-      if (!parsedColor) return null
 
       return formatColor({
         ...parsedColor,
@@ -44,11 +44,7 @@ const twColorsPlugin = (
       })
     }
 
-    const parsedColor = parseColor(colorPalette[value] ?? value)
-
-    if (!parsedColor) return null
-
-    return formatColor(parsedColor)
+    return formatColor(parseColor(colorPalette[value] ?? value))
   }
 
   const plugin = (chart: Chart) => {
@@ -64,7 +60,6 @@ const twColorsPlugin = (
       "pointHoverBorderColor",
       "fill.above",
       "fill.below",
-      "fill",
     ]
 
     parsableOpts.forEach((parsableOpt) => {
@@ -76,7 +71,9 @@ const twColorsPlugin = (
           get(dataset, parsableOpt) ||
           (isValidTwColor(chartOpt) ? chartOpt : defaultOpt)
 
-        if (color) set(dataset, parsableOpt, parseTailwindColor(color))
+        if (isValidTwColor(color, { strict: false })) {
+          set(dataset, parsableOpt, parseTailwindColor(color))
+        }
       })
     })
   }

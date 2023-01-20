@@ -18,3 +18,7 @@ export type Color = {
   color: Array<string>
   alpha?: string | number
 }
+
+export interface TwColorValidatorOpts {
+  strict?: boolean
+}
