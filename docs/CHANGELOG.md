@@ -1,3 +1,10 @@
+# [1.0.0-alpha.7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.6...v1.0.0-alpha.7) (2023-01-20)
+
+
+### Bug Fixes
+
+* **color-parser:** remove wrong import ([b7084a9](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/b7084a9b40b1d9b87661b5e5514b20500950af36))
+
 # [1.0.0-alpha.6](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.5...v1.0.0-alpha.6) (2023-01-19)
 
 
