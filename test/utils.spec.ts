@@ -72,7 +72,7 @@ describe("Validator is working with extended colors", () => {
   })
 
   test("If `mango-200` is invalid", () => {
-    expect(isValidTwColor("mango-900")).toEqual(false)
+    expect(isValidTwColor("mango-200")).toEqual(false)
   })
 })
 
