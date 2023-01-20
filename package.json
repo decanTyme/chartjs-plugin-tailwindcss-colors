@@ -12,10 +12,10 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "yarn test",
     "prepublishOnly": "cross-env NODE_ENV=production yarn build",
     "watch": "parcel watch",
-    "dev": "concurrently \"parcel watch\" \"yarn test:dev\"",
+    "dev": "concurrently \"yarn watch\" \"yarn test:dev\"",
+    "prebuild": "yarn test",
     "build": "parcel build",
     "test": "jest",
     "test:dev": "jest --watch",
