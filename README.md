@@ -1,6 +1,6 @@
 # chartjs-plugin-tailwindcss-colors
 
-![yarn-current](https://img.shields.io/badge/Yarn-v1-blue) ![npm peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js) ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors) [![release](https://img.shields.io/github/v/release/decanTyme/chartjs-plugin-tailwindcss-colors)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/releases) [![npm (latest)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors/latest)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/latest) [![npm (latest)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors/latest)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/latest) [![CI](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml)
+![yarn-current](https://img.shields.io/badge/Yarn-v1-blue) ![npm peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js) ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors) [![npm (alpha)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors/alpha)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/alpha) [![CI](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml)
 
 <p align="center">⚠️ This project is still under development ⚠️</p>
 
@@ -12,8 +12,16 @@ This plugin integrates your existing TailwindCSS colors configuration so you can
 
 ### Installation
 
+Package:
+
 ```shell
-yarn add chartjs-plugin-tailwindcss-colors
+yarn add chartjs-plugin-tailwindcss-colors # or npm install
+```
+
+CDN:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors"></script>
 ```
 
 ### Integration
@@ -77,7 +85,7 @@ or alternatively:
 Chart.register(twColorsPlugin(tailwindConfig))
 
 Chart.defaults.borderColor = "yellow-500"
-Chart.defaults.backgroundColor = "yellow-500/50"
+Chart.defaults.backgroundColor = "yellow-500/50" // or #eab308/50
 ```
 
 Now if a chart's parsable option is not configured, it will fallback to the values provided above.
@@ -86,7 +94,7 @@ Now if a chart's parsable option is not configured, it will fallback to the valu
 
 ## Why did I even make this?
 
-I absolutely _love_ how fast I can prototype things with TailwindCSS. However, keeping my Chart.js component's colors consistent with my TailwindCSS config has been pretty much a hassle, to say the least. While you can just use TailwindCSS's `resolveConfig` [helper function](https://tailwindcss.com/docs/configuration#referencing-in-java-script), it is far more intuitive and convenient to just use TailwindCSS classes directly rather than something like `fullConfig.theme.colors.red[500]`. What's more, it doesn't even handle opacity, which is something I use all the time.
+I absolutely _love_ how fast I can prototype things with TailwindCSS. However, keeping my Chart.js component's colors consistent with my TailwindCSS config has been pretty much a hassle, to say the least. While you can just use TailwindCSS's `resolveConfig` [helper function](https://tailwindcss.com/docs/configuration#referencing-in-java-script), it is far more intuitive and convenient to just use TailwindCSS color classes directly rather than something like `fullConfig.theme.colors.red[500]`. What's more, it doesn't even handle opacity, which is something I use all the time.
 
 That's why this plugin was made in order to seamlessly blend Chart.js's color options with my TailwindCSS workflow. Now I'm sharing this with all of you!
 
