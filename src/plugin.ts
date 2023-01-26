@@ -10,6 +10,20 @@ import { flattenColorPalette, formatColor, parseColor } from "./color"
 import { MaybeArray, ParsableOptions } from "./types"
 import { hasValidAlpha, isValidArray, twColorValidator } from "./utils"
 
+const parsableOpts = [
+  "color",
+  "borderColor",
+  "backgroundColor",
+  "hoverBorderColor",
+  "hoverBackgroundColor",
+  "pointBorderColor",
+  "pointBackgroundColor",
+  "pointHoverBackgroundColor",
+  "pointHoverBorderColor",
+  "fill.above",
+  "fill.below",
+]
+
 const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
   defaults: Partial<ParsableOptions> = {}
@@ -22,7 +36,7 @@ const twColorsPlugin = (
 
   const colorPalette = flattenColorPalette(colors)
 
-  const isValidTwColor = twColorValidator(colorPalette)
+  const isParsable = twColorValidator(colorPalette)
 
   const parseTailwindColor = (
     value: MaybeArray<string>
@@ -30,7 +44,7 @@ const twColorsPlugin = (
     invariant(value, `Invalid value: ${value}`)
 
     if (isValidArray(value)) {
-      return value.map((_val) => <string>parseTailwindColor(_val))
+      return value.map((v) => <string>parseTailwindColor(v))
     }
 
     if (hasValidAlpha(value)) {
@@ -48,30 +62,18 @@ const twColorsPlugin = (
   }
 
   const plugin = (chart: Chart) => {
-    const parsableOpts = [
-      "color",
-      "borderColor",
-      "backgroundColor",
-      "hoverBorderColor",
-      "hoverBackgroundColor",
-      "pointBorderColor",
-      "pointBackgroundColor",
-      "pointHoverBackgroundColor",
-      "pointHoverBorderColor",
-      "fill.above",
-      "fill.below",
-    ]
-
     parsableOpts.forEach((parsableOpt) => {
-      const defaultOpt = defaults[parsableOpt]
-      const chartOpt = get(chart.options, parsableOpt)
+      const chartOptColor = get(chart.options, parsableOpt)
+      const defaultOptColor = defaults[parsableOpt] || chartOptColor
+
+      if (isParsable(defaultOptColor, { strict: false })) {
+        set(chart.options, parsableOpt, parseTailwindColor(defaultOptColor))
+      }
 
       chart.data.datasets?.forEach((dataset) => {
-        const color =
-          get(dataset, parsableOpt) ||
-          (isValidTwColor(chartOpt) ? chartOpt : defaultOpt)
+        const color = get(dataset, parsableOpt) || defaultOptColor
 
-        if (isValidTwColor(color, { strict: false })) {
+        if (isParsable(color, { strict: false })) {
           set(dataset, parsableOpt, parseTailwindColor(color))
         }
       })

@@ -14,43 +14,43 @@ const {
 invariant(colors, "TailwindCSS theme colors is undefined!")
 
 const colorPalette = flattenColorPalette(colors)
-const isValidTwColor = twColorValidator(colorPalette)
+const isParsable = twColorValidator(colorPalette)
 
 describe("Validator is working with config colors only (strict)", () => {
   test("If `transparent` is valid", () => {
-    expect(isValidTwColor("transparent")).toBe(true)
+    expect(isParsable("transparent")).toBe(true)
   })
 
   test("If `black` is valid", () => {
-    expect(isValidTwColor("black")).toBe(true)
+    expect(isParsable("black")).toBe(true)
   })
 
   test("If `yellow-50` is valid", () => {
-    expect(isValidTwColor("yellow-50")).toBe(true)
+    expect(isParsable("yellow-50")).toBe(true)
   })
 
   test("If `red-100` is valid", () => {
-    expect(isValidTwColor("red-100")).toBe(true)
+    expect(isParsable("red-100")).toBe(true)
   })
 
   test("If `` is invalid", () => {
-    expect(isValidTwColor("")).toBe(false)
+    expect(isParsable("")).toBe(false)
   })
 
   test("If `orange-90` is invalid", () => {
-    expect(isValidTwColor("orange-90")).toBe(false)
+    expect(isParsable("orange-90")).toBe(false)
   })
 
   test("If `pink-250` is invalid", () => {
-    expect(isValidTwColor("pink-250")).toBe(false)
+    expect(isParsable("pink-250")).toBe(false)
   })
 
   test("If `indigo-0` is invalid", () => {
-    expect(isValidTwColor("indigo-0")).toBe(false)
+    expect(isParsable("indigo-0")).toBe(false)
   })
 
   test("If `#c08240` is invalid", () => {
-    expect(isValidTwColor("#c08240")).toBe(false)
+    expect(isParsable("#c08240")).toBe(false)
   })
 })
 
@@ -58,56 +58,56 @@ describe("Validator is working (non-strict)", () => {
   const opts = { strict: false }
 
   test("If arrays with valid values should be parsed", () => {
-    expect(isValidTwColor(["red-600", "#3b82f6/75"], opts)).toBe(true)
+    expect(isParsable(["red-600", "#3b82f6/75"], opts)).toBe(true)
   })
 
   test("If only valid values should be parsed", () => {
-    expect(isValidTwColor("orange", opts)).toBe(true)
-    expect(isValidTwColor("orange/50", opts)).toBe(true)
-    expect(isValidTwColor("stone-50", opts)).toBe(true)
-    expect(isValidTwColor("stone-50/30", opts)).toBe(true)
-    expect(isValidTwColor("green-900", opts)).toBe(true)
-    expect(isValidTwColor("green-900/55", opts)).toBe(true)
-    expect(isValidTwColor("#c08240", opts)).toBe(true)
-    expect(isValidTwColor("#3b82f6/75", opts)).toBe(true)
+    expect(isParsable("orange", opts)).toBe(true)
+    expect(isParsable("orange/50", opts)).toBe(true)
+    expect(isParsable("stone-50", opts)).toBe(true)
+    expect(isParsable("stone-50/30", opts)).toBe(true)
+    expect(isParsable("green-900", opts)).toBe(true)
+    expect(isParsable("green-900/55", opts)).toBe(true)
+    expect(isParsable("#c08240", opts)).toBe(true)
+    expect(isParsable("#3b82f6/75", opts)).toBe(true)
 
-    expect(isValidTwColor("emerald-", opts)).toBe(false)
-    expect(isValidTwColor("zinc-0", opts)).toBe(false)
-    expect(isValidTwColor("#cyan-900", opts)).toBe(false)
-    expect(isValidTwColor("#cyan-900/55", opts)).toBe(false)
-    expect(isValidTwColor("b69576", opts)).toBe(false)
-    expect(isValidTwColor("#b69576/", opts)).toBe(false)
-    expect(isValidTwColor("/")).toBe(false)
-    expect(isValidTwColor("/0")).toBe(false)
-    expect(isValidTwColor("#/20")).toBe(false)
+    expect(isParsable("emerald-", opts)).toBe(false)
+    expect(isParsable("zinc-0", opts)).toBe(false)
+    expect(isParsable("#cyan-900", opts)).toBe(false)
+    expect(isParsable("#cyan-900/55", opts)).toBe(false)
+    expect(isParsable("b69576", opts)).toBe(false)
+    expect(isParsable("#b69576/", opts)).toBe(false)
+    expect(isParsable("/")).toBe(false)
+    expect(isParsable("/0")).toBe(false)
+    expect(isParsable("#/20")).toBe(false)
   })
 
   test("If `rgb/a` form should not be parsed", () => {
-    expect(isValidTwColor("rgb(0,0,0)", opts)).toBe(false)
-    expect(isValidTwColor("rgb(0 0 0)", opts)).toBe(false)
-    expect(isValidTwColor("rgba(0,0,0,0.1)", opts)).toBe(false)
-    expect(isValidTwColor("rgb(0 0 0 / 0.1)", opts)).toBe(false)
+    expect(isParsable("rgb(0,0,0)", opts)).toBe(false)
+    expect(isParsable("rgb(0 0 0)", opts)).toBe(false)
+    expect(isParsable("rgba(0,0,0,0.1)", opts)).toBe(false)
+    expect(isParsable("rgb(0 0 0 / 0.1)", opts)).toBe(false)
   })
 
   test("If `hsl/a` form should not be parsed", () => {
-    expect(isValidTwColor("hsl(50,80%,40%)", opts)).toBe(false)
-    expect(isValidTwColor("hsl(150deg 30% 60%)", opts)).toBe(false)
-    expect(isValidTwColor("hsla(0.3turn,60%,45%,.7)", opts)).toBe(false)
-    expect(isValidTwColor("hsla(0 80% 50% / 25%)", opts)).toBe(false)
+    expect(isParsable("hsl(50,80%,40%)", opts)).toBe(false)
+    expect(isParsable("hsl(150deg 30% 60%)", opts)).toBe(false)
+    expect(isParsable("hsla(0.3turn,60%,45%,.7)", opts)).toBe(false)
+    expect(isParsable("hsla(0 80% 50% / 25%)", opts)).toBe(false)
   })
 })
 
 describe("Validator is working with extended colors", () => {
   test("If `main` is valid", () => {
-    expect(isValidTwColor("main")).toBe(true)
+    expect(isParsable("main")).toBe(true)
   })
 
   test("If `choco-50` is valid", () => {
-    expect(isValidTwColor("choco-50")).toBe(true)
+    expect(isParsable("choco-50")).toBe(true)
   })
 
   test("If `mango-200` is invalid", () => {
-    expect(isValidTwColor("mango-200")).toBe(false)
+    expect(isParsable("mango-200")).toBe(false)
   })
 })
 

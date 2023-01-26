@@ -71,9 +71,18 @@ Chart.register(
 )
 ```
 
+or alternatively:
+
+```js
+Chart.register(twColorsPlugin(tailwindConfig))
+
+Chart.defaults.borderColor = "yellow-500"
+Chart.defaults.backgroundColor = "yellow-500/50"
+```
+
 Now if a chart's parsable option is not configured, it will fallback to the values provided above.
 
-> **NOTE**: Since this plugin is still on its initial release, there might be other overlooked color options left to be parsed. As such, feedback is highly encouraged!
+> **NOTE**: Since this plugin is still on its initial release, there might be other overlooked color options left to be parsed (also, bugs). As such, feedback is highly encouraged!
 
 ## Why did I even make this?
 
