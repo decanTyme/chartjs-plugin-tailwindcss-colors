@@ -1,3 +1,12 @@
+# [1.0.0-alpha.9](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.8...v1.0.0-alpha.9) (2023-01-30)
+
+
+### Bug Fixes
+
+* **color-validator:** improve handling of non-strings ([fc9d4e8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/fc9d4e8752511144e7b1b7a417ccfd8631287f87))
+* **deps:** update `chart.js` to 3.9.1 and peer dependency semver range ([bf498a8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/bf498a8b3d8bd43eefdcf541bdd86774c9e551c3))
+* fallback to `Chart.defaults` if no color at all is specified ([8f074dc](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8f074dc9538f6605e2484b83f8b111770b07ca8d))
+
 # [1.0.0-alpha.8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v1.0.0-alpha.7...v1.0.0-alpha.8) (2023-01-20)
 
 
