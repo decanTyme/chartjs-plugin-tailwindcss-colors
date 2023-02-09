@@ -1,0 +1,14 @@
+# Package Manager Artifacts
+node_modules
+yarn-*.log
+
+# User-Specific IDE Settings
+.vscode
+
+# OS Auto-Generated Files
+.DS_Store
+
+# Parcel Artifacts
+.parcel-cache
+
+dist

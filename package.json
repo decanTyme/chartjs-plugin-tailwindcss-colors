@@ -1,0 +1,52 @@
+{
+  "name": "chartjs-plugin-tailwindcss-colors",
+  "version": "0.0.0",
+  "author": "Danry Parens Patriae Ague <ague.danryparenspatriae@gmail.com>",
+  "description": "Colorize your Chart.js components using TailwindCSS!",
+  "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "module": "dist/main.esm.js",
+  "types": "dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build",
+    "format:checkonly": "prettier . -c",
+    "format": "prettier . -w",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "stylecheck": "yarn format:checkonly && yarn lint",
+    "stylefix": "yarn format && yarn lint:fix"
+  },
+  "homepage": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors",
+  "bugs": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors"
+  },
+  "keywords": [
+    "chartjs",
+    "chartjs-plugin",
+    "tailwindcss",
+    "colors"
+  ],
+  "devDependencies": {
+    "@parcel/packager-ts": "^2.4.1",
+    "@parcel/transformer-typescript-types": "^2.4.1",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "parcel": "^2.4.1",
+    "prettier": "^2.6.2",
+    "semantic-release": "^19.0.2",
+    "typescript": "^4.6.3"
+  }
+}
