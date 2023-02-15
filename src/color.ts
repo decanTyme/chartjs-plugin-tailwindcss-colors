@@ -10,13 +10,6 @@ import type { Color, TailwindColorGroup, TailwindThemeColors } from "./types"
 
 const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
-const VALUE = `(?:\\d+|\\d*\\.\\d+)%?`
-const SEP = `(?:\\s*,\\s*|\\s+)`
-const ALPHA_SEP = `\\s*[,/]\\s*`
-
-const RGB = new RegExp(
-  `^rgba?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
-)
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
@@ -38,23 +31,13 @@ export function parseColor(value: string): Color {
   value = value.trim()
 
   if (value === "transparent") {
-    return { mode: "rgb", color: ["0", "0", "0"], alpha: "0" }
+    return { mode: "rgb", values: ["0", "0", "0"], alpha: "0" }
   }
 
   if (value in Colors) {
     return {
       mode: "rgb",
-      color: Colors[value as keyof typeof Colors].map((v) => v.toString()),
-    }
-  }
-
-  const rgbMatch = value.match(RGB)
-
-  if (rgbMatch) {
-    return {
-      mode: "rgb",
-      color: [rgbMatch[1], rgbMatch[2], rgbMatch[3]].map((v) => v.toString()),
-      alpha: rgbMatch[4]?.toString?.(),
+      values: Colors[value as keyof typeof Colors].map((v) => v.toString()),
     }
   }
 
@@ -70,7 +53,7 @@ export function parseColor(value: string): Color {
 
   return {
     mode: "rgb",
-    color: [
+    values: [
       parseInt(hex[1], 16),
       parseInt(hex[2], 16),
       parseInt(hex[3], 16),
@@ -79,6 +62,6 @@ export function parseColor(value: string): Color {
   }
 }
 
-export function formatColor({ mode, color, alpha }: Color): string {
-  return `${mode}(${color.join(" ")}${alpha ? ` / ${alpha}` : ""})`
+export function formatColor({ mode, values, alpha }: Color): string {
+  return `${mode}(${values.join(" ")}${alpha ? ` / ${alpha}` : ""})`
 }

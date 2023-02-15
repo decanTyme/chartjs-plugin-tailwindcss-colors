@@ -13,14 +13,24 @@ export interface ParsableOptions extends Record<string, MaybeArray<string>> {
   pointHoverBorderColor: string
 }
 
-export type Color = {
+export interface Color {
   mode: "rgb" | "hsl"
-  color: Array<string>
+  values: Array<string>
   alpha?: string | number
 }
 
 export interface TwColorValidatorOpts {
+  /**
+   * @default true
+   */
   strict?: boolean
+
+  /**
+   * If `true`, hex values are also parsed.
+   *
+   * @default false
+   */
+  hex?: boolean
 }
 
 // Bring back types from stub `@types/tailwindcss`

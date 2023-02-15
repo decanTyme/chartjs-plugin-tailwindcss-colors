@@ -68,9 +68,9 @@ describe("Validator is working (non-strict)", () => {
     expect(isParsable("stone-50/30", opts)).toBe(true)
     expect(isParsable("green-900", opts)).toBe(true)
     expect(isParsable("green-900/55", opts)).toBe(true)
-    expect(isParsable("#c08240", opts)).toBe(true)
     expect(isParsable("#3b82f6/75", opts)).toBe(true)
 
+    expect(isParsable("#c08240", opts)).toBe(false)
     expect(isParsable("emerald-", opts)).toBe(false)
     expect(isParsable("zinc-0", opts)).toBe(false)
     expect(isParsable("#cyan-900", opts)).toBe(false)

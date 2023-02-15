@@ -55,16 +55,16 @@ describe("Plugin works as expected", () => {
   })
 
   test("If it correctly parses valid default colors", () => {
-    expect(chart.data.datasets[0].borderColor).toEqual("rgb(239 68 68)")
+    expect(chart.data.datasets[0].borderColor).toBe("#ef4444")
   })
 
   test("If it correctly parses arrays of valid colors", () => {
     expect(chart.data.datasets[0].backgroundColor).toBeInstanceOf(Array)
     expect(chart.data.datasets[0].backgroundColor).toEqual([
-      "rgb(220 38 38)",
+      "#dc2626",
       "rgb(59 130 246 / 0.75)",
-      "rgb(254 240 138)",
-      "rgb(190 242 100)",
+      "#fef08a",
+      "#bef264",
       "rgb(88 28 135 / 0.6)",
       "rgb(255 165 0 / 0.25)",
     ])
