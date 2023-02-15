@@ -17,13 +17,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: yarn
-          node-version: 16
+          node-version: "lts/*"
 
       - name: Install dependencies
         run: yarn install
 
-      - name: Check code style
-        run: yarn stylecheck
+      - run: yarn stylecheck
 
-      - name: Run tests
-        run: yarn test
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - run: yarn jest
