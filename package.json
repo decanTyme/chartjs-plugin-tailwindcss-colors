@@ -34,9 +34,12 @@
   },
   "keywords": [
     "chartjs",
-    "chartjs-plugin",
+    "chart.js",
     "tailwindcss",
-    "colors"
+    "colors",
+    "class",
+    "plugin",
+    "parser"
   ],
   "dependencies": {
     "color-name": "^1.1.4",
