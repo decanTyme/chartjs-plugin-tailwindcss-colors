@@ -2,29 +2,45 @@ name: Release
 
 on:
   push:
-    branches: [main, beta, alpha, next]
+    branches: [main]
 
 jobs:
-  release:
-    name: Release
+  release-please:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: google-github-actions/release-please-action@v3
+        id: release
         with:
-          fetch-depth: 0
+          token: ${{ secrets.GH_PAT_RELEASER }}
+          release-type: node
+          bump-minor-pre-major: true
+          bump-patch-for-minor-pre-major: true
+          changelog-path: CHANGELOG.md
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"perf","section":"Performance Improvements","hidden":false},{"type":"revert","section":"Reverts","hidden":false},{"type":"docs","section":"Documentation","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
+          prerelease: true
+          draft-pull-request: false
+          signoff: "Danry Ague <74456102+decanTyme@users.noreply.github.com>"
+          pull-request-title-pattern: "chore(release): ${version}"
+          plugins: sentence-case
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v3
+        if: ${{ steps.release.outputs.release_created }}
+
+      - uses: actions/setup-node@v3
         with:
-          cache: yarn
           node-version: "lts/*"
+          cache: yarn
+          registry-url: "https://registry.npmjs.org"
+        if: ${{ steps.release.outputs.release_created }}
 
-      - name: Install dependencies
-        run: yarn install
+      - name: Test and Build
+        run: |
+          yarn install
+          yarn build
+        if: ${{ steps.release.outputs.release_created }}
 
-      - name: Release
+      - name: Publish to NPM
+        run: npm publish
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: ${{ steps.release.outputs.release_created }}
