@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { Chart, Plugin } from "chart.js"
 import type { Config as TailwindConfig } from "tailwindcss"
 
@@ -8,8 +7,13 @@ import resolveConfig from "tailwindcss/resolveConfig"
 import invariant from "tiny-invariant"
 
 import { flattenColorPalette, formatColor, parseColor } from "./color"
-import { MaybeArray, ParsableOptions, TailwindThemeColors } from "./types"
-import { hasValidAlpha, isValidArray, twColorValidator } from "./utils"
+import {
+  Maybe,
+  MaybeArray,
+  ParsableOptions,
+  TailwindThemeColors,
+} from "./types"
+import { hasValidAlpha, twColorValidator } from "./utils"
 
 const parsableOpts = [
   "color",
@@ -30,7 +34,7 @@ const twColorsPlugin = (
   defaults: Partial<ParsableOptions> = {}
 ): Plugin => {
   const colors = resolveConfig(tailwindConfig).theme
-    ?.colors as TailwindThemeColors
+    ?.colors as Maybe<TailwindThemeColors>
 
   invariant(colors, "TailwindCSS theme colors is undefined!")
 
@@ -41,16 +45,14 @@ const twColorsPlugin = (
   const parseTailwindColor = (
     value: MaybeArray<string>
   ): MaybeArray<string> => {
-    invariant(value, `Invalid value: ${value}`)
-
-    if (isValidArray(value)) {
+    if (Array.isArray(value)) {
       return value.map((v) => <string>parseTailwindColor(v))
     }
 
     if (hasValidAlpha(value)) {
       const [color, alpha] = value.split("/")
 
-      const parsedColor = parseColor(<string>parseTailwindColor(color))
+      const parsedColor = parseColor(colorPalette[color] ?? color)
 
       return formatColor({
         ...parsedColor,
@@ -58,7 +60,7 @@ const twColorsPlugin = (
       })
     }
 
-    return formatColor(parseColor(colorPalette[value] ?? value))
+    return colorPalette[value] ?? value
   }
 
   const plugin = (chart: Chart) => {
@@ -70,7 +72,7 @@ const twColorsPlugin = (
         set(chart.options, parsableOpt, parseTailwindColor(defaultOptColor))
       }
 
-      chart.data.datasets?.forEach((dataset) => {
+      chart.data.datasets.forEach((dataset) => {
         const color = get(dataset, parsableOpt) || defaultOptColor
 
         if (isParsable(color, { strict: false })) {
