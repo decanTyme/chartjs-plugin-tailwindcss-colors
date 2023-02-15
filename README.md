@@ -1,6 +1,12 @@
 # chartjs-plugin-tailwindcss-colors
 
-![yarn-current](https://img.shields.io/badge/Yarn-v1-blue) ![npm peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js) ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors) [![npm (alpha)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors/alpha)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/alpha) [![CI](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml)
+![yarn-current](https://img.shields.io/badge/Yarn-v1-blue)
+![chart.js peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js)
+![tailwindcss peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/tailwindcss)
+![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors)
+[![npm (latest)](https://img.shields.io/npm/v/chartjs-plugin-tailwindcss-colors)](https://www.npmjs.com/package/chartjs-plugin-tailwindcss-colors/v/latest)
+[![CI](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml/badge.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/actions/workflows/ci.yml)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/fork)
 
 <p align="center">⚠️ This project is still under development ⚠️</p>
 
@@ -18,10 +24,15 @@ Package:
 yarn add chartjs-plugin-tailwindcss-colors # or npm install
 ```
 
-CDN:
+[CDN](https://www.jsdelivr.com/package/npm/chartjs-plugin-tailwindcss-colors):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors@<version>/dist/index.min.js"></script>
+
+<!-- or as an ESM -->
+<script type="module">
+  import twColorsPlugin from "https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors@<version>/+esm"
+</script>
 ```
 
 ### Integration
@@ -57,6 +68,7 @@ And that's about it, you're good to go!
 
 In addition to the above, it can also parse the following color options:
 
+- `color`
 - `hoverBorderColor`
 - `hoverBackgroundColor`
 - `pointBorderColor`
@@ -79,7 +91,7 @@ Chart.register(
 )
 ```
 
-or alternatively:
+or, alternatively:
 
 ```js
 Chart.register(twColorsPlugin(tailwindConfig))
