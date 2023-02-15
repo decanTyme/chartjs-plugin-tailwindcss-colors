@@ -77,9 +77,9 @@ describe("Validator is working (non-strict)", () => {
     expect(isParsable("#cyan-900/55", opts)).toBe(false)
     expect(isParsable("b69576", opts)).toBe(false)
     expect(isParsable("#b69576/", opts)).toBe(false)
-    expect(isParsable("/")).toBe(false)
-    expect(isParsable("/0")).toBe(false)
-    expect(isParsable("#/20")).toBe(false)
+    expect(isParsable("/", opts)).toBe(false)
+    expect(isParsable("/0", opts)).toBe(false)
+    expect(isParsable("#/20", opts)).toBe(false)
   })
 
   test("If `rgb/a` form should not be parsed", () => {
