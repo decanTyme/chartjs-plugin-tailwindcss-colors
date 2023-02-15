@@ -1,14 +1,12 @@
 // Color utilities taken from the CSS framework tailwindcss, which is
 // Copyright (c) Tailwind Labs, Inc. (https://tailwindcss.com/)
 // and used under the terms of the MIT license
+// @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
 
 import Colors from "color-name"
-import {
-  TailwindColorGroup,
-  TailwindThemeColors,
-} from "tailwindcss/tailwind-config"
 import invariant from "tiny-invariant"
-import { Color } from "./types"
+
+import type { Color, TailwindColorGroup, TailwindThemeColors } from "./types"
 
 const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
@@ -20,6 +18,7 @@ const RGB = new RegExp(
   `^rgba?\\(\\s*(${VALUE})${SEP}(${VALUE})${SEP}(${VALUE})(?:${ALPHA_SEP}(${VALUE}))?\\s*\\)$`
 )
 
+// @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
   colors: TailwindThemeColors
 ): TailwindColorGroup =>
@@ -34,6 +33,7 @@ export const flattenColorPalette = (
     )
   )
 
+// @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/color.js
 export function parseColor(value: string): Color {
   value = value.trim()
 

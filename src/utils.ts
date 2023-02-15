@@ -1,5 +1,4 @@
-import { TailwindColorGroup } from "tailwindcss/tailwind-config"
-import { TwColorValidatorOpts } from "./types"
+import type { TailwindColorGroup, TwColorValidatorOpts } from "./types"
 
 const VALID_HEX = `#([A-Fa-f\\d]{6})([A-Fa-f\\d]{2})?(?!\\/(?!\\S))`
 const VALID_COLOR_FORM = `${VALID_HEX}|(?<!#)\\b[a-z]+\\b(-?[0-9]{2,3}|)(?!-)`

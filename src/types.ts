@@ -22,3 +22,15 @@ export type Color = {
 export interface TwColorValidatorOpts {
   strict?: boolean
 }
+
+// Bring back types from stub `@types/tailwindcss`
+
+export interface TailwindColorGroup {
+  readonly [key: string]: string
+}
+
+export type TailwindColorValue = string | TailwindColorGroup
+
+export interface TailwindThemeColors {
+  readonly [key: string]: TailwindColorValue
+}

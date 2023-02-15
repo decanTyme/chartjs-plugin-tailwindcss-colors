@@ -2,14 +2,14 @@
 import resolveConfig from "tailwindcss/resolveConfig"
 import invariant from "tiny-invariant"
 import { flattenColorPalette } from "../src/color"
+import { TailwindThemeColors } from "../src/types"
 import { hasValidAlpha, twColorValidator } from "../src/utils"
 
 // @ts-ignore
 import tailwindConfig from "./tailwind.config"
 
-const {
-  theme: { colors },
-} = resolveConfig(tailwindConfig)
+const colors = resolveConfig(tailwindConfig).theme
+  ?.colors as TailwindThemeColors
 
 invariant(colors, "TailwindCSS theme colors is undefined!")
 

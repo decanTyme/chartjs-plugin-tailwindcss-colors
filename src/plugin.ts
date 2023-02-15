@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import type { Chart, Plugin } from "chart.js"
+import type { Config as TailwindConfig } from "tailwindcss"
+
 import get from "lodash.get"
 import set from "lodash.set"
 import resolveConfig from "tailwindcss/resolveConfig"
-import { TailwindConfig } from "tailwindcss/tailwind-config"
 import invariant from "tiny-invariant"
 
 import { flattenColorPalette, formatColor, parseColor } from "./color"
-import { MaybeArray, ParsableOptions } from "./types"
+import { MaybeArray, ParsableOptions, TailwindThemeColors } from "./types"
 import { hasValidAlpha, isValidArray, twColorValidator } from "./utils"
 
 const parsableOpts = [
@@ -28,9 +29,8 @@ const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
   defaults: Partial<ParsableOptions> = {}
 ): Plugin => {
-  const {
-    theme: { colors },
-  } = resolveConfig(tailwindConfig)
+  const colors = resolveConfig(tailwindConfig).theme
+    ?.colors as TailwindThemeColors
 
   invariant(colors, "TailwindCSS theme colors is undefined!")
 
