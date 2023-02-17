@@ -9,9 +9,9 @@ import invariant from "tiny-invariant"
 import { flattenColorPalette, formatColor, parseColor } from "./color"
 import {
   Maybe,
-  MaybeArray,
   ParsableOptions,
   TailwindThemeColors,
+  ValidValues,
 } from "./types"
 import { hasValidAlpha, twColorValidator } from "./utils"
 
@@ -42,9 +42,7 @@ const twColorsPlugin = (
 
   const isParsable = twColorValidator(colorPalette)
 
-  const parseTailwindColor = (
-    value: MaybeArray<string>
-  ): MaybeArray<string> => {
+  const parseTailwindColor = (value: string | string[]): string | string[] => {
     if (Array.isArray(value)) {
       return value.map((v) => <string>parseTailwindColor(v))
     }
@@ -63,9 +61,9 @@ const twColorsPlugin = (
     return colorPalette[value] ?? value
   }
 
-  const plugin = (chart: Chart) => {
+  const initialize = (chart: Chart) => {
     parsableOpts.forEach((parsableOpt) => {
-      const chartOptColor = get(chart.options, parsableOpt)
+      const chartOptColor: ValidValues = get(chart.options, parsableOpt)
       const defaultOptColor = defaults[parsableOpt] || chartOptColor
 
       if (isParsable(defaultOptColor, { strict: false })) {
@@ -84,8 +82,59 @@ const twColorsPlugin = (
 
   return {
     id: "tailwindcss-colors",
-    beforeInit: plugin,
-    beforeUpdate: plugin,
+
+    // Shouldn't be needed, but tests fail without it
+    // FIXME Update plugin tests so this can be removed
+    beforeInit: initialize,
+
+    // FIXME
+    // Shouldn't be needed, but charts "lose" colors on some
+    // updates for some reason. Serves as a workaround for now.
+    beforeUpdate: initialize,
+
+    beforeDatasetDraw: (chart: Chart, args) => {
+      parsableOpts.forEach((parsableOpt) => {
+        const chartOptColor: ValidValues = get(chart.options, parsableOpt)
+        const defaultOptColor = defaults[parsableOpt] || chartOptColor
+
+        const metaDataset = args.meta.dataset
+
+        if (!metaDataset) return
+
+        const metaDatasetOptsColor = get(
+          metaDataset.options,
+          parsableOpt,
+          defaultOptColor
+        )
+
+        if (isParsable(metaDatasetOptsColor, { strict: false })) {
+          set(
+            metaDataset.options,
+            parsableOpt,
+            parseTailwindColor(metaDatasetOptsColor)
+          )
+        }
+
+        const currentDataset = chart.data.datasets[args.index]
+
+        currentDataset.data.forEach((_, i) => {
+          const currentElement = args.meta.data[i]
+          const resolvedColor = get(
+            currentElement.options,
+            parsableOpt,
+            defaultOptColor
+          )
+
+          if (isParsable(resolvedColor, { strict: false })) {
+            set(
+              currentElement.options,
+              parsableOpt,
+              parseTailwindColor(resolvedColor)
+            )
+          }
+        })
+      })
+    },
   }
 }
 
