@@ -1,10 +1,14 @@
-export type Maybe<T> = T | undefined | null
-export type MaybeArray<T> = T | Array<T>
+import type { Scriptable } from "chart.js"
+import type { AnyObject } from "chart.js/types/basic"
 
-export interface ParsableOptions extends Record<string, MaybeArray<string>> {
+export type Maybe<T> = T | undefined | null
+export type ValidValues = string | Array<string> | Scriptable<string, AnyObject>
+
+export interface ParsableOptions
+  extends Record<string, string | Array<string>> {
   color: string
   borderColor: string
-  backgroundColor: MaybeArray<string>
+  backgroundColor: string | Array<string>
   hoverBorderColor: string
   hoverBackgroundColor: string
   pointBackgroundColor: string

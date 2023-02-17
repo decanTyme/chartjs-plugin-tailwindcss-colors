@@ -1,15 +1,11 @@
-import type {
-  MaybeArray,
-  TailwindColorGroup,
-  TwColorValidatorOpts,
-} from "./types"
+import type { TailwindColorGroup, TwColorValidatorOpts } from "./types"
 
 const VALID_HEX = `#([A-Fa-f\\d]{6})([A-Fa-f\\d]{2})?(?!\\/(?!\\S))`
 const VALID_TW_CLASS = `(?<!#)\\b[a-z]+\\b(-?[0-9]{2,3}|)(?!-)`
 const VALID_COLOR_FORM = `${VALID_HEX}|${VALID_TW_CLASS}`
 const VALID_ALPHA = `\\/(?=(\\b([1-9]|[1-9][0-9]|100)\\b))`
 
-export const isValidArray = (value: unknown): value is Array<string> =>
+export const isValidArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((v) => typeof v === "string")
 
 /**
@@ -29,7 +25,7 @@ export const twColorValidator =
   (
     value: unknown,
     { strict = true, hex = false }: TwColorValidatorOpts = {}
-  ): value is MaybeArray<string> => {
+  ): value is string | string[] => {
     if (!value) return false
 
     if (!strict || hex) {
