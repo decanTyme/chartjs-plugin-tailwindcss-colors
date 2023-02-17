@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.1.2](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.1.1...v0.1.2) (2023-02-17)
+
+
+### Features
+
+* Add initial support for scriptable options ([84d687b](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/84d687b5506960177564ba1c2ad77e56ae9980a8))
+
+
+### Bug Fixes
+
+* **deps:** Bump `json5` from 1.0.1 to 1.0.2 ([#7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/7)) ([29ada4d](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/29ada4daf9c4a0ebd2180fd07bb37576dd03fa08))
+* **deps:** Bump `semver-regex` from 3.1.3 to 3.1.4 ([#3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/3)) ([ca4c88a](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/ca4c88ad184ea37b7325f50ec974932bd3e07318))
+* **deps:** Update `caniuse-lite` ([13c2197](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/13c219721bf24da9518bb258a08de0208b280752))
+* **plugin:** Allow hex values (w/o alpha) to be returned as-is ([998c04f](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/998c04f3edbc7b32c2239a0c62861f388fe36625))
+
+
+### Documentation
+
+* **readme:** Update badges and some minor edits ([5ab63e0](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/5ab63e01fe6e0fad5c875a3bc9b600c21056d2b7))
+
+
+### Miscellaneous
+
+* **deps:** Bump `terser` from 5.12.1 to 5.16.3 ([#12](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/12)) ([2ff1975](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/2ff19750edb315cd6e90e950c9a929258d35a41c))
+* **deps:** Update parcel, jest and typescript, types ([8f12e1d](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8f12e1de4e78f8af947809b1691e3e4d20e790e0))
+* **package:** Update keywords ([c40c8e3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/c40c8e32ab45f6c6cca23f9d216437a99daf93ad))
+* Remove semantic-release, deps, config ([8be8dac](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8be8dac948d393217d0d3ed284ff12f3b58e83e3))
+
 ## [0.1.1](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.1.0...v0.1.1) (2023-02-15)
 
 
