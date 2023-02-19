@@ -27,7 +27,7 @@ yarn add chartjs-plugin-tailwindcss-colors # or npm install
 [CDN](https://www.jsdelivr.com/package/npm/chartjs-plugin-tailwindcss-colors):
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors@<version>/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors@<version>/dist/plugin.umd.min.js"></script>
 
 <!-- or as an ESM -->
 <script type="module">
