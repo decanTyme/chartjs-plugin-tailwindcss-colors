@@ -3,15 +3,12 @@
 // and used under the terms of the MIT license
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
 
+import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
+
 import Colors from "color-name"
 import invariant from "tiny-invariant"
 
-import type {
-  Color,
-  TailwindColorGroup,
-  TailwindThemeColors,
-  Writeable,
-} from "./types"
+import type { Color, TailwindColorGroup, Writeable } from "./types"
 
 import { isNamedColor } from "./utils"
 
@@ -20,7 +17,7 @@ const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
-  colors: TailwindThemeColors
+  colors: RecursiveKeyValuePair
 ): TailwindColorGroup => {
   const result: Writeable<TailwindColorGroup> = {}
   Object.entries(colors ?? {}).forEach(([color, value]) => {

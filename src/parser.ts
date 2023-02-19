@@ -1,13 +1,10 @@
 import type { Config as TailwindConfig } from "tailwindcss"
+import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
+
 import resolveConfig from "tailwindcss/resolveConfig"
 import invariant from "tiny-invariant"
 
-import type {
-  Maybe,
-  TailwindColorGroup,
-  TailwindThemeColors,
-  TwColorValidatorOpts,
-} from "./types"
+import type { Maybe, TailwindColorGroup, TwColorValidatorOpts } from "./types"
 
 import { flattenColorPalette, formatColor, parseColor } from "./color"
 import * as utils from "./utils"
@@ -19,7 +16,7 @@ class TailwindColorsParser {
   constructor(config: TailwindConfig) {
     const colors = {
       ...resolveConfig(config).theme?.colors,
-    } as Maybe<TailwindThemeColors>
+    } as Maybe<RecursiveKeyValuePair>
 
     invariant(colors, "TailwindCSS theme colors is undefined!")
 
