@@ -5,8 +5,9 @@
   "description": "Colorize your Chart.js components using TailwindCSS!",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/main.js",
-  "module": "dist/main.esm.js",
+  "umd": "dist/plugin.umd.js",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
   "types": "dist/types.d.ts",
   "files": [
     "dist"
@@ -41,6 +42,24 @@
     "plugin",
     "parser"
   ],
+  "targets": {
+    "main": {
+      "context": "node",
+      "isLibrary": true,
+      "engines": {
+        "node": ">= 16"
+      }
+    },
+    "umd": {
+      "context": "browser",
+      "outputFormat": "global",
+      "isLibrary": false,
+      "optimize": false,
+      "engines": {
+        "browsers": "> 0.5%, last 2 versions, not dead"
+      }
+    }
+  },
   "dependencies": {
     "color-name": "^1.1.4",
     "lodash.get": "^4.4.2",
@@ -68,6 +87,7 @@
     "jest-environment-jsdom": "^29.4.1",
     "parcel": "^2.8.3",
     "prettier": "^2.6.2",
+    "process": "^0.11.10",
     "tailwindcss": "^3.2.4",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
