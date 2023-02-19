@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import twColorsPlugin from "./plugin"
 
-// https://gist.github.com/ebidel/3201b36f59f26525eb606663f7b487d0?permalink_comment_id=4102094#gistcomment-4102094
+// https://gist.github.com/ebidel/3201b36f59f26525eb606663f7b487d0#gistcomment-4102094
 function hasModuleSupport() {
   if ("supports" in HTMLScriptElement) {
     return HTMLScriptElement.supports("module")
