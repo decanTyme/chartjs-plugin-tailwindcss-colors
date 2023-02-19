@@ -11,7 +11,7 @@ export const isValidArray = (value: unknown): value is string[] =>
 export const isParsableString = (value: unknown): value is string =>
   typeof value === "string" &&
   // No need to parse these as chart.js can readily accept it
-  !/rgb?a?|hsl?a?/i.test(value)
+  !/rgba?|hsla?/i.test(value)
 
 export const isHex = (value: string) =>
   new RegExp(`${VALID_HEX.source}(${VALID_ALPHA.source})?`).test(value)
