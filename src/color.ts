@@ -3,28 +3,34 @@
 // and used under the terms of the MIT license
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
 
+import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
+
 import Colors from "color-name"
 import invariant from "tiny-invariant"
 
-import type { Color, TailwindColorGroup, TailwindThemeColors } from "./types"
+import type { Color, TailwindColorGroup, Writeable } from "./types"
+
+import { isNamedColor } from "./utils"
 
 const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
 const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
-  colors: TailwindThemeColors
-): TailwindColorGroup =>
-  Object.assign(
-    {},
-    ...Object.entries(colors ?? {}).flatMap(([color, values]) =>
-      typeof values === "object"
-        ? Object.entries(flattenColorPalette(values)).map(([number, hex]) => ({
-            [color + (number === "DEFAULT" ? "" : `-${number}`)]: hex,
-          }))
-        : [{ [`${color}`]: values }]
-    )
-  )
+  colors: RecursiveKeyValuePair
+): TailwindColorGroup => {
+  const result: Writeable<TailwindColorGroup> = {}
+  Object.entries(colors ?? {}).forEach(([color, value]) => {
+    if (typeof value === "string") result[color] = value
+    else {
+      const nestedColors = flattenColorPalette(value)
+      Object.entries(nestedColors).forEach(([number, hex]) => {
+        result[`${color}${number === "DEFAULT" ? "" : `-${number}`}`] = hex
+      })
+    }
+  })
+  return result
+}
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/color.js
 export function parseColor(value: string): Color {
@@ -34,7 +40,7 @@ export function parseColor(value: string): Color {
     return { mode: "rgb", values: ["0", "0", "0"], alpha: "0" }
   }
 
-  if (value in Colors) {
+  if (isNamedColor(value)) {
     return {
       mode: "rgb",
       values: Colors[value as keyof typeof Colors].map((v) => v.toString()),

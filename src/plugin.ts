@@ -3,17 +3,10 @@ import type { Config as TailwindConfig } from "tailwindcss"
 
 import get from "lodash.get"
 import set from "lodash.set"
-import resolveConfig from "tailwindcss/resolveConfig"
-import invariant from "tiny-invariant"
 
-import { flattenColorPalette, formatColor, parseColor } from "./color"
-import {
-  Maybe,
-  ParsableOptions,
-  TailwindThemeColors,
-  ValidValues,
-} from "./types"
-import { hasValidAlpha, twColorValidator } from "./utils"
+import type { ParsableOptions, ValidValues } from "./types"
+
+import TailwindColorsParser from "./parser"
 
 const parsableOpts = [
   "color",
@@ -33,48 +26,22 @@ const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
   defaults: Partial<ParsableOptions> = {}
 ): Plugin => {
-  const colors = resolveConfig(tailwindConfig).theme
-    ?.colors as Maybe<TailwindThemeColors>
-
-  invariant(colors, "TailwindCSS theme colors is undefined!")
-
-  const colorPalette = flattenColorPalette(colors)
-
-  const isParsable = twColorValidator(colorPalette)
-
-  const parseTailwindColor = (value: string | string[]): string | string[] => {
-    if (Array.isArray(value)) {
-      return value.map((v) => <string>parseTailwindColor(v))
-    }
-
-    if (hasValidAlpha(value)) {
-      const [color, alpha] = value.split("/")
-
-      const parsedColor = parseColor(colorPalette[color] ?? color)
-
-      return formatColor({
-        ...parsedColor,
-        alpha: parseInt(alpha, 10) / 100,
-      })
-    }
-
-    return colorPalette[value] ?? value
-  }
+  const parser = new TailwindColorsParser(tailwindConfig)
 
   const initialize = (chart: Chart) => {
     parsableOpts.forEach((parsableOpt) => {
       const chartOptColor: ValidValues = get(chart.options, parsableOpt)
       const defaultOptColor = defaults[parsableOpt] || chartOptColor
 
-      if (isParsable(defaultOptColor, { strict: false })) {
-        set(chart.options, parsableOpt, parseTailwindColor(defaultOptColor))
+      if (parser.isParsable(defaultOptColor)) {
+        set(chart.options, parsableOpt, parser.parse(defaultOptColor))
       }
 
       chart.data.datasets.forEach((dataset) => {
-        const color = get(dataset, parsableOpt) || defaultOptColor
+        const color = get(dataset, parsableOpt, defaultOptColor)
 
-        if (isParsable(color, { strict: false })) {
-          set(dataset, parsableOpt, parseTailwindColor(color))
+        if (parser.isParsable(color)) {
+          set(dataset, parsableOpt, parser.parse(color))
         }
       })
     })
@@ -107,11 +74,11 @@ const twColorsPlugin = (
           defaultOptColor
         )
 
-        if (isParsable(metaDatasetOptsColor, { strict: false })) {
+        if (parser.isParsable(metaDatasetOptsColor)) {
           set(
             metaDataset.options,
             parsableOpt,
-            parseTailwindColor(metaDatasetOptsColor)
+            parser.parse(metaDatasetOptsColor)
           )
         }
 
@@ -125,11 +92,11 @@ const twColorsPlugin = (
             defaultOptColor
           )
 
-          if (isParsable(resolvedColor, { strict: false })) {
+          if (parser.isParsable(resolvedColor)) {
             set(
               currentElement.options,
               parsableOpt,
-              parseTailwindColor(resolvedColor)
+              parser.parse(resolvedColor)
             )
           }
         })
