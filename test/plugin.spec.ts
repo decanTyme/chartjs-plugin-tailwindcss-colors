@@ -40,7 +40,7 @@ describe("Plugin works as expected", () => {
               "red-600",
               "#3b82f6/75",
               "yellow-200",
-              "lime-300",
+              "navy",
               "purple-900/60",
               "orange/25",
             ],
@@ -64,7 +64,7 @@ describe("Plugin works as expected", () => {
       "#dc2626",
       "rgb(59 130 246 / 0.75)",
       "#fef08a",
-      "#bef264",
+      "navy",
       "rgb(88 28 135 / 0.6)",
       "rgb(255 165 0 / 0.25)",
     ])

@@ -1,113 +1,125 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import resolveConfig from "tailwindcss/resolveConfig"
-import invariant from "tiny-invariant"
-import { flattenColorPalette } from "../src/color"
-import { TailwindThemeColors } from "../src/types"
-import { hasValidAlpha, twColorValidator } from "../src/utils"
+
+import TWColorParser from "../src/parser"
+import { hasValidAlpha } from "../src/utils"
 
 // @ts-ignore
 import tailwindConfig from "./tailwind.config"
 
-const colors = resolveConfig(tailwindConfig).theme
-  ?.colors as TailwindThemeColors
+const parser = new TWColorParser(tailwindConfig)
 
-invariant(colors, "TailwindCSS theme colors is undefined!")
+describe("Validator is working with configured colors only (strict)", () => {
+  const opts = { strict: true }
 
-const colorPalette = flattenColorPalette(colors)
-const isParsable = twColorValidator(colorPalette)
-
-describe("Validator is working with config colors only (strict)", () => {
   test("If `transparent` is valid", () => {
-    expect(isParsable("transparent")).toBe(true)
+    expect(parser.isParsable("transparent", opts)).toBe(true)
   })
 
   test("If `black` is valid", () => {
-    expect(isParsable("black")).toBe(true)
+    expect(parser.isParsable("black", opts)).toBe(true)
   })
 
   test("If `yellow-50` is valid", () => {
-    expect(isParsable("yellow-50")).toBe(true)
+    expect(parser.isParsable("yellow-50", opts)).toBe(true)
   })
 
   test("If `red-100` is valid", () => {
-    expect(isParsable("red-100")).toBe(true)
-  })
-
-  test("If `` is invalid", () => {
-    expect(isParsable("")).toBe(false)
+    expect(parser.isParsable("red-100", opts)).toBe(true)
   })
 
   test("If `orange-90` is invalid", () => {
-    expect(isParsable("orange-90")).toBe(false)
+    expect(parser.isParsable("orange-90", opts)).toBe(false)
   })
 
   test("If `pink-250` is invalid", () => {
-    expect(isParsable("pink-250")).toBe(false)
+    expect(parser.isParsable("pink-250", opts)).toBe(false)
   })
 
   test("If `indigo-0` is invalid", () => {
-    expect(isParsable("indigo-0")).toBe(false)
+    expect(parser.isParsable("indigo-0")).toBe(false)
   })
 
   test("If `#c08240` is invalid", () => {
-    expect(isParsable("#c08240")).toBe(false)
+    expect(parser.isParsable("#c08240", opts)).toBe(false)
   })
 })
 
 describe("Validator is working (non-strict)", () => {
-  const opts = { strict: false }
+  test("If `` is invalid", () => {
+    expect(parser.isParsable("")).toBe(false)
+  })
+
+  test("If `transparent` is valid", () => {
+    expect(parser.isParsable("transparent")).toBe(true)
+  })
+
+  test("If `black` is valid", () => {
+    expect(parser.isParsable("black")).toBe(true)
+  })
 
   test("If arrays with valid values should be parsed", () => {
-    expect(isParsable(["red-600", "#3b82f6/75"], opts)).toBe(true)
+    expect(parser.isParsable(["red-600", "#3b82f6/75"])).toBe(true)
   })
 
   test("If only valid values should be parsed", () => {
-    expect(isParsable("orange", opts)).toBe(true)
-    expect(isParsable("orange/50", opts)).toBe(true)
-    expect(isParsable("stone-50", opts)).toBe(true)
-    expect(isParsable("stone-50/30", opts)).toBe(true)
-    expect(isParsable("green-900", opts)).toBe(true)
-    expect(isParsable("green-900/55", opts)).toBe(true)
-    expect(isParsable("#3b82f6/75", opts)).toBe(true)
+    expect(parser.isParsable("orange/50")).toBe(true)
+    expect(parser.isParsable("stone-50")).toBe(true)
+    expect(parser.isParsable("stone-50/30")).toBe(true)
+    expect(parser.isParsable("green-900")).toBe(true)
+    expect(parser.isParsable("green-900/55")).toBe(true)
+    expect(parser.isParsable("#3b82f6/75")).toBe(true)
 
-    expect(isParsable("#c08240", opts)).toBe(false)
-    expect(isParsable("emerald-", opts)).toBe(false)
-    expect(isParsable("zinc-0", opts)).toBe(false)
-    expect(isParsable("#cyan-900", opts)).toBe(false)
-    expect(isParsable("#cyan-900/55", opts)).toBe(false)
-    expect(isParsable("b69576", opts)).toBe(false)
-    expect(isParsable("#b69576/", opts)).toBe(false)
-    expect(isParsable("/", opts)).toBe(false)
-    expect(isParsable("/0", opts)).toBe(false)
-    expect(isParsable("#/20", opts)).toBe(false)
+    expect(parser.isParsable("orange")).toBe(false)
+    expect(parser.isParsable("#c08240")).toBe(false)
+    expect(parser.isParsable("emerald-")).toBe(false)
+    expect(parser.isParsable("purple-cyan")).toBe(false)
+    expect(parser.isParsable("slate-0")).toBe(false)
+    expect(parser.isParsable("#cyan-900")).toBe(false)
+    expect(parser.isParsable("#cyan-900/55")).toBe(false)
+    expect(parser.isParsable("b69576")).toBe(false)
+    expect(parser.isParsable("#b69576/")).toBe(false)
+    expect(parser.isParsable("/")).toBe(false)
+    expect(parser.isParsable("/0")).toBe(false)
+    expect(parser.isParsable("#/20")).toBe(false)
+  })
+
+  test("If hex is parsed when `hex` flag is passed", () => {
+    expect(parser.isParsable("#c08240", { hex: true })).toBe(true)
+  })
+
+  test("If hex is parsed when `named` flag is passed", () => {
+    expect(parser.isParsable("bisque", { named: true })).toBe(true)
+    expect(parser.isParsable("zinc", { named: true })).toBe(false)
   })
 
   test("If `rgb/a` form should not be parsed", () => {
-    expect(isParsable("rgb(0,0,0)", opts)).toBe(false)
-    expect(isParsable("rgb(0 0 0)", opts)).toBe(false)
-    expect(isParsable("rgba(0,0,0,0.1)", opts)).toBe(false)
-    expect(isParsable("rgb(0 0 0 / 0.1)", opts)).toBe(false)
+    expect(parser.isParsable("rgb(0,0,0)")).toBe(false)
+    expect(parser.isParsable("rgb(0 0 0)")).toBe(false)
+    expect(parser.isParsable("rgba(0,0,0,0.1)")).toBe(false)
+    expect(parser.isParsable("rgb(0 0 0 / 0.1)")).toBe(false)
   })
 
   test("If `hsl/a` form should not be parsed", () => {
-    expect(isParsable("hsl(50,80%,40%)", opts)).toBe(false)
-    expect(isParsable("hsl(150deg 30% 60%)", opts)).toBe(false)
-    expect(isParsable("hsla(0.3turn,60%,45%,.7)", opts)).toBe(false)
-    expect(isParsable("hsla(0 80% 50% / 25%)", opts)).toBe(false)
+    expect(parser.isParsable("hsl(50,80%,40%)")).toBe(false)
+    expect(parser.isParsable("hsl(150deg 30% 60%)")).toBe(false)
+    expect(parser.isParsable("hsla(0.3turn,60%,45%,.7)")).toBe(false)
+    expect(parser.isParsable("hsla(0 80% 50% / 25%)")).toBe(false)
   })
 })
 
 describe("Validator is working with extended colors", () => {
+  const opts = { strict: true }
+
   test("If `main` is valid", () => {
-    expect(isParsable("main")).toBe(true)
+    expect(parser.isParsable("main", opts)).toBe(true)
   })
 
   test("If `choco-50` is valid", () => {
-    expect(isParsable("choco-50")).toBe(true)
+    expect(parser.isParsable("choco-50", opts)).toBe(true)
   })
 
   test("If `mango-200` is invalid", () => {
-    expect(isParsable("mango-200")).toBe(false)
+    expect(parser.isParsable("mango-200", opts)).toBe(false)
   })
 })
 
@@ -122,6 +134,10 @@ describe("Alpha validator is working", () => {
 
   test("If `green-900/50` is valid", () => {
     expect(hasValidAlpha("green-900/50")).toBe(true)
+  })
+
+  test("If `aqua/75` is valid", () => {
+    expect(hasValidAlpha("aqua/75")).toBe(true)
   })
 
   test("If `lime-600/200` is invalid", () => {
