@@ -4,18 +4,23 @@ import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
 import resolveConfig from "tailwindcss/resolveConfig"
 import invariant from "tiny-invariant"
 
-import type { Maybe, TailwindColorGroup, TwColorValidatorOpts } from "./types"
+import type {
+  Maybe,
+  TailwindColorGroup,
+  TwColorValidatorOptions,
+} from "./types"
 
 import { flattenColorPalette, formatColor, parseColor } from "./color"
 import * as utils from "./utils"
 
 class TailwindColorsParser {
-  config: TailwindConfig
-  colorPalette: TailwindColorGroup
+  public config: TailwindConfig
 
-  constructor(config: TailwindConfig) {
+  public colorPalette: TailwindColorGroup
+
+  public constructor(config: TailwindConfig) {
     const colors = {
-      ...resolveConfig(config).theme?.colors,
+      ...resolveConfig(config).theme.colors,
     } as Maybe<RecursiveKeyValuePair>
 
     invariant(colors, "TailwindCSS theme colors is undefined!")
@@ -24,8 +29,8 @@ class TailwindColorsParser {
     this.config = config
   }
 
-  parse<T extends string | string[]>(value: T): T
-  parse(value: string | string[]): string | string[] {
+  public parse<T extends string[] | string>(value: T): T
+  public parse(value: string[] | string): string[] | string {
     if (Array.isArray(value)) {
       return value.map((v) => this.parse(v))
     }
@@ -35,7 +40,7 @@ class TailwindColorsParser {
 
       return formatColor({
         ...parseColor(this.colorPalette[color] ?? color),
-        alpha: parseInt(alpha, 10) / 100,
+        alpha: Number.parseInt(alpha, 10) / 100,
       })
     }
 
@@ -46,10 +51,10 @@ class TailwindColorsParser {
    * Checks if a given color/value is valid, and
    * whether it should to be parsed.
    */
-  isParsable(
+  public isParsable(
     value: unknown,
-    { strict = false, hex, named }: TwColorValidatorOpts = {}
-  ): value is string | string[] {
+    { strict = false, hex, named }: TwColorValidatorOptions = {}
+  ): value is string[] | string {
     if (!value) return false
 
     if (!strict) {
@@ -59,7 +64,7 @@ class TailwindColorsParser {
 
       if (!utils.isParsableString(value)) return false
 
-      if (hex || named) {
+      if (hex ?? named) {
         return utils.isHex(value) || utils.isNamedColor(value)
       }
 

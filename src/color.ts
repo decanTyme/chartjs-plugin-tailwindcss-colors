@@ -12,15 +12,15 @@ import type { Color, TailwindColorGroup, Writeable } from "./types"
 
 import { isNamedColor } from "./utils"
 
-const HEX = /^#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i
-const SHORT_HEX = /^#([a-f\d])([a-f\d])([a-f\d])([a-f\d])?$/i
+const HEX = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})([\da-f]{2})?$/i
+const SHORT_HEX = /^#([\da-f])([\da-f])([\da-f])([\da-f])?$/i
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
   colors: RecursiveKeyValuePair
 ): TailwindColorGroup => {
   const result: Writeable<TailwindColorGroup> = {}
-  Object.entries(colors ?? {}).forEach(([color, value]) => {
+  Object.entries(colors).forEach(([color, value]) => {
     if (typeof value === "string") result[color] = value
     else {
       const nestedColors = flattenColorPalette(value)
@@ -43,28 +43,29 @@ export function parseColor(value: string): Color {
   if (isNamedColor(value)) {
     return {
       mode: "rgb",
-      values: Colors[value as keyof typeof Colors].map((v) => v.toString()),
+      values: Colors[value].map((v) => v.toString()),
     }
   }
 
   // We already filter out and validate before even trying
   // to parse, so this should now always match a hex
-  const hex = value
-    .replace(SHORT_HEX, (_, r, g, b, a) =>
+  const hex = HEX.exec(
+    // eslint-disable-next-line @typescript-eslint/max-params
+    value.replace(SHORT_HEX, (_, r, g, b, a) =>
       ["#", r, r, g, g, b, b, a ? a + a : ""].join("")
     )
-    .match(HEX)
+  )
 
   invariant(hex, `Invalid value: ${value}`)
 
   return {
     mode: "rgb",
     values: [
-      parseInt(hex[1], 16),
-      parseInt(hex[2], 16),
-      parseInt(hex[3], 16),
+      Number.parseInt(hex[1], 16),
+      Number.parseInt(hex[2], 16),
+      Number.parseInt(hex[3], 16),
     ].map((v) => v.toString()),
-    alpha: hex[4] ? (parseInt(hex[4], 16) / 255).toString() : undefined,
+    alpha: hex[4] ? (Number.parseInt(hex[4], 16) / 255).toString() : undefined,
   }
 }
 

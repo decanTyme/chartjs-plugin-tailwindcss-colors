@@ -8,7 +8,7 @@ import type { ParsableOptions, ValidValues } from "./types"
 
 import TailwindColorsParser from "./parser"
 
-const parsableOpts = [
+const parsableOptions = [
   "color",
   "borderColor",
   "backgroundColor",
@@ -28,10 +28,10 @@ const twColorsPlugin = (
 ): Plugin => {
   const parser = new TailwindColorsParser(tailwindConfig)
 
-  const initialize = (chart: Chart) => {
-    parsableOpts.forEach((parsableOpt) => {
-      const chartOptColor: ValidValues = get(chart.options, parsableOpt)
-      const defaultOptColor = defaults[parsableOpt] || chartOptColor
+  const initialize = (chart: Chart): void => {
+    parsableOptions.forEach((parsableOpt) => {
+      const chartOptColor = get(chart.options, parsableOpt) as ValidValues
+      const defaultOptColor = defaults[parsableOpt] ?? chartOptColor
 
       if (parser.isParsable(defaultOptColor)) {
         set(chart.options, parsableOpt, parser.parse(defaultOptColor))
@@ -59,33 +59,33 @@ const twColorsPlugin = (
     // updates for some reason. Serves as a workaround for now.
     beforeUpdate: initialize,
 
-    beforeDatasetDraw: (chart: Chart, args) => {
-      parsableOpts.forEach((parsableOpt) => {
-        const chartOptColor: ValidValues = get(chart.options, parsableOpt)
-        const defaultOptColor = defaults[parsableOpt] || chartOptColor
+    beforeDatasetDraw: (chart: Chart, args): void => {
+      parsableOptions.forEach((parsableOpt) => {
+        const chartOptColor = get(chart.options, parsableOpt) as ValidValues
+        const defaultOptColor = defaults[parsableOpt] ?? chartOptColor
 
         const metaDataset = args.meta.dataset
 
         if (!metaDataset) return
 
-        const metaDatasetOptsColor = get(
+        const metaDatasetOptionsColor = get(
           metaDataset.options,
           parsableOpt,
           defaultOptColor
         )
 
-        if (parser.isParsable(metaDatasetOptsColor)) {
+        if (parser.isParsable(metaDatasetOptionsColor)) {
           set(
             metaDataset.options,
             parsableOpt,
-            parser.parse(metaDatasetOptsColor)
+            parser.parse(metaDatasetOptionsColor)
           )
         }
 
         const currentDataset = chart.data.datasets[args.index]
 
-        currentDataset.data.forEach((_, i) => {
-          const currentElement = args.meta.data[i]
+        currentDataset.data.forEach((_, index) => {
+          const currentElement = args.meta.data[index]
           const resolvedColor = get(
             currentElement.options,
             parsableOpt,

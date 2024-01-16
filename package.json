@@ -5,20 +5,19 @@
   "description": "Colorize your Chart.js components using TailwindCSS!",
   "license": "MIT",
   "source": "src/index.ts",
-  "umd": "dist/plugin.umd.js",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "browser": "dist/plugin.umd.js",
   "types": "dist/types.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "prepublishOnly": "cross-env NODE_ENV=production yarn build",
-    "watch": "parcel watch",
-    "dev": "concurrently \"yarn watch\" \"yarn test:dev\"",
-    "prebuild": "yarn jest",
-    "build": "parcel build",
-    "test": "jest --collectCoverage",
+    "watch": "rollup -c --configPlugin rollup-plugin-ts -w",
+    "dev": "conc -n R,J -c red,magenta -k \"yarn watch\" \"yarn test:dev\"",
+    "build": "rollup -c --configPlugin rollup-plugin-ts",
+    "test": "jest --coverage",
     "test:dev": "jest --watch",
     "format:checkonly": "prettier . -c",
     "format": "prettier . -w",
@@ -42,23 +41,12 @@
     "plugin",
     "parser"
   ],
-  "targets": {
-    "main": {
-      "context": "node",
-      "isLibrary": true,
-      "engines": {
-        "node": ">= 16"
-      }
-    },
-    "umd": {
-      "context": "browser",
-      "outputFormat": "global",
-      "isLibrary": false,
-      "optimize": false,
-      "engines": {
-        "browsers": "> 0.5%, last 2 versions, not dead"
-      }
-    }
+  "exports": {
+    "import": "./dist/index.esm.js",
+    "require": "./dist/index.js",
+    "browser": "./dist/plugin.umd.js",
+    "default": "./dist/index.esm.js",
+    "types": "./dist/types.d.ts"
   },
   "dependencies": {
     "color-name": "^1.1.4",
@@ -67,30 +55,35 @@
     "tiny-invariant": "^1.3.1"
   },
   "devDependencies": {
-    "@parcel/packager-ts": "^2.8.3",
-    "@parcel/transformer-typescript-types": "^2.8.3",
-    "@types/color-name": "^1.1.1",
-    "@types/jest": "^29.4.0",
-    "@types/lodash.get": "^4.4.7",
-    "@types/lodash.set": "^4.3.7",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
-    "canvas": "^2.11.0",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@tsconfig/node-lts": "^20.1.1",
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/color-name": "^1.1.3",
+    "@types/jest": "^29.5.11",
+    "@types/lodash.get": "^4.4.9",
+    "@types/lodash.set": "^4.3.9",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "canvas": "^2.11.2",
     "chart.js": "^3.9.1",
-    "concurrently": "^7.1.0",
+    "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.13.0",
+    "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.26.0",
-    "jest": "^29.4.1",
-    "jest-environment-jsdom": "^29.4.1",
-    "parcel": "^2.8.3",
-    "prettier": "^2.6.2",
-    "process": "^0.11.10",
-    "tailwindcss": "^3.2.4",
-    "ts-jest": "^29.0.5",
-    "typescript": "^4.9.5"
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-unicorn": "^50.0.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^2.8.8",
+    "rollup": "^4.9.5",
+    "rollup-plugin-ts": "^3.4.5",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "chart.js": "^3.0.0",

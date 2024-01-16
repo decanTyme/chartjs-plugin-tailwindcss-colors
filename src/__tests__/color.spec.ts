@@ -3,7 +3,9 @@
 // and used under the terms of the MIT license
 // @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
 
-import { flattenColorPalette, formatColor, parseColor } from "../src/color"
+import type { Color } from "../types"
+
+import { flattenColorPalette, formatColor, parseColor } from "../color"
 
 describe("Color palette is correctly flattened", () => {
   test("It flattens nested color objects", () => {
@@ -96,9 +98,12 @@ describe("`parseColor` works as intended", () => {
     ${"#0088cc99"}   | ${{ mode: "rgb", values: ["0", "136", "204"], alpha: "0.6" }}
     ${"#08c9"}       | ${{ mode: "rgb", values: ["0", "136", "204"], alpha: "0.6" }}
     ${"transparent"} | ${{ mode: "rgb", values: ["0", "0", "0"], alpha: "0" }}
-  `('Should parse "$color" to the correct value', ({ color, output }) => {
-    expect(parseColor(color)).toEqual(output)
-  })
+  `(
+    'Should parse "$color" to the correct value',
+    ({ color, output }: { color: string; output: Color }) => {
+      expect(parseColor(color)).toEqual(output)
+    }
+  )
 })
 
 describe("`formatColor` works as intended", () => {
@@ -109,7 +114,7 @@ describe("`formatColor` works as intended", () => {
     ${{ mode: "rgb", values: ["0", "136", "204"], alpha: "0.6" }}     | ${"rgb(0 136 204 / 0.6)"}
   `(
     'Should format the color pieces into a proper "$output"',
-    ({ color, output }) => {
+    ({ color, output }: { color: Color; output: string }) => {
       expect(formatColor(color)).toEqual(output)
     }
   )

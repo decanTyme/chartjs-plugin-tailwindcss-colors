@@ -1,15 +1,17 @@
 import type { Scriptable } from "chart.js"
 import type { AnyObject } from "chart.js/types/basic"
+import type Colors from "color-name"
 
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] }
-export type Maybe<T> = T | undefined | null
-export type ValidValues = string | Array<string> | Scriptable<string, AnyObject>
+export type Maybe<T> = T | null | undefined
+export type ValidValues = Scriptable<string, AnyObject> | string[] | string
 
-export interface ParsableOptions
-  extends Record<string, string | Array<string>> {
+export type NamedColor = keyof typeof Colors
+
+export interface ParsableOptions extends Record<string, string[] | string> {
   color: string
   borderColor: string
-  backgroundColor: string | Array<string>
+  backgroundColor: string[] | string
   hoverBorderColor: string
   hoverBackgroundColor: string
   pointBackgroundColor: string
@@ -19,12 +21,12 @@ export interface ParsableOptions
 }
 
 export interface Color {
-  mode: "rgb" | "hsl"
-  values: Array<string>
-  alpha?: string | number
+  mode: "hsl" | "rgb"
+  values: string[]
+  alpha?: number | string
 }
 
-export interface TwColorValidatorOpts {
+export interface TwColorValidatorOptions {
   /**
    * @default false
    */
@@ -47,6 +49,4 @@ export interface TwColorValidatorOpts {
 
 // Bring back types from stub `@types/tailwindcss`
 
-export interface TailwindColorGroup {
-  readonly [key: string]: string
-}
+export type TailwindColorGroup = Readonly<Record<string, string | undefined>>

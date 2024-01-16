@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { hasValidAlpha } from "../src/utils"
+import { hasValidAlpha } from "../utils"
 
 describe("Alpha validator is working", () => {
   test("If `yellow-50/1` is valid", () => {

@@ -1,26 +1,18 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/init-declarations */
+
 import { Chart } from "chart.js"
 import invariant from "tiny-invariant"
-import canvas from "canvas"
-import twColorsPlugin from "../src"
+import twColorsPlugin from ".."
 
-// @ts-ignore
 import tailwindConfig from "./tailwind.config"
 
 // TODO: Improve plugin tests
 describe("Plugin works as expected", () => {
+  // eslint-disable-next-line unicorn/prevent-abbreviations
   let ctx
   let chart: Chart
 
   beforeAll(() => {
-    // @see https://github.com/Automattic/node-canvas/issues/990
-    ;["CanvasRenderingContext2D", "CanvasPattern", "CanvasGradient"].forEach(
-      (val) => {
-        // @ts-ignore - ts(2551)
-        global[<keyof typeof global>val] = canvas[<keyof typeof canvas>val]
-      }
-    )
-
     Chart.register(twColorsPlugin(tailwindConfig, { borderColor: "red-500" }))
   })
 
