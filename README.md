@@ -1,6 +1,6 @@
 # chartjs-plugin-tailwindcss-colors
 
-![yarn-current](https://img.shields.io/badge/Yarn-v1-blue)
+![yarn current](https://img.shields.io/badge/Yarn-v1-blue)
 ![chart.js peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js)
 ![tailwindcss peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/tailwindcss)
 ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors)
@@ -27,7 +27,14 @@ yarn add chartjs-plugin-tailwindcss-colors # or npm install
 [CDN](https://www.jsdelivr.com/package/npm/chartjs-plugin-tailwindcss-colors):
 
 ```html
+<script src="https://cdn.jsdelivr.net/npm/chart.js@<version>/dist/chart.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- UMD -->
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-tailwindcss-colors@<version>/dist/plugin.umd.min.js"></script>
+<script>
+  Chart.register(twColorsPlugin(tailwind.config))
+</script>
 
 <!-- or as an ESM -->
 <script type="module">
@@ -62,7 +69,7 @@ const chart = new Chart(ctx, config)
 
 And that's about it, you're good to go!
 
-> **NOTE**: Only tested with vanilla JS and `react-chartjs-2` using `chart.js@3.7.1` as of initial release. If you encounter any problems with other frameworks and versions of Chart.js, please feel free to drop by or maybe submit to the [issue tracker](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues)!
+> **NOTE**: Only tested with vanilla JS and `react-chartjs-2` using `chart.js@3` as of initial release. If you encounter problems with other frameworks and versions of Chart.js, please feel free to submit to the [issue tracker](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues)!
 
 ### Parsable Chart Options
 

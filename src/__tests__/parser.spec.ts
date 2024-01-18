@@ -1,36 +1,34 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import TailwindColorsParser from "../src/parser"
+import TailwindColorsParser from "../parser"
 
-// @ts-ignore
 import tailwindConfig from "./tailwind.config"
 
 const parser = new TailwindColorsParser(tailwindConfig)
 
 describe("Validator is working with configured colors only (strict)", () => {
-  const opts = { strict: true }
+  const options = { strict: true }
 
   test("If `transparent` is valid", () => {
-    expect(parser.isParsable("transparent", opts)).toBe(true)
+    expect(parser.isParsable("transparent", options)).toBe(true)
   })
 
   test("If `black` is valid", () => {
-    expect(parser.isParsable("black", opts)).toBe(true)
+    expect(parser.isParsable("black", options)).toBe(true)
   })
 
   test("If `yellow-50` is valid", () => {
-    expect(parser.isParsable("yellow-50", opts)).toBe(true)
+    expect(parser.isParsable("yellow-50", options)).toBe(true)
   })
 
   test("If `red-100` is valid", () => {
-    expect(parser.isParsable("red-100", opts)).toBe(true)
+    expect(parser.isParsable("red-100", options)).toBe(true)
   })
 
   test("If `orange-90` is invalid", () => {
-    expect(parser.isParsable("orange-90", opts)).toBe(false)
+    expect(parser.isParsable("orange-90", options)).toBe(false)
   })
 
   test("If `pink-250` is invalid", () => {
-    expect(parser.isParsable("pink-250", opts)).toBe(false)
+    expect(parser.isParsable("pink-250", options)).toBe(false)
   })
 
   test("If `indigo-0` is invalid", () => {
@@ -38,7 +36,7 @@ describe("Validator is working with configured colors only (strict)", () => {
   })
 
   test("If `#c08240` is invalid", () => {
-    expect(parser.isParsable("#c08240", opts)).toBe(false)
+    expect(parser.isParsable("#c08240", options)).toBe(false)
   })
 })
 
@@ -106,17 +104,17 @@ describe("Validator is working (non-strict)", () => {
 })
 
 describe("Validator is working with extended colors", () => {
-  const opts = { strict: true }
+  const options = { strict: true }
 
   test("If `main` is valid", () => {
-    expect(parser.isParsable("main", opts)).toBe(true)
+    expect(parser.isParsable("main", options)).toBe(true)
   })
 
   test("If `choco-50` is valid", () => {
-    expect(parser.isParsable("choco-50", opts)).toBe(true)
+    expect(parser.isParsable("choco-50", options)).toBe(true)
   })
 
   test("If `mango-200` is invalid", () => {
-    expect(parser.isParsable("mango-200", opts)).toBe(false)
+    expect(parser.isParsable("mango-200", options)).toBe(false)
   })
 })
