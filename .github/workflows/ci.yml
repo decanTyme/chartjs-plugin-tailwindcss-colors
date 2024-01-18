@@ -20,7 +20,7 @@ jobs:
           node-version: "lts/*"
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
       - run: yarn stylecheck
 
@@ -39,6 +39,6 @@ jobs:
           node-version: "lts/*"
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
-      - run: yarn jest
+      - run: yarn test

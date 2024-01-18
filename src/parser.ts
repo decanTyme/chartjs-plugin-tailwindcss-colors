@@ -44,7 +44,9 @@ class TailwindColorsParser {
       })
     }
 
-    return this.colorPalette[value] ?? value
+    return value === "transparent"
+      ? formatColor(parseColor(value))
+      : this.colorPalette[value] ?? value
   }
 
   /**
@@ -64,8 +66,12 @@ class TailwindColorsParser {
 
       if (!utils.isParsableString(value)) return false
 
-      if (hex ?? named) {
-        return utils.isHex(value) || utils.isNamedColor(value)
+      if (hex) {
+        return utils.isHex(value)
+      }
+
+      if (named) {
+        return utils.isNamedColor(value)
       }
 
       // Ignore hex and named colors without a valid alpha

@@ -4,6 +4,7 @@
   "extends": [
     "eslint:all",
     "plugin:@typescript-eslint/all",
+    "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "airbnb-base",
@@ -13,13 +14,17 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["./tsconfig.json"],
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
     "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "no-invalid-this": "off",
+    "no-unused-expressions": "off",
+    "init-declarations": "off",
+    "prefer-destructuring": "off",
 
     "lines-between-class-members": [
       "error",
@@ -27,30 +32,102 @@
       { "exceptAfterSingleLine": true }
     ],
 
+    "func-names": ["warn", "as-needed"],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+
     "@typescript-eslint/no-type-alias": "off",
+    "@typescript-eslint/no-invalid-this": "off",
     "@typescript-eslint/prefer-readonly-parameter-types": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
 
     "@typescript-eslint/consistent-type-imports": "warn",
+    "@typescript-eslint/no-unused-expressions": [
+      "error",
+      { "allowTaggedTemplates": true }
+    ],
 
     "unicorn/no-array-for-each": "off",
+    "unicorn/no-null": "off",
+    "unicorn/switch-case-braces": "off",
 
     "unicorn/prevent-abbreviations": ["error", { "ignore": ["^args$"] }]
   },
+
   "overrides": [
     {
-      "files": ["rollup.config.ts", "jest.config.js"],
-      "rules": {
-        "unicorn/prevent-abbreviations": "off",
-        "unicorn/prefer-module": "off"
-      }
+      "files": ["**/*.ts", "jest.config.js"],
+      "parserOptions": { "project": true },
+
+      "overrides": [
+        {
+          "files": ["rollup.config.ts", "jest.config.js"],
+          "rules": {
+            "unicorn/prevent-abbreviations": "off",
+            "unicorn/prefer-module": "off"
+          }
+        },
+        {
+          "files": ["src/__tests__/**/*.ts"],
+          "parserOptions": {
+            "project": ["./src/__tests__/tsconfig.test.json"]
+          },
+          "rules": {
+            "import/no-extraneous-dependencies": "off",
+            "@typescript-eslint/naming-convention": "off",
+            "@typescript-eslint/init-declarations": "off",
+            "unicorn/prefer-module": "off",
+            "unicorn/prevent-abbreviations": [
+              "warn",
+              { "ignore": ["[aA]rgs$", "^ctx$"] }
+            ]
+          },
+
+          "overrides": [
+            {
+              "files": ["src/__tests__/utils/**/*.ts"],
+              "rules": {
+                "@typescript-eslint/max-params": "off"
+              }
+            },
+            {
+              "files": ["src/__tests__/**/*.{spec,test}.ts"],
+              "extends": ["plugin:jest/recommended"],
+              "plugins": ["jest"]
+            }
+          ]
+        }
+      ]
     },
+
     {
-      "files": ["src/__tests__/**/*"],
-      "rules": {
-        "unicorn/prefer-module": "off"
-      }
+      "files": ["*.js"],
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"],
+
+      "overrides": [
+        {
+          "files": ["src/__tests__/**/*.js"],
+          "parserOptions": {
+            "project": ["./src/__tests__/tsconfig.test.json"]
+          },
+          "rules": {
+            "unicorn/prefer-module": "off",
+            "@typescript-eslint/explicit-function-return-type": "off"
+          },
+
+          "overrides": [
+            {
+              "files": ["src/__tests__/fixtures/**/*.js"],
+              "globals": { "Chart": "readonly", "helpers": "readonly" },
+              "rules": {
+                "no-nested-ternary": "off",
+                "unicorn/filename-case": "warn"
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
+
   "ignorePatterns": ["dist", "coverage"]
 }

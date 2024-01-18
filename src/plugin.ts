@@ -1,4 +1,4 @@
-import type { Chart, Plugin } from "chart.js"
+import type { Plugin } from "chart.js"
 import type { Config as TailwindConfig } from "tailwindcss"
 
 import get from "lodash.get"
@@ -16,8 +16,8 @@ const parsableOptions = [
   "hoverBackgroundColor",
   "pointBorderColor",
   "pointBackgroundColor",
-  "pointHoverBackgroundColor",
   "pointHoverBorderColor",
+  "pointHoverBackgroundColor",
   "fill.above",
   "fill.below",
 ]
@@ -28,38 +28,30 @@ const twColorsPlugin = (
 ): Plugin => {
   const parser = new TailwindColorsParser(tailwindConfig)
 
-  const initialize = (chart: Chart): void => {
-    parsableOptions.forEach((parsableOpt) => {
-      const chartOptColor = get(chart.options, parsableOpt) as ValidValues
-      const defaultOptColor = defaults[parsableOpt] ?? chartOptColor
-
-      if (parser.isParsable(defaultOptColor)) {
-        set(chart.options, parsableOpt, parser.parse(defaultOptColor))
-      }
-
-      chart.data.datasets.forEach((dataset) => {
-        const color = get(dataset, parsableOpt, defaultOptColor)
-
-        if (parser.isParsable(color)) {
-          set(dataset, parsableOpt, parser.parse(color))
-        }
-      })
-    })
-  }
-
   return {
     id: "tailwindcss-colors",
 
-    // Shouldn't be needed, but tests fail without it
-    // FIXME Update plugin tests so this can be removed
-    beforeInit: initialize,
+    beforeLayout: (chart): void => {
+      parsableOptions.forEach((parsableOpt) => {
+        const chartDefaultColor = get(chart.options, parsableOpt) as ValidValues
+        const defaultOptColor = defaults[parsableOpt] ?? chartDefaultColor
 
-    // FIXME
-    // Shouldn't be needed, but charts "lose" colors on some
-    // updates for some reason. Serves as a workaround for now.
-    beforeUpdate: initialize,
+        if (parser.isParsable(defaultOptColor)) {
+          set(chart.options, parsableOpt, parser.parse(defaultOptColor))
+        }
 
-    beforeDatasetDraw: (chart: Chart, args): void => {
+        chart.config.data.datasets.forEach((dataset) => {
+          const color = get(dataset, parsableOpt, defaultOptColor)
+
+          if (parser.isParsable(color)) {
+            set(dataset, parsableOpt, parser.parse(color))
+          }
+        })
+      })
+    },
+
+    // Handle scriptable options
+    beforeDatasetDraw: (chart, args): void => {
       parsableOptions.forEach((parsableOpt) => {
         const chartOptColor = get(chart.options, parsableOpt) as ValidValues
         const defaultOptColor = defaults[parsableOpt] ?? chartOptColor

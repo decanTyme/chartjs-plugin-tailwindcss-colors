@@ -5,9 +5,8 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "isolatedModules": true,
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "outDir": "dist"
+    "resolveJsonModule": true
   },
-  "include": ["src", "./*.config.*"]
+  "include": ["src/**/*", "./*.config.*"],
+  "exclude": ["src/__tests__/**/*"]
 }
