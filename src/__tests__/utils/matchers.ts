@@ -79,7 +79,7 @@ const toEqualImageData: MatcherFunction<
         ` / ${RECEIVED_COLOR`${toPercent(ratio)}%`}\n` +
         `Tolerance: ${EXPECTED_COLOR`${toPercent(tolerance)}%`}\n` +
         `Threshold: ${EXPECTED_COLOR`${toPercent(threshold)}%`}`,
-      pass: false,
+      pass: debug ?? false,
     }
   }
 

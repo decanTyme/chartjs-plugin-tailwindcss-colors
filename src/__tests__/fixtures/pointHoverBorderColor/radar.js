@@ -23,7 +23,6 @@ module.exports = {
   },
 
   options: {
-    tolerance: 0.0001,
     async run(chart) {
       const element = chart.getDatasetMeta(0).data[2]
 

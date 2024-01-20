@@ -13,5 +13,12 @@ module.exports = {
         },
       ],
     },
+    options: {
+      scales: {
+        x: { display: false },
+        y: { display: false },
+      },
+      plugins: { legend: false },
+    },
   },
 }

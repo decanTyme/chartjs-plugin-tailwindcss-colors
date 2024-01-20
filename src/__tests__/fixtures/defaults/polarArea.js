@@ -10,5 +10,11 @@ module.exports = {
         },
       ],
     },
+    options: {
+      scales: {
+        r: { display: false },
+      },
+      plugins: { legend: false },
+    },
   },
 }

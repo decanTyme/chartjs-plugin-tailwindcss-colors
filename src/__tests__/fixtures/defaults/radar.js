@@ -11,7 +11,10 @@ module.exports = {
       ],
     },
     options: {
-      plugins: { filler: false },
+      scales: {
+        r: { display: false },
+      },
+      plugins: { legend: false },
     },
   },
 }
