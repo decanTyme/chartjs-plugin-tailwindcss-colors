@@ -55,12 +55,12 @@
 
   "overrides": [
     {
-      "files": ["**/*.ts", "jest.config.js"],
+      "files": ["**/*.ts"],
       "parserOptions": { "project": true },
 
       "overrides": [
         {
-          "files": ["rollup.config.ts", "jest.config.js"],
+          "files": ["rollup.config.ts"],
           "rules": {
             "unicorn/prevent-abbreviations": "off",
             "unicorn/prefer-module": "off"
@@ -102,6 +102,12 @@
     {
       "files": ["*.js"],
       "extends": ["plugin:@typescript-eslint/disable-type-checked"],
+      "rules": {
+        "global-require": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "unicorn/prefer-module": "off"
+      },
 
       "overrides": [
         {
@@ -110,7 +116,6 @@
             "project": ["./src/__tests__/tsconfig.test.json"]
           },
           "rules": {
-            "unicorn/prefer-module": "off",
             "@typescript-eslint/explicit-function-return-type": "off"
           },
 
