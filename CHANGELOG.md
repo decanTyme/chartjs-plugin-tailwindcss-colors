@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.1](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.0...v0.2.1) (2024-01-22)
+
+
+### Miscellaneous
+
+* **deps:** Bump `semver` from 5.7.1 to 5.7.2 ([#22](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/22)) ([dfc4ee4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/dfc4ee45fa5dd1c77d87f628c646e0e6f2504a4d))
+* **deps:** Bump `tough-cookie` from 4.1.2 to 4.1.3 ([#21](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/21)) ([9cc51c9](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/9cc51c9b4b41a39d727af5df1a3f90f5624d773b))
+* **deps:** Bump `word-wrap` from 1.2.3 to 1.2.5 ([#24](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/24)) ([b279d71](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/b279d719ae1a4e5ef506a135108f26fac4b86b57))
+* Migrate to `rollup` ([#16](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/16))([#29](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/29)) ([8de5671](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8de56710de55299bb6bc03178e8ee58ba495445c))
+
 ## [0.2.0](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.1.1...v0.2.0) (2023-02-19)
 
 
