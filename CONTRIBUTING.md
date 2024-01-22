@@ -29,7 +29,7 @@ Clear, concise pull requests are excellent at continuing the project's community
 - Please create an issue first:
   - For bugs, we can discuss the fixing approach
   - For enhancements, we can discuss if it is within the project scope and avoid duplicate effort
-- Please only make changes to the files in [`/src`](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/tree/main/src)
+- Please only make changes to the files in [`/src`](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/tree/main/src) and [`/test`](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/tree/main/test)
 - If adding new functionality, please also include any relevant changes to the documentation
 - Please make sure to run `yarn stylecheck` before submitting a PR
 - Please make sure your commits follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification

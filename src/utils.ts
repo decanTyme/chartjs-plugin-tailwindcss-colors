@@ -15,11 +15,9 @@ export const isParsableString = (value: unknown): value is string =>
   // No need to parse these as chart.js can readily accept it
   !/rgba?|hsla?/i.test(value)
 
-export const isHex = (value: string): boolean =>
-  new RegExp(`${VALID_HEX.source}(${VALID_ALPHA.source})?`).test(value)
-
+export const isHex = (value: string): boolean => VALID_HEX.test(value)
 export const isNamedColor = (value: string): value is NamedColor =>
-  value in Colors && Boolean(Colors[value as NamedColor])
+  value in Colors
 
 /**
  * Checks first if the color is in a valid form, then
