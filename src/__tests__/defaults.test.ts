@@ -1,11 +1,6 @@
 import { Chart } from "chart.js"
 
-import {
-  addMatchers,
-  injectWrapperCSS,
-  showBrowserWindow,
-  specsFromFixtures,
-} from "./utils"
+import { specsFromFixtures } from "./utils"
 
 import twColorsPlugin from ".."
 import twConfig from "./tailwind.config"
@@ -13,14 +8,6 @@ import twConfig from "./tailwind.config"
 const plugin = twColorsPlugin(twConfig)
 
 beforeAll(() => {
-  // force ratio=1 for tests on high-res/retina devices
-  window.devicePixelRatio = 1
-
-  showBrowserWindow()
-
-  injectWrapperCSS()
-  addMatchers()
-
   Chart.defaults.set({
     color: "violet-700",
     borderColor: "teal-700",

@@ -1,24 +1,9 @@
-import {
-  addMatchers,
-  injectWrapperCSS,
-  showBrowserWindow,
-  specsFromFixtures,
-} from "./utils"
+import { specsFromFixtures } from "./utils"
 
 import twColorsPlugin from ".."
 import twConfig from "./tailwind.config"
 
 const plugin = twColorsPlugin(twConfig)
-
-beforeAll(() => {
-  // force ratio=1 for tests on high-res/retina devices
-  window.devicePixelRatio = 1
-
-  showBrowserWindow()
-
-  injectWrapperCSS()
-  addMatchers()
-})
 
 describe("Plugin works as expected", () => {
   describe.each([

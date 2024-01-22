@@ -7,6 +7,8 @@ const config: JestConfigWithTsJest = {
   testMatch: ["*/**/__tests__/*.(spec|test).ts"],
   testPathIgnorePatterns: ["dist"],
   coveragePathIgnorePatterns: ["test"],
+  setupFilesAfterEnv: ["./src/__tests__/setup.ts"],
+  randomize: true,
 
   transform: {
     "^.+\\.tsx?$": [
