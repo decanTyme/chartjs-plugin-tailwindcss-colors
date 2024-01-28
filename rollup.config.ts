@@ -8,21 +8,19 @@ import typescript from "rollup-plugin-ts"
 
 import pkg from "./package.json" assert { type: "json" }
 
+const author = pkg.author.replaceAll(/ <[^>]+>/g, "")
 const banner = `/*!
  * ${pkg.name} v${pkg.version}
  * ${pkg.homepage}
- * (c) ${new Date().getFullYear()} ${pkg.author.replaceAll(
-  / <[^>]+>/g,
-  ""
-)} and ${pkg.name} Contributors
+ * (c) ${new Date().getFullYear()} ${author} and Contributors
  * Released under the MIT License
  */`
 
 const external: ExternalOption = [
   "chart.js",
   "tailwindcss/resolveConfig",
-  "lodash.get",
-  "lodash.set",
+  "lodash/get",
+  "lodash/set",
   "tiny-invariant",
   "color-name",
 ]
@@ -43,7 +41,7 @@ export default defineConfig([
       globals,
       sourcemap: true,
     },
-    external: external.slice(0, 1),
+    external: external.slice(0, 2),
     plugins: [
       typescript({
         tsconfig: (resolved) => ({
