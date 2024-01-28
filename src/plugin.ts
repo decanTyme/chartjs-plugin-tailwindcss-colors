@@ -1,8 +1,8 @@
 import type { Plugin } from "chart.js"
 import type { Config as TailwindConfig } from "tailwindcss"
 
-import get from "lodash.get"
-import set from "lodash.set"
+import get from "lodash/get"
+import set from "lodash/set"
 
 import type { ParsableOptions, ValidValues } from "./types"
 
