@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.2](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.1...v0.2.2) (2024-01-30)
+
+
+### Bug Fixes
+
+* **deps:** Remove `resolveConfig` from umd bundle ([#31](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/31)) ([3e040d8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/3e040d8a30c1be1d3dce7d69ec1f91fcf38aa5e2))
+* **package:** Incorrect exports ([#33](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/33)) ([c9f54c7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/c9f54c71e397a15c5c85f1222cc7fe52129f626a))
+
 ## [0.2.1](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.0...v0.2.1) (2024-01-22)
 
 
