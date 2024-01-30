@@ -78,14 +78,8 @@ export default defineConfig([
         tsconfig: (resolved) => ({
           ...resolved,
           declaration: true,
-          declarationMap: true,
           sourceMap: true,
         }),
-        hook: {
-          // ensure rewrite to avoid declaration dupes
-          outputPath: (_, kind) =>
-            `./dist/types.d.ts${kind === "declaration" ? "" : ".map"}`,
-        },
       }),
       commonjs(),
       resolve(),

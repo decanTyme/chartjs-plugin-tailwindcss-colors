@@ -11,11 +11,12 @@ const config: JestConfigWithTsJest = {
   randomize: true,
 
   transform: {
-    "^.+\\.tsx?$": [
+    "^.+\\.[jt]sx?$": [
       "ts-jest",
       { ...defaults, tsconfig: "./src/__tests__/tsconfig.test.json" },
     ],
   },
+  transformIgnorePatterns: ["node_modules/(?!color-name)"],
 }
 
 export default config
