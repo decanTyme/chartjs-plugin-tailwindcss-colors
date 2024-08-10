@@ -2,7 +2,6 @@
   "plugins": [
     "sentence-case"
   ],
-  "bootstrap-sha": "fbf8187c7f5a40ba553a1bfc29a9eb8d3a5e8ff5",
   "release-type": "node",
   "draft": false,
   "prerelease": true,
