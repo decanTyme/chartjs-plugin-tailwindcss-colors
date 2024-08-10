@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.2...v0.2.3) (2024-08-10)
+
+
+### Bug Fixes
+
+* **utils:** Use regex `?:` for safari &lt;16.4 compatibility ([#37](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/37)) ([f35b3cf](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/f35b3cfd5f61c05e6fcb3bb047cf0ab2d4e5350d))
+
 ## [0.2.2](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.1...v0.2.2) (2024-01-30)
 
 
