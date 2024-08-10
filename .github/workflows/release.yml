@@ -13,7 +13,7 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT_RELEASER }}
           config-file: .releaserc
-          manifest-file: .github/workflows/manifest.json
+          manifest-file: .github/manifest.json
 
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created }}
