@@ -26,7 +26,7 @@ export const isNamedColor = (value: string): value is NamedColor =>
 export const hasValidAlpha = (value: string): boolean =>
   // TODO There should be room for improvement here
   (isNamedColor(value.split("/")[0]) && VALID_ALPHA.test(value)) || // named colors
-  new RegExp(`(?<=(${VALID_COLOR_FORM}))${VALID_ALPHA.source}`).test(value)
+  new RegExp(`(?:${VALID_COLOR_FORM})${VALID_ALPHA.source}`).test(value)
 
 export const shouldParse = (value: string): boolean =>
   hasValidAlpha(value) || VALID_TW_COLOR_CLASS.test(value)

@@ -5,6 +5,7 @@
     "eslint:all",
     "plugin:@typescript-eslint/all",
     "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "airbnb-base",
@@ -26,10 +27,14 @@
     "init-declarations": "off",
     "prefer-destructuring": "off",
 
-    "lines-between-class-members": [
+    "@typescript-eslint/lines-between-class-members": [
       "error",
-      "always",
-      { "exceptAfterSingleLine": true }
+      {
+        "enforce": [
+          { "blankLine": "never", "prev": "field", "next": "field" },
+          { "blankLine": "always", "prev": "field", "next": "method" }
+        ]
+      }
     ],
 
     "func-names": ["warn", "as-needed"],

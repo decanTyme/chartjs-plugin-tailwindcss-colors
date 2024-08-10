@@ -3,8 +3,8 @@ import type { Plugin } from "chart.js"
 import { Chart } from "chart.js"
 import * as chartHelpers from "chart.js/helpers"
 import fs from "node:fs"
-import vm from "node:vm"
 import { join, relative, resolve } from "node:path"
+import vm from "node:vm"
 
 import type {
   FixtureConfig,

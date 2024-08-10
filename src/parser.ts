@@ -15,7 +15,6 @@ import * as utils from "./utils"
 
 class TailwindColorsParser {
   public config: TailwindConfig
-
   public colorPalette: TailwindColorGroup
 
   public constructor(config: TailwindConfig) {
