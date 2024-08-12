@@ -22,8 +22,6 @@
   "rules": {
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "no-invalid-this": "off",
-    "no-unused-expressions": "off",
     "init-declarations": "off",
     "prefer-destructuring": "off",
 

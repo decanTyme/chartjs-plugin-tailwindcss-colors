@@ -12,6 +12,7 @@ describe("Alpha validator is working", () => {
     ${"green-900/50"} | ${true}  | ${"valid"}
     ${"red-100/100"}  | ${true}  | ${"valid"}
     ${"aqua/75"}      | ${true}  | ${"valid"}
+    ${"bisque/"}      | ${false} | ${"invalid"}
     ${"lime-600/200"} | ${false} | ${"invalid"}
     ${"orange-200/"}  | ${false} | ${"invalid"}
     ${"pink-300/0"}   | ${false} | ${"invalid"}
@@ -27,7 +28,10 @@ describe("Alpha validator is working with hex values", () => {
   test.each`
     color            | output   | status
     ${"#c08240/20"}  | ${true}  | ${"valid"}
+    ${"#bc4/20"}     | ${true}  | ${"valid"}
     ${"#a42c20/200"} | ${false} | ${"invalid"}
+    ${"#bc4/200"}    | ${false} | ${"invalid"}
+    ${"##a42c20/70"} | ${false} | ${"invalid"}
     ${"#a42c20/0"}   | ${false} | ${"invalid"}
     ${"b69576/45"}   | ${false} | ${"invalid"}
     ${"#b69576/"}    | ${false} | ${"invalid"}

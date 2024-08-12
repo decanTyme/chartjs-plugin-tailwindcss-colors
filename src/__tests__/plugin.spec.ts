@@ -7,6 +7,8 @@ const plugin = twColorsPlugin(twConfig)
 
 describe("Plugin works as expected", () => {
   describe.each([
+    "indexable",
+    "scriptable",
     "hoverBorderColor",
     "hoverBackgroundColor",
     "pointBorderColor",

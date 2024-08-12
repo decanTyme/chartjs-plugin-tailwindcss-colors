@@ -7,6 +7,6 @@
     "isolatedModules": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "./*.config.*"],
+  "include": ["src", "./*.config.*"],
   "exclude": ["src/__tests__/**/*"]
 }
