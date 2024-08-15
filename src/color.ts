@@ -1,7 +1,7 @@
 // Color utilities taken from the CSS framework tailwindcss, which is
 // Copyright (c) Tailwind Labs, Inc. (https://tailwindcss.com/)
 // and used under the terms of the MIT license
-// @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
+// @see https://github.com/tailwindlabs/tailwindcss/blob/main/LICENSE
 
 import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
 
@@ -15,7 +15,7 @@ import { isNamedColor } from "./utils"
 const HEX = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})([\da-f]{2})?$/i
 const SHORT_HEX = /^#([\da-f])([\da-f])([\da-f])([\da-f])?$/i
 
-// @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/flattenColorPalette.js
+// @see https://github.com/tailwindlabs/tailwindcss/blob/main/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
   colors: RecursiveKeyValuePair
 ): TailwindColorGroup => {
@@ -32,7 +32,7 @@ export const flattenColorPalette = (
   return result
 }
 
-// @see https://github.com/tailwindlabs/tailwindcss/blob/master/src/util/color.js
+// @see https://github.com/tailwindlabs/tailwindcss/blob/main/src/util/color.js
 export function parseColor(value: string): Color {
   value = value.trim()
 

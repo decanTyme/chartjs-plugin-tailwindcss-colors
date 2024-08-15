@@ -1,7 +1,7 @@
 // Color utilities tests taken from the CSS framework tailwindcss, which is
 // Copyright (c) Tailwind Labs, Inc. (https://tailwindcss.com/)
 // and used under the terms of the MIT license
-// @see https://github.com/tailwindlabs/tailwindcss/blob/master/LICENSE
+// @see https://github.com/tailwindlabs/tailwindcss/blob/main/LICENSE
 
 import type { Color } from "../types"
 
