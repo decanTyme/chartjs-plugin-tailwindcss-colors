@@ -119,7 +119,7 @@ That's why this plugin was made in order to seamlessly blend Chart.js's color op
 
 ## Contributing
 
-For making feature requests and other related information, please refer to the [contributing guidelines](CONTRIBUTING.md).
+For making feature requests and other related information, please refer to the [contributing guidelines](CONTRIBUTING.md). This project is tested with BrowserStack.
 
 ## License
 
