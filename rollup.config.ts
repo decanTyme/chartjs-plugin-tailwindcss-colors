@@ -13,7 +13,7 @@ const banner = `/*!
  * ${pkg.name} v${pkg.version}
  * ${pkg.homepage}
  * (c) ${new Date().getFullYear()} ${author} and Contributors
- * Released under the MIT License
+ * Released under the ${pkg.license} License
  */`
 
 const external: ExternalOption = [

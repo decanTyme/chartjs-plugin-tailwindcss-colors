@@ -6,7 +6,7 @@ module.exports = {
       labels: [0, 1, 2, 3, 4, 5],
       datasets: [
         {
-          data: [0, 5, 10, null, -10, -5],
+          data: [-5, 5, 10, 5, -10, -5],
           backgroundColor: [
             "red-600",
             "#3b82f6/75",
@@ -17,7 +17,7 @@ module.exports = {
           ],
         },
         {
-          data: [0, 5, 10, null, -10, -5],
+          data: [-5, 5, 10, 5, -10, -5],
         },
       ],
     },

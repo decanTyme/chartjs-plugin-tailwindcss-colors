@@ -34,18 +34,18 @@ class TailwindColorsParser {
       return value.map((v) => this.parse(v))
     }
 
+    if (!utils.isParsableString(value)) return value
+
     if (utils.hasValidAlpha(value)) {
       const [color, alpha] = value.split("/")
 
       return formatColor({
-        ...parseColor(this.colorPalette[color] ?? color),
+        ...parseColor(this.colorPalette[color.trim()] ?? color),
         alpha: Number.parseInt(alpha, 10) / 100,
       })
     }
 
-    return value === "transparent"
-      ? formatColor(parseColor(value))
-      : this.colorPalette[value] ?? value
+    return this.colorPalette[value.trim()] ?? formatColor(parseColor(value))
   }
 
   /**
@@ -59,8 +59,8 @@ class TailwindColorsParser {
     if (!value) return false
 
     if (!strict) {
-      // Since some colors are stored in arrays, assuming the values
-      // in the array are valid, the array itself is valid
+      // Since some colors are stored in arrays, assuming all values
+      // in the array are strings, the array itself is valid
       if (utils.isValidArray(value)) return true
 
       if (!utils.isParsableString(value)) return false
@@ -74,11 +74,15 @@ class TailwindColorsParser {
       }
 
       // Ignore hex and named colors without a valid alpha
-      return Object.hasOwn(this.colorPalette, value) || utils.shouldParse(value)
+      return (
+        Object.hasOwn(this.colorPalette, value) || utils.hasValidAlpha(value)
+      )
     }
 
     // Strictly from the specified config
-    return typeof value === "string" && Object.hasOwn(this.colorPalette, value)
+    return (
+      utils.isParsableString(value) && Object.hasOwn(this.colorPalette, value)
+    )
   }
 }
 

@@ -31,7 +31,7 @@
   "bugs": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors"
+    "url": "git+https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors.git"
   },
   "keywords": [
     "chartjs",

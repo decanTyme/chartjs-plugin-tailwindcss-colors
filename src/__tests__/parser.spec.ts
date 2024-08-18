@@ -7,7 +7,7 @@ const parser = new TailwindColorsParser(tailwindConfig)
 describe("Parser", () => {
   test.each`
     color                          | output
-    ${"transparent"}               | ${"rgb(0 0 0 / 0)"}
+    ${"transparent"}               | ${"transparent"}
     ${"black"}                     | ${"#000"}
     ${"slate-700"}                 | ${"#334155"}
     ${"main"}                      | ${"#5a65f6"}
@@ -21,10 +21,10 @@ describe("Parser", () => {
 describe("Validator is working with configured colors only (strict)", () => {
   test.each`
     color            | output   | status
-    ${"transparent"} | ${true}  | ${"valid"}
     ${"black"}       | ${true}  | ${"valid"}
     ${"yellow-50"}   | ${true}  | ${"valid"}
     ${"red-100"}     | ${true}  | ${"valid"}
+    ${"transparent"} | ${false} | ${"skipped"}
     ${"orange-90"}   | ${false} | ${"invalid"}
     ${"pink-250"}    | ${false} | ${"invalid"}
     ${"indigo-0"}    | ${false} | ${"invalid"}
@@ -41,29 +41,31 @@ describe("Validator is working (non-strict)", () => {
 
   test.each`
     color            | output   | status
-    ${"transparent"} | ${true}  | ${"valid"}
     ${"black"}       | ${true}  | ${"valid"}
+    ${"transparent"} | ${false} | ${"skipped"}
     ${""}            | ${false} | ${"invalid"}
   `("if `$color` is $status", ({ color, output }) => {
     expect(parser.isParsable(color)).toBe(output)
   })
 
   test.each`
-    value             | output   | status
-    ${"stone-50"}     | ${true}  | ${"be"}
-    ${"stone-50/30"}  | ${true}  | ${"be"}
-    ${"green-900"}    | ${true}  | ${"be"}
-    ${" "}            | ${false} | ${"not be"}
-    ${"bisque"}       | ${false} | ${"not be"}
-    ${"#c08240"}      | ${false} | ${"not be"}
-    ${"#c0824066"}    | ${false} | ${"not be"}
-    ${"emerald-"}     | ${false} | ${"not be"}
-    ${"purple-cyan"}  | ${false} | ${"not be"}
-    ${"slate-0"}      | ${false} | ${"not be"}
-    ${"#cyan-900"}    | ${false} | ${"not be"}
-    ${"#cyan-900/55"} | ${false} | ${"not be"}
-    ${"b69576"}       | ${false} | ${"not be"}
-    ${"b69576/"}      | ${false} | ${"not be"}
+    value              | output   | status
+    ${"stone-50"}      | ${true}  | ${"be"}
+    ${"stone-50/30"}   | ${true}  | ${"be"}
+    ${"green-900"}     | ${true}  | ${"be"}
+    ${" "}             | ${false} | ${"not be"}
+    ${"bisque"}        | ${false} | ${"not be"}
+    ${"#c08240"}       | ${false} | ${"not be"}
+    ${"#c0824066"}     | ${false} | ${"not be"}
+    ${"emerald-"}      | ${false} | ${"not be"}
+    ${"purple-cyan"}   | ${false} | ${"not be"}
+    ${"slate-0"}       | ${false} | ${"not be"}
+    ${"#cyan-900"}     | ${false} | ${"not be"}
+    ${"#cyan-900/55"}  | ${false} | ${"not be"}
+    ${"##cyan-900/55"} | ${false} | ${"not be"}
+    ${"b69576"}        | ${false} | ${"not be"}
+    ${"##b69576"}      | ${false} | ${"not be"}
+    ${"b69576/"}       | ${false} | ${"not be"}
   `("if `$value` should $status parsed", ({ value, output }) => {
     expect(parser.isParsable(value)).toBe(output)
   })
