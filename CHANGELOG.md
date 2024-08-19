@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.3...v0.2.4) (2024-08-19)
+
+
+### Bug Fixes
+
+* **utils:** Remove all instances of lookbehind ([#41](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/41)) ([3cd4ad9](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/3cd4ad901024374974727817daad631cf2f8e8da))
+
 ## [0.2.3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.2...v0.2.3) (2024-08-10)
 
 
