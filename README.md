@@ -90,17 +90,6 @@ In addition to the above, it can also parse the following color options:
 To set the global colors, you can register it and add defaults:
 
 ```js
-Chart.register(
-  twColorsPlugin(tailwindConfig, {
-    borderColor: "yellow-500",
-    backgroundColor: "yellow-500/50", // or #eab308/50
-  })
-)
-```
-
-or, alternatively:
-
-```js
 Chart.register(twColorsPlugin(tailwindConfig))
 
 Chart.defaults.borderColor = "yellow-500"
