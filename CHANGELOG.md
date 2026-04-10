@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.4...v0.2.5) (2026-04-10)
+
+
+### Bug Fixes
+
+* **deps:** Bump lodash from 4.17.23 to 4.18.1 ([#54](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/54)) ([af924ab](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/af924ab50dacfd9b1bfa9f79e2e7da6a907da9d9))
+
 ## [0.2.4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.3...v0.2.4) (2024-08-19)
 
 
