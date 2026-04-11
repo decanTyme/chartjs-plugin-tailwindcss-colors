@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.4...v0.2.5) (2026-04-11)
+
+
+### Bug Fixes
+
+* Build failing due to multiple `rollup-plugin-ts` issues on node v22 ([#56](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/56)) ([4078006](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/4078006a54bcca25843ad5ff46bb655cf98db54e))
+* **deps:** Bump lodash from 4.17.23 to 4.18.1 ([#54](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/54)) ([af924ab](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/af924ab50dacfd9b1bfa9f79e2e7da6a907da9d9))
+
 ## [0.2.4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.3...v0.2.4) (2024-08-19)
 
 
