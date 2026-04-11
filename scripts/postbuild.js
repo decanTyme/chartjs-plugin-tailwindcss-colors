@@ -12,7 +12,7 @@ const content = fs.readFileSync(filePath, "utf8")
 fs.writeFileSync(
   filePath,
   content.replace(`export { ${name} as default };`, `export = ${name};`),
-  "utf8"
+  "utf8",
 )
 
 console.info("Post-build script executed successfully.")

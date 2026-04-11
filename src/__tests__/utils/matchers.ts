@@ -65,7 +65,7 @@ const toEqualImageData: MatcherFunction<
     buildPixelMatchPreview(
       count,
       { actual, expected, diff },
-      { description, threshold, tolerance }
+      { description, threshold, tolerance },
     )
 
     if (typeof wait === "number") await delay(wait)

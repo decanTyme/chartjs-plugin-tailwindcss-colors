@@ -94,7 +94,7 @@ function specFromFixture(
   path: string,
   inputs: FixtureInputs,
   plugins?: Plugin[],
-  options?: SpecFromFixtureOptions
+  options?: SpecFromFixtureOptions,
 ): void {
   const input = inputs.js ?? inputs.json
 
@@ -138,7 +138,7 @@ function specFromFixture(
 
       _releaseChart(chart)
     },
-    resolveWait(options?.wait)
+    resolveWait(options?.wait),
   )
 }
 
@@ -171,7 +171,7 @@ function readFolder(path: string, root = ""): Record<string, string> {
 export function specsFromFixtures(
   path = "",
   plugins?: Plugin[],
-  options?: SpecFromFixtureOptions
+  options?: SpecFromFixtureOptions,
 ): () => void {
   const testsRootPath = "src/__tests__/fixtures"
   const regex = new RegExp(`(^${testsRootPath}/${path}.+)\\.(png|json|js)`)

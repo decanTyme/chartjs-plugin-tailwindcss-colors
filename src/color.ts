@@ -17,7 +17,7 @@ const SHORT_HEX = /^#([\da-f])([\da-f])([\da-f])([\da-f])?$/i
 
 // @see https://github.com/tailwindlabs/tailwindcss/blob/main/src/util/flattenColorPalette.js
 export const flattenColorPalette = (
-  colors: RecursiveKeyValuePair
+  colors: RecursiveKeyValuePair,
 ): TailwindColorGroup => {
   const result: Writeable<TailwindColorGroup> = {}
   Object.entries(colors).forEach(([color, value]) => {
@@ -52,8 +52,8 @@ export function parseColor(value: string): Color {
   const hex = HEX.exec(
     // eslint-disable-next-line @typescript-eslint/max-params
     value.replace(SHORT_HEX, (_, r, g, b, a) =>
-      ["#", r, r, g, g, b, b, a ? a + a : ""].join("")
-    )
+      ["#", r, r, g, g, b, b, a ? a + a : ""].join(""),
+    ),
   )
 
   invariant(hex, `Invalid value: ${value}`)

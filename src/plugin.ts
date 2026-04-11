@@ -24,7 +24,7 @@ const parsableOptions = [
 
 const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
-  defaults: Partial<ParsableOptions> = {}
+  defaults: Partial<ParsableOptions> = {},
 ): Plugin => {
   const parser = new TailwindColorsParser(tailwindConfig)
 
@@ -63,14 +63,14 @@ const twColorsPlugin = (
         const metaDatasetOptionsColor = get(
           metaDataset.options,
           parsableOpt,
-          defaultOptColor
+          defaultOptColor,
         )
 
         if (parser.isParsable(metaDatasetOptionsColor)) {
           set(
             metaDataset.options,
             parsableOpt,
-            parser.parse(metaDatasetOptionsColor)
+            parser.parse(metaDatasetOptionsColor),
           )
         }
 
@@ -81,14 +81,14 @@ const twColorsPlugin = (
           const resolvedColor = get(
             currentElement.options,
             parsableOpt,
-            defaultOptColor
+            defaultOptColor,
           )
 
           if (parser.isParsable(resolvedColor)) {
             set(
               currentElement.options,
               parsableOpt,
-              parser.parse(resolvedColor)
+              parser.parse(resolvedColor),
             )
           }
         })

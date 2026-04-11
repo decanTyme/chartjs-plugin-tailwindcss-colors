@@ -79,7 +79,7 @@ function spriteWrite(
   this: CanvasRenderingContext2D,
   text: string | undefined,
   x: number,
-  y: number
+  y: number,
 ): void {
   if (!text?.charCodeAt) return
 

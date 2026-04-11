@@ -49,8 +49,10 @@ export type Wait =
       fail?: number
     }
 
-export interface ToEqualImageDataOptions
-  extends Pick<PixelmatchOptions, "threshold"> {
+export interface ToEqualImageDataOptions extends Pick<
+  PixelmatchOptions,
+  "threshold"
+> {
   description: string
   debug?: boolean
 
@@ -88,8 +90,7 @@ export interface FixtureInputs {
 export type FixtureTypes = keyof FixtureInputs
 
 interface FixtureConfigOptions
-  extends AcquireChartOptions,
-    Omit<ToEqualImageDataOptions, "description"> {
+  extends AcquireChartOptions, Omit<ToEqualImageDataOptions, "description"> {
   run: (chart: Chart) => Promise<void>
 }
 

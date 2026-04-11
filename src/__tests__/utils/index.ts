@@ -44,7 +44,7 @@ const charts = new Map<string, TestChart>()
  */
 export function acquireChart(
   config: ChartConfiguration,
-  options?: AcquireChartOptions
+  options?: AcquireChartOptions,
 ): Chart {
   const chart = _acquireChart(config, options)
   charts.set(chart.id, chart)
