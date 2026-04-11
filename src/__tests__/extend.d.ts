@@ -17,7 +17,7 @@ declare global {
     interface Matchers<R> {
       toEqualImageData: (
         data: ImageData,
-        options: ToEqualImageDataOptions
+        options: ToEqualImageDataOptions,
       ) => Promise<R>
     }
   }

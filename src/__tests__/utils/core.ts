@@ -10,7 +10,7 @@ interface ChartSetupElements {
 }
 
 function setupCanvas(
-  options: Pick<AcquireChartOptions, "canvas" | "wrapper">
+  options: Pick<AcquireChartOptions, "canvas" | "wrapper">,
 ): ChartSetupElements {
   const wrapper = document.createElement("div")
   const canvas = document.createElement("canvas")
@@ -39,7 +39,7 @@ function setupCanvas(
 
 export function _acquireChart(
   config: ChartConfiguration,
-  options: AcquireChartOptions = {}
+  options: AcquireChartOptions = {},
 ): Chart {
   const { wrapper, canvas } = setupCanvas(options)
 

@@ -22,5 +22,5 @@ beforeAll(() => {
 describe(
   // eslint-disable-next-line jest/valid-describe-callback
   "Correctly parses valid `Chart.default` colors",
-  specsFromFixtures("defaults", [plugin], { wait: { fail: 30_000 } })
+  specsFromFixtures("defaults", [plugin], { wait: { fail: 30_000 } }),
 )

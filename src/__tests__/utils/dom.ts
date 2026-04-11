@@ -39,7 +39,7 @@ export function canvasFromImageData(data: ImageData): HTMLCanvasElement {
 export function buildPixelMatchPreview(
   count: number,
   data: PixelMatchPreviewData,
-  options: PixelMatchPreviewOptions
+  options: PixelMatchPreviewOptions,
 ): void {
   const { actual, expected, diff } = data
   const { threshold, tolerance, description } = options
@@ -89,7 +89,7 @@ export function buildPixelMatchPreview(
 }
 
 function _resolveElementPoint(
-  element: Element | PointElement | undefined
+  element: Element | PointElement | undefined,
 ): Point {
   const isPointElement = (v: Element | PointElement): v is PointElement =>
     "getCenterPoint" in v && typeof v.getCenterPoint === "function"
@@ -108,7 +108,7 @@ function _resolveElementPoint(
 export function afterEvent(
   chart: Chart & { _eventHandler: (event: ChartEvent) => void },
   type: ChartEvent["type"],
-  callback: (...args: unknown[]) => void
+  callback: (...args: unknown[]) => void,
 ): void {
   const override = chart._eventHandler
 
@@ -125,7 +125,7 @@ export function afterEvent(
 export async function triggerMouseEvent(
   chart: Chart,
   type: ChartEvent["type"],
-  element: Element | PointElement
+  element: Element | PointElement,
 ): Promise<MouseEvent> {
   const node = chart.canvas
   const rect = node.getBoundingClientRect()

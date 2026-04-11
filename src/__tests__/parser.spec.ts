@@ -80,7 +80,7 @@ describe("Validator is working (non-strict)", () => {
     "If `$color` $status parsed when the `hex` flag is passed",
     ({ color, output }) => {
       expect(parser.isParsable(color, { hex: true })).toBe(output)
-    }
+    },
   )
 
   test.each`
@@ -91,7 +91,7 @@ describe("Validator is working (non-strict)", () => {
     "If `$color` $status parsed when the `named` flag is passed",
     ({ color, output }) => {
       expect(parser.isParsable(color, { named: true })).toBe(output)
-    }
+    },
   )
 })
 

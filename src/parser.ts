@@ -54,7 +54,7 @@ class TailwindColorsParser {
    */
   public isParsable(
     value: unknown,
-    { strict = false, hex, named }: TwColorValidatorOptions = {}
+    { strict = false, hex, named }: TwColorValidatorOptions = {},
   ): value is string[] | string {
     if (!value) return false
 

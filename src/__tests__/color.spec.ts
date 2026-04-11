@@ -33,7 +33,7 @@ describe("Color palette is correctly flattened", () => {
           2: "rgb(0,0,67)",
           3: "rgb(0,0,100)",
         },
-      })
+      }),
     ).toEqual({
       purple: "purple",
       "white-25": "rgba(255,255,255,.25)",
@@ -71,7 +71,7 @@ describe("Color palette is correctly flattened", () => {
             },
           },
         },
-      })
+      }),
     ).toEqual({
       primary: "purple",
       secondary: "blue",
@@ -102,7 +102,7 @@ describe("`parseColor` works as intended", () => {
     'Should parse "$color" to the correct value',
     ({ color, output }: { color: string; output: Color }) => {
       expect(parseColor(color)).toEqual(output)
-    }
+    },
   )
 })
 
@@ -116,6 +116,6 @@ describe("`formatColor` works as intended", () => {
     'Should format the color pieces into a proper "$output"',
     ({ color, output }: { color: Color; output: string }) => {
       expect(formatColor(color)).toEqual(output)
-    }
+    },
   )
 })

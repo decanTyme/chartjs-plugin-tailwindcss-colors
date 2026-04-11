@@ -1,0 +1,12 @@
+diff --git a/node_modules/browserslist-generator/dist/esm/index.js b/node_modules/browserslist-generator/dist/esm/index.js
+index 851e503..a1422ca 100644
+--- a/node_modules/browserslist-generator/dist/esm/index.js
++++ b/node_modules/browserslist-generator/dist/esm/index.js
+@@ -1,6 +1,6 @@
+ import Browserslist from 'browserslist';
+ import { feature, features } from 'caniuse-lite';
+-import * as compatData from '@mdn/browser-compat-data' assert { type: 'json' };
++import * as compatData from '@mdn/browser-compat-data' with { type: 'json' };
+ import objectPath from 'object-path';
+ import { coerce, lt, gt, gte, lte } from 'semver';
+ import { UAParser } from 'ua-parser-js';

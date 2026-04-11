@@ -1,12 +1,10 @@
-import type { ExternalOption, GlobalsOption } from "rollup"
-
 import commonjs from "@rollup/plugin-commonjs"
 import resolve from "@rollup/plugin-node-resolve"
 import replace from "@rollup/plugin-replace"
 import { defineConfig } from "rollup"
 import typescript from "rollup-plugin-ts"
 
-import pkg from "./package.json" assert { type: "json" }
+import pkg from "./package.json" with { type: "json" }
 
 const author = pkg.author.replaceAll(/ <[^>]+>/g, "")
 const banner = `/*!
@@ -16,7 +14,8 @@ const banner = `/*!
  * Released under the ${pkg.license} License
  */`
 
-const external: ExternalOption = [
+/** @type {import("rollup").ExternalOption} */
+const external = [
   "chart.js",
   "tailwindcss/resolveConfig",
   "lodash/get",
@@ -25,7 +24,8 @@ const external: ExternalOption = [
   "color-name",
 ]
 
-const globals: GlobalsOption = {
+/** @type {import("rollup").GlobalsOption} */
+const globals = {
   "chart.js": "Chart",
   "tailwindcss/resolveConfig": "tailwind.resolveConfig",
 }
