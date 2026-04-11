@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.3.0](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.5...v0.3.0) (2026-04-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* named colors without a valid alpha are no longer parsed.
+* **plugin:** hex values without a valid alpha channel are no longer parsed.
+
+### Features
+
+* Add `fill` multi-color support ([7b2e0fc](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/7b2e0fcc142ea21bbf5eeaaddcb1cbdb07490aa5))
+* Add initial support for scriptable options ([04b8533](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/04b853350442629287c12d71841c8bef77735a0b))
+* Initial spec ([c8d8dfa](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/c8d8dfa0e9d6947eaaa37010348db04a4f8c9dca))
+
+
+### Bug Fixes
+
+* Add missing parsable options ([8b156bc](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8b156bcb88f57181cb9fcdc1b1b092e5a3d1adb3))
+* Build failing due to multiple `rollup-plugin-ts` issues on node v22 ([#56](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/56)) ([4078006](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/4078006a54bcca25843ad5ff46bb655cf98db54e))
+* **color-parser:** Remove wrong import ([33c56b7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/33c56b70bd1fd99c484d41fec8c16de8a7fd0c55))
+* **color-validator:** Improve handling of non-strings ([d07665c](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/d07665c2a26d1a5ad3bdd56ea16bbadd0d81da65))
+* **deps:** Bump `json5` from 1.0.1 to 1.0.2 ([#7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/7)) ([29ada4d](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/29ada4daf9c4a0ebd2180fd07bb37576dd03fa08))
+* **deps:** Bump `semver-regex` from 3.1.3 to 3.1.4 ([#3](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/3)) ([ca4c88a](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/ca4c88ad184ea37b7325f50ec974932bd3e07318))
+* **deps:** Bump lodash from 4.17.23 to 4.18.1 ([#54](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/54)) ([af924ab](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/af924ab50dacfd9b1bfa9f79e2e7da6a907da9d9))
+* **deps:** Remove `resolveConfig` from umd bundle ([#31](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/31)) ([3e040d8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/3e040d8a30c1be1d3dce7d69ec1f91fcf38aa5e2))
+* **deps:** Update `caniuse-lite` ([22e10a4](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/22e10a4d5daa82bbbec39437b246ea114ad92010))
+* **deps:** Update `canvas` to 2.11.0 ([2cd53e8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/2cd53e873cfb18b24e6c3568efb2f2f9dd97ffab))
+* **deps:** Update `chart.js` to 3.9.1 and peer dependency semver range ([04f3884](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/04f38846139c24d46cf857c582b8a805604637ad))
+* **deps:** Update `tailwindcss` peer dependency semver range ([32cbad7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/32cbad7009cca95ec4f2bee0f08a931c1040875e))
+* **deps:** Update `tiny-invariant` to 1.3.1 ([a39532e](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/a39532ea97498d7aaefa233a29372bacb7581955))
+* Fallback to `Chart.defaults` if no color at all is specified ([340445f](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/340445f7d231988d404656a8cf209a04d409681b))
+* Improve alpha detection regex ([8798cac](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/8798cac42231ff7440a29a7898ef75eeab50f6ae))
+* **package:** Export a browser-friendly UMD build ([#18](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/18)) ([17d0b8d](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/17d0b8d3041d134d8cee99f8a1f389bb9e327bbf))
+* **package:** Incorrect exports ([#33](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/33)) ([c9f54c7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/c9f54c71e397a15c5c85f1222cc7fe52129f626a))
+* **plugin:** Allow hex values (w/o alpha) to be returned as-is ([73b55cc](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/73b55cc73f15e5c7bcd03cce862b654deeb20a83))
+* **plugin:** Manually set fill target for boolean fill values ([6d55e39](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/6d55e398a528f40f7dd2c350e3e4e300dfc5bd00))
+* **plugin:** Use `beforeUpdate` hook for subsequent rerender parsing ([f90f059](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/f90f0597ddff3cdc0f9294970a00103898921917))
+* **plugin:** Use `isValidTwColor()` instead of `includes()` ([673d1e8](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/673d1e8cd70686c859c55ebdb7c007ee0390ea99))
+* **utils:** Remove all instances of lookbehind ([#41](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/41)) ([3cd4ad9](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/3cd4ad901024374974727817daad631cf2f8e8da))
+* **utils:** Use regex `?:` for safari &lt;16.4 compatibility ([#37](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/37)) ([f35b3cf](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/f35b3cfd5f61c05e6fcb3bb047cf0ab2d4e5350d))
+
+
+### Code Refactoring
+
+* Convert the parser to a class ([#19](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/19)) ([534362e](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/534362e3788f00ee3d898fd12740469326c815ae))
+
 ## [0.2.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.4...v0.2.5) (2026-04-11)
 
 
