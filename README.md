@@ -1,6 +1,6 @@
 # chartjs-plugin-tailwindcss-colors
 
-![yarn current](https://img.shields.io/badge/Yarn-v1-blue)
+![pnpm current](https://img.shields.io/badge/pnpm-v10-blue)
 ![chart.js peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js)
 ![tailwindcss peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/tailwindcss)
 ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors)
@@ -21,7 +21,7 @@ This plugin integrates your existing TailwindCSS colors configuration so you can
 Package:
 
 ```shell
-yarn add chartjs-plugin-tailwindcss-colors # or npm install
+pnpm add chartjs-plugin-tailwindcss-colors # or npm install
 ```
 
 [CDN](https://www.jsdelivr.com/package/npm/chartjs-plugin-tailwindcss-colors):

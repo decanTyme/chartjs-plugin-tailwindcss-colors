@@ -16,7 +16,10 @@ const config: JestConfigWithTsJest = {
       { ...defaults, tsconfig: "./src/__tests__/tsconfig.test.json" },
     ],
   },
-  transformIgnorePatterns: ["node_modules/(?!color-name)"],
+  transformIgnorePatterns: [
+    "node_modules/(?!(\\.pnpm|color-name)/)",
+    "node_modules/\\.pnpm/(?!color-name@)",
+  ],
 }
 
 export default config

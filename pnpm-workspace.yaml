@@ -1,0 +1,4 @@
+allowBuilds:
+  electron: true
+patchedDependencies:
+  browserslist-generator@2.3.0: patches/browserslist-generator@2.3.0.patch

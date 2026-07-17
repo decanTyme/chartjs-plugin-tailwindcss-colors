@@ -18,7 +18,7 @@ If there's any other details that may be related to the bug, it is encouraged to
 
 ## Local development
 
-Run `yarn` to install all the libraries, then run `yarn dev` to build and run tests as you make changes.
+Run `pnpm install` to install all the libraries, then run `pnpm dev` to build and run tests as you make changes.
 
 ## Pull requests
 
@@ -31,7 +31,7 @@ Clear, concise pull requests are excellent at continuing the project's community
   - For enhancements, we can discuss if it is within the project scope and avoid duplicate effort
 - Please only make changes to the files in [`/src`](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/tree/main/src) and [`/src/__tests__`](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/tree/main/src/__tests__)
 - If adding new functionality, please also include any relevant changes to the documentation
-- Please make sure to run `yarn stylecheck` before submitting a PR
+- Please make sure to run `pnpm stylecheck` before submitting a PR
 - Please make sure your commits follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
 
 > **NOTE**: This repo adheres to [Semantic Versioning (SemVer)](https://semver.org/).
