@@ -5,9 +5,10 @@
   "description": "Colorize your Chart.js components using TailwindCSS!",
   "license": "MIT",
   "source": "src/index.ts",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "browser": "dist/plugin.umd.js",
+  "types": "dist/index.d.cts",
   "files": [
     "dist"
   ],
@@ -16,7 +17,6 @@
     "watch": "rollup -c --configPlugin rollup-plugin-ts -w",
     "dev": "conc -n R,J -c red,magenta -k \"pnpm watch\" \"pnpm test:dev\"",
     "build": "rollup -c",
-    "postbuild": "node scripts/postbuild.js",
     "test": "jest --coverage",
     "test:dev": "jest --watch",
     "format:checkonly": "prettier -c --cache .",
@@ -43,10 +43,16 @@
     "parser"
   ],
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js",
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
     "browser": "./dist/plugin.umd.js",
-    "default": "./dist/index.js"
+    "default": "./dist/index.cjs"
   },
   "dependencies": {
     "color-name": "^2.0.0",
