@@ -1,6 +1,6 @@
 # Package Manager Artifacts
 node_modules
-yarn-*.log
+pnpm-debug.log*
 
 # User-Specific IDE Settings
 .vscode

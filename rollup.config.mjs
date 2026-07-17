@@ -30,6 +30,26 @@ const globals = {
   "tailwindcss/resolveConfig": "tailwind.resolveConfig",
 }
 
+/**
+ * TypeScript never rewrites `export default` to `export =` in declaration
+ * files, regardless of the target module format, so the CJS declaration
+ * still describes an ESM namespace shape that doesn't match the actual
+ * `module.exports = ...` produced by the CJS chunk.
+ * @type {import("rollup").Plugin}
+ */
+const fixCjsDeclarationExport = {
+  name: "fix-cjs-declaration-export",
+  generateBundle(_options, bundle) {
+    const dts = bundle["index.d.cts"]
+    if (dts?.type === "asset" && typeof dts.source === "string") {
+      dts.source = dts.source.replace(
+        "export { twColorsPlugin as default };",
+        "export = twColorsPlugin;",
+      )
+    }
+  },
+}
+
 export default defineConfig([
   {
     input: pkg.source,
@@ -62,12 +82,12 @@ export default defineConfig([
     input: pkg.source,
     output: [
       {
-        file: pkg.exports.import,
+        file: pkg.exports.import.default,
         format: "esm",
         sourcemap: true,
       },
       {
-        file: pkg.exports.require,
+        file: pkg.exports.require.default,
         format: "cjs",
         sourcemap: true,
       },
@@ -83,6 +103,7 @@ export default defineConfig([
       }),
       commonjs(),
       resolve(),
+      fixCjsDeclarationExport,
     ],
   },
 ])
