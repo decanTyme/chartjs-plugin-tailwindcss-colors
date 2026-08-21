@@ -4,6 +4,9 @@ on:
   pull_request:
     branches: [main, beta, alpha, next]
 
+permissions:
+  contents: read
+
 jobs:
   stylecheck:
     name: Check for code style issues
