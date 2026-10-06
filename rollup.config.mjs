@@ -50,7 +50,11 @@ export default defineConfig([
           sourceMap: true,
         },
       }),
-      replace({ preventAssignment: true }),
+      replace({
+        // Replace `tiny-invariant` Node environment check for the browser build.
+        "process.env.NODE_ENV": JSON.stringify("production"),
+        preventAssignment: true,
+      }),
       commonjs(),
       resolve({ browser: true }),
     ],
