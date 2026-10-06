@@ -1,8 +1,9 @@
 import commonjs from "@rollup/plugin-commonjs"
 import resolve from "@rollup/plugin-node-resolve"
 import replace from "@rollup/plugin-replace"
+import typescript from "@rollup/plugin-typescript"
 import { defineConfig } from "rollup"
-import typescript from "rollup-plugin-ts"
+import dts from "unplugin-dts/rollup"
 
 import pkg from "./package.json" with { type: "json" }
 
@@ -30,26 +31,6 @@ const globals = {
   "tailwindcss/resolveConfig": "tailwind.resolveConfig",
 }
 
-/**
- * TypeScript never rewrites `export default` to `export =` in declaration
- * files, regardless of the target module format, so the CJS declaration
- * still describes an ESM namespace shape that doesn't match the actual
- * `module.exports = ...` produced by the CJS chunk.
- * @type {import("rollup").Plugin}
- */
-const fixCjsDeclarationExport = {
-  name: "fix-cjs-declaration-export",
-  generateBundle(_options, bundle) {
-    const dts = bundle["index.d.cts"]
-    if (dts?.type === "asset" && typeof dts.source === "string") {
-      dts.source = dts.source.replace(
-        "export { twColorsPlugin as default };",
-        "export = twColorsPlugin;",
-      )
-    }
-  },
-}
-
 export default defineConfig([
   {
     input: pkg.source,
@@ -64,13 +45,13 @@ export default defineConfig([
     external: external.slice(0, 2),
     plugins: [
       typescript({
-        tsconfig: (resolved) => ({
-          ...resolved,
+        compilerOptions: {
           allowJs: false,
           sourceMap: true,
-        }),
+        },
       }),
       replace({
+        // Replace `tiny-invariant` Node environment check for the browser build.
         "process.env.NODE_ENV": JSON.stringify("production"),
         preventAssignment: true,
       }),
@@ -78,6 +59,7 @@ export default defineConfig([
       resolve({ browser: true }),
     ],
   },
+
   {
     input: pkg.source,
     output: [
@@ -95,15 +77,40 @@ export default defineConfig([
     external,
     plugins: [
       typescript({
-        tsconfig: (resolved) => ({
-          ...resolved,
-          declaration: true,
+        compilerOptions: {
+          allowJs: false,
           sourceMap: true,
-        }),
+        },
       }),
+
+      dts({
+        bundleTypes: true,
+
+        outDirs: [
+          { dir: "dist", moduleFormat: "esm" },
+          { dir: "dist", moduleFormat: "cjs" },
+        ],
+
+        // TypeScript never rewrites `export default` to `export =` in declaration
+        // files, regardless of the target module format, so the CJS declaration
+        // still describes an ESM namespace shape that doesn't match the actual
+        // `module.exports = ...` produced by the CJS chunk.
+        beforeWriteFile(filePath, content) {
+          content = content.replace(/\nexport \{\s*\}\s*;?\s*$/, "\n")
+
+          if (filePath.endsWith(".d.cts")) {
+            content = content.replace(
+              "export default twColorsPlugin;",
+              "export = twColorsPlugin;",
+            )
+          }
+
+          return { content }
+        },
+      }),
+
       commonjs(),
       resolve(),
-      fixCjsDeclarationExport,
     ],
   },
 ])
