@@ -18,6 +18,67 @@ describe("Parser", () => {
   })
 })
 
+describe("Parser handles invalid color input", () => {
+  test.each([
+    "constructor",
+    "toString",
+    "__proto__",
+    "constructor/50",
+    "toString/50",
+    "__proto__/50",
+    "__esModule/50",
+    "default/50",
+    "#fffff/50",
+    "#fff/50/extra",
+    "#fff/50.5",
+    "red-999/50",
+    "not-a-color",
+  ])("rejects %s before automatic conversion", (color) => {
+    expect(parser.isParsable(color)).toBe(false)
+    expect(() => parser.parse(color)).toThrow()
+  })
+
+  test("does not partially convert an array with an invalid entry", () => {
+    const colors = ["red-500", "not-a-color", "__proto__/50", "crimson/50"]
+
+    expect(() => parser.parse(colors)).toThrow("Invalid value: not-a-color")
+    expect(colors).toEqual([
+      "red-500",
+      "not-a-color",
+      "__proto__/50",
+      "crimson/50",
+    ])
+  })
+
+  test("preserves configured color aliases that shadow Object.prototype", () => {
+    const configuredParser = new TailwindColorsParser({
+      content: [],
+      theme: { colors: { constructor: "#123456", toString: "#654321" } },
+    })
+
+    expect(configuredParser.isParsable("constructor")).toBe(true)
+    expect(configuredParser.parse("constructor")).toBe("#123456")
+    expect(configuredParser.parse("toString")).toBe("#654321")
+  })
+
+  test("rejects palette values that cannot be converted to RGB with opacity", () => {
+    const configuredParser = new TailwindColorsParser({
+      content: [],
+      theme: {
+        colors: {
+          "custom-500": "var(--chart-color)",
+          "custom-600": "rgb(1 2 3)",
+        },
+      },
+    })
+
+    expect(configuredParser.parse("custom-500")).toBe("var(--chart-color)")
+    expect(configuredParser.isParsable("custom-500/50")).toBe(false)
+    expect(() => configuredParser.parse("custom-500/50")).toThrow()
+    expect(() => configuredParser.parse("custom-600/50")).toThrow()
+  })
+})
+
 describe("Validator is working with configured colors only (strict)", () => {
   test.each`
     color            | output   | status
