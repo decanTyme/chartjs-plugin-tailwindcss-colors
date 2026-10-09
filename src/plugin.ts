@@ -1,10 +1,14 @@
-import type { Plugin } from "chart.js"
+import type { Chart, Plugin } from "chart.js"
 import type { Config as TailwindConfig } from "tailwindcss"
 
 import get from "lodash/get"
 import set from "lodash/set"
 
-import type { ParsableOptions, ValidValues } from "./types"
+import type {
+  ParsableOptions,
+  TwColorsPluginOptions,
+  ValidValues,
+} from "./types"
 
 import TailwindColorsParser from "./parser"
 
@@ -25,8 +29,56 @@ const parsableOptions = [
 const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
   defaults: Partial<ParsableOptions> = {},
+  { invalidColorHandling = "warn" }: TwColorsPluginOptions = {},
 ): Plugin => {
   const parser = new TailwindColorsParser(tailwindConfig)
+  const warnedColors = new WeakMap<Chart, Set<string>>()
+
+  const reportInvalidColor = (
+    chart: Chart,
+    value: string,
+    path: string,
+  ): void => {
+    if (invalidColorHandling === "ignore") return
+
+    const prefix = "[chartjs-plugin-tailwindcss-colors]"
+    const message = `${prefix} Cannot resolve color ${JSON.stringify(value)} at ${path}.`
+
+    if (invalidColorHandling === "throw") {
+      throw new Error(message)
+    }
+
+    let warnings = warnedColors.get(chart)
+    if (warnings?.has(value)) return
+
+    if (warnings === undefined) {
+      warnings = new Set()
+      warnedColors.set(chart, warnings)
+    }
+
+    warnings.add(value)
+
+    // eslint-disable-next-line no-console -- Report each invalid value once per chart.
+    console.warn(message)
+  }
+
+  const resolveColor = (
+    chart: Chart,
+    value: unknown,
+    path: string,
+  ): unknown => {
+    if (parser.isParsable(value)) {
+      if (typeof value === "string") return parser.parse(value)
+
+      return parser.parse(value, (invalidColor, index) => {
+        const location = index === undefined ? path : `${path}[${index}]`
+        reportInvalidColor(chart, invalidColor, location)
+      })
+    }
+
+    if (parser.isInvalidColor(value)) reportInvalidColor(chart, value, path)
+    return value
+  }
 
   return {
     id: "tailwindcss-colors",
@@ -36,15 +88,26 @@ const twColorsPlugin = (
         const chartDefaultColor = get(chart.options, parsableOpt) as ValidValues
         const defaultOptColor = defaults[parsableOpt] ?? chartDefaultColor
 
-        if (parser.isParsable(defaultOptColor)) {
-          set(chart.options, parsableOpt, parser.parse(defaultOptColor))
+        const parsedDefaultColor = resolveColor(
+          chart,
+          defaultOptColor,
+          `options.${parsableOpt}`,
+        )
+
+        if (parsedDefaultColor !== defaultOptColor) {
+          set(chart.options, parsableOpt, parsedDefaultColor)
         }
 
-        chart.config.data.datasets.forEach((dataset) => {
+        chart.config.data.datasets.forEach((dataset, datasetIndex) => {
           const color = get(dataset, parsableOpt, defaultOptColor)
+          const parsedColor = resolveColor(
+            chart,
+            color,
+            `data.datasets[${datasetIndex}].${parsableOpt}`,
+          )
 
-          if (parser.isParsable(color)) {
-            set(dataset, parsableOpt, parser.parse(color))
+          if (parsedColor !== color) {
+            set(dataset, parsableOpt, parsedColor)
           }
         })
       })
@@ -66,12 +129,14 @@ const twColorsPlugin = (
           defaultOptColor,
         )
 
-        if (parser.isParsable(metaDatasetOptionsColor)) {
-          set(
-            metaDataset.options,
-            parsableOpt,
-            parser.parse(metaDatasetOptionsColor),
-          )
+        const parsedDatasetColor = resolveColor(
+          chart,
+          metaDatasetOptionsColor,
+          `data.datasets[${args.index}].${parsableOpt} (resolved)`,
+        )
+
+        if (parsedDatasetColor !== metaDatasetOptionsColor) {
+          set(metaDataset.options, parsableOpt, parsedDatasetColor)
         }
 
         const currentDataset = chart.data.datasets[args.index]
@@ -84,12 +149,14 @@ const twColorsPlugin = (
             defaultOptColor,
           )
 
-          if (parser.isParsable(resolvedColor)) {
-            set(
-              currentElement.options,
-              parsableOpt,
-              parser.parse(resolvedColor),
-            )
+          const parsedColor = resolveColor(
+            chart,
+            resolvedColor,
+            `data.datasets[${args.index}].${parsableOpt} (data index ${index})`,
+          )
+
+          if (parsedColor !== resolvedColor) {
+            set(currentElement.options, parsableOpt, parsedColor)
           }
         })
       })

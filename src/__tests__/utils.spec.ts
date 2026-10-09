@@ -23,6 +23,9 @@ describe("Parsable string validator recognises native CSS colors", () => {
     "color-mix(in srgb, red 50%, blue)",
     "light-dark(rgb(1 2 3), rgb(4 5 6))",
     "\tTrAnSpArEnT\n",
+    "currentColor",
+    "oklch(60% 0.2 30)",
+    "var(--chart-color)",
   ])("skips native CSS color %s", (color) => {
     expect(isParsableString(color)).toBe(false)
   })

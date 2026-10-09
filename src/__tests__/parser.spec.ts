@@ -73,21 +73,35 @@ describe("Parser handles invalid color input", () => {
     "#fff/50.5",
     "red-999/50",
     "not-a-color",
-  ])("rejects %s before automatic conversion", (color) => {
+  ])("rejects %s without an explicit invalid-color handler", (color) => {
     expect(parser.isParsable(color)).toBe(false)
-    expect(() => parser.parse(color)).toThrow()
+    expect(parser.isInvalidColor(color)).toBe(true)
+    expect(() => parser.parse(color)).toThrow("Cannot resolve color")
   })
 
-  test("does not partially convert an array with an invalid entry", () => {
-    const colors = ["red-500", "not-a-color", "__proto__/50", "crimson/50"]
+  test("preserves invalid array entries only with an explicit handler", () => {
+    const reportInvalidColor = jest.fn()
 
-    expect(() => parser.parse(colors)).toThrow("Invalid value: not-a-color")
-    expect(colors).toEqual([
-      "red-500",
+    expect(
+      parser.parse(
+        ["red-500", "not-a-color", "__proto__/50", "crimson/50"],
+        reportInvalidColor,
+      ),
+    ).toEqual([
+      "#ef4444",
       "not-a-color",
       "__proto__/50",
-      "crimson/50",
+      "rgb(220 20 60 / 0.5)",
     ])
+    expect(reportInvalidColor).toHaveBeenNthCalledWith(1, "not-a-color", 1)
+    expect(reportInvalidColor).toHaveBeenNthCalledWith(2, "__proto__/50", 2)
+  })
+
+  test("does not partially convert an invalid array without a handler", () => {
+    const colors = ["red-500", "not-a-color", "blue-500"]
+
+    expect(() => parser.parse(colors)).toThrow('"not-a-color" at color[1]')
+    expect(colors).toEqual(["red-500", "not-a-color", "blue-500"])
   })
 
   test("preserves configured color aliases that shadow Object.prototype", () => {
@@ -114,8 +128,12 @@ describe("Parser handles invalid color input", () => {
 
     expect(configuredParser.parse("custom-500")).toBe("var(--chart-color)")
     expect(configuredParser.isParsable("custom-500/50")).toBe(false)
-    expect(() => configuredParser.parse("custom-500/50")).toThrow()
-    expect(() => configuredParser.parse("custom-600/50")).toThrow()
+    expect(() => configuredParser.parse("custom-500/50")).toThrow(
+      "Cannot resolve color",
+    )
+    expect(() => configuredParser.parse("custom-600/50")).toThrow(
+      "Cannot resolve color",
+    )
   })
 })
 

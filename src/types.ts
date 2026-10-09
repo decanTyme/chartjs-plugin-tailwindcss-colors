@@ -8,6 +8,19 @@ export type ValidValues = Scriptable<string, AnyObject> | string[] | string
 
 export type NamedColor = keyof typeof Colors
 
+export type InvalidColorHandling = "ignore" | "throw" | "warn"
+
+export interface TwColorsPluginOptions {
+  /**
+   * How to handle color values that the plugin cannot resolve.
+   *
+   * @default "warn"
+   */
+  invalidColorHandling?: InvalidColorHandling
+}
+
+export type InvalidColorReporter = (value: string, index?: number) => void
+
 export interface ParsableOptions extends Record<string, string[] | string> {
   color: string
   borderColor: string
