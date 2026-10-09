@@ -39,11 +39,9 @@ class TailwindColorsParser {
     const alphaColor = this.getAlphaColor(value)
 
     if (alphaColor !== undefined) {
-      const [, alpha] = value.trim().split("/")
-
       return formatColor({
-        ...parseColor(alphaColor),
-        alpha: Number.parseInt(alpha, 10) / 100,
+        ...parseColor(alphaColor.color),
+        alpha: alphaColor.alpha,
       })
     }
 
@@ -100,16 +98,18 @@ class TailwindColorsParser {
       : undefined
   }
 
-  private getAlphaColor(value: string): string | undefined {
-    if (!utils.hasValidAlpha(value)) return undefined
+  private getAlphaColor(value: string): utils.ColorWithAlpha | undefined {
+    const alphaColor = utils.parseAlpha(value)
 
-    const [color] = value.trim().split("/")
+    if (alphaColor === undefined) return undefined
+
+    const { color, alpha } = alphaColor
     const resolvedColor = (this.getPaletteColor(color) ?? color).trim()
 
     return utils.isHex(resolvedColor) ||
       utils.isNamedColor(resolvedColor) ||
       resolvedColor === "transparent"
-      ? resolvedColor
+      ? { color: resolvedColor, alpha }
       : undefined
   }
 }

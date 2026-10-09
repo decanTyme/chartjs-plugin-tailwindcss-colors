@@ -1,11 +1,23 @@
 import type * as ColorUtils from "../utils"
 
-import { hasValidAlpha, isHex, isNamedColor } from "../utils"
+import { hasValidAlpha, isHex, isNamedColor, isParsableString } from "../utils"
 
 interface TestArgs {
   color: string
   output: boolean
 }
+
+describe("Parsable string validator recognises native CSS colors", () => {
+  test.each([
+    "rgb(1 2 3)",
+    " rgba(1, 2, 3, 0.5) ",
+    "hsl(120 100% 50%)",
+    " HSLA(120, 100%, 50%, 0.5) ",
+    "\tTrAnSpArEnT\n",
+  ])("skips native CSS color %s", (color) => {
+    expect(isParsableString(color)).toBe(false)
+  })
+})
 
 describe("Named color validator rejects inherited properties and module metadata", () => {
   test.each(["constructor", "toString", "__proto__", "hasOwnProperty"])(

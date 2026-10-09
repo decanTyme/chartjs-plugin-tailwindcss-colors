@@ -16,6 +16,24 @@ describe("Parser", () => {
   `("`$color`", ({ color, output }) => {
     expect(parser.parse(color)).toStrictEqual(output)
   })
+
+  test.each([
+    "brand-rgb",
+    "rgb-brand",
+    "brand-hsl",
+    "hsl-brand",
+    "brand-transparent",
+    "transparent-brand",
+  ])("resolves configured alias %s containing a CSS color name", (color) => {
+    const configuredParser = new TailwindColorsParser({
+      content: [],
+      theme: { colors: { [color]: "#123456" } },
+    })
+
+    expect(configuredParser.isParsable(color)).toBe(true)
+    expect(configuredParser.isParsable(color, { strict: true })).toBe(true)
+    expect(configuredParser.parse(color)).toBe("#123456")
+  })
 })
 
 describe("Parser handles invalid color input", () => {
