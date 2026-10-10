@@ -66,7 +66,7 @@ const twColorsPlugin = (
     chart: Chart,
     value: unknown,
     path: string,
-  ): unknown => {
+  ): string[] | string | undefined => {
     if (parser.isParsable(value)) {
       if (typeof value === "string") return parser.parse(value)
 
@@ -76,8 +76,11 @@ const twColorsPlugin = (
       })
     }
 
-    if (parser.isInvalidColor(value)) reportInvalidColor(chart, value, path)
-    return value
+    if (parser.isInvalidColor(value)) {
+      reportInvalidColor(chart, value, path)
+    }
+
+    return undefined
   }
 
   return {
@@ -94,7 +97,7 @@ const twColorsPlugin = (
           `options.${parsableOpt}`,
         )
 
-        if (parsedDefaultColor !== defaultOptColor) {
+        if (parsedDefaultColor !== undefined) {
           set(chart.options, parsableOpt, parsedDefaultColor)
         }
 
@@ -106,7 +109,7 @@ const twColorsPlugin = (
             `data.datasets[${datasetIndex}].${parsableOpt}`,
           )
 
-          if (parsedColor !== color) {
+          if (parsedColor !== undefined) {
             set(dataset, parsableOpt, parsedColor)
           }
         })
@@ -135,7 +138,7 @@ const twColorsPlugin = (
           `data.datasets[${args.index}].${parsableOpt} (resolved)`,
         )
 
-        if (parsedDatasetColor !== metaDatasetOptionsColor) {
+        if (parsedDatasetColor !== undefined) {
           set(metaDataset.options, parsableOpt, parsedDatasetColor)
         }
 
@@ -155,7 +158,7 @@ const twColorsPlugin = (
             `data.datasets[${args.index}].${parsableOpt} (data index ${index})`,
           )
 
-          if (parsedColor !== resolvedColor) {
+          if (parsedColor !== undefined) {
             set(currentElement.options, parsableOpt, parsedColor)
           }
         })

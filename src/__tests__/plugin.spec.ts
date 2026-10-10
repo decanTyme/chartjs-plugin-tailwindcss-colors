@@ -1,4 +1,6 @@
-import { Chart } from "chart.js"
+import type { ChartDataset } from "chart.js"
+
+import { BarElement, Chart } from "chart.js"
 
 import { acquireChart, releaseCharts, specsFromFixtures } from "./utils"
 
@@ -288,4 +290,138 @@ describe("Plugin handles untrusted color values", () => {
     }).not.toThrow()
     expect(warn).not.toHaveBeenCalled()
   })
+
+  test.each(["warn", "ignore", "throw"] as const)(
+    "keeps native CSS keywords in scalars, arrays, and scriptable colors in %s mode",
+    (invalidColorHandling) => {
+      const scalarDataset = {
+        data: [1, 2],
+        backgroundColor: "RED",
+        borderColor: "RebeccaPurple",
+        pointBackgroundColor: "CanvasText",
+        pointBorderColor: "WindowText",
+      }
+
+      const arrayDataset = {
+        data: [2, 1],
+        backgroundColor: ["RED", "red-500"],
+        borderColor: ["CanvasText", "blue-500/75"],
+      }
+
+      const scriptableDataset = {
+        data: [1, 1],
+        backgroundColor: (): string => "RebeccaPurple",
+        borderColor: (): string => "CanvasText",
+        pointBackgroundColor: (): string => "RED",
+      }
+
+      const chart = acquireChart({
+        type: "line",
+        data: {
+          labels: ["A", "B"],
+          datasets: [scalarDataset, arrayDataset, scriptableDataset],
+        },
+        options: { color: "RebeccaPurple" },
+        plugins: [twColorsPlugin(twConfig, {}, { invalidColorHandling })],
+      })
+
+      expect(chart.options.color).toBe("RebeccaPurple")
+      expect(scalarDataset.backgroundColor).toBe("RED")
+      expect(scalarDataset.borderColor).toBe("RebeccaPurple")
+      expect(scalarDataset.pointBackgroundColor).toBe("CanvasText")
+      expect(scalarDataset.pointBorderColor).toBe("WindowText")
+      expect(arrayDataset.backgroundColor).toEqual(["RED", "#ef4444"])
+      expect(arrayDataset.borderColor).toEqual([
+        "CanvasText",
+        "rgb(59 130 246 / 0.75)",
+      ])
+      expect(chart.getDatasetMeta(2).dataset?.options).toEqual(
+        expect.objectContaining({
+          backgroundColor: "RebeccaPurple",
+          borderColor: "CanvasText",
+        }),
+      )
+      expect(chart.getDatasetMeta(2).data[0].options).toEqual(
+        expect.objectContaining({ backgroundColor: "RED" }),
+      )
+
+      scalarDataset.backgroundColor = "rEbEcCaPuRpLe"
+      arrayDataset.backgroundColor = ["WindowText", "blue-500/75"]
+
+      expect(() => {
+        chart.update()
+      }).not.toThrow()
+      expect(scalarDataset.backgroundColor).toBe("rEbEcCaPuRpLe")
+      expect(arrayDataset.backgroundColor).toEqual([
+        "WindowText",
+        "rgb(59 130 246 / 0.75)",
+      ])
+      expect(warn).not.toHaveBeenCalled()
+    },
+  )
+
+  describe.each(["warn", "ignore", "throw"] as const)(
+    "%s mode applies configured defaults",
+    (invalidColorHandling) => {
+      test.each([
+        { color: "red", expected: "red" },
+        { color: "red-500", expected: "#ef4444" },
+      ])("applies configured defaults for $color", ({ color, expected }) => {
+        const fallbackDataset: ChartDataset<"bar"> = { data: [1, 2] }
+        const explicitDataset = { data: [2, 1], backgroundColor: "blue" }
+        const chart = acquireChart({
+          type: "bar",
+          data: {
+            labels: ["A", "B"],
+            datasets: [fallbackDataset, explicitDataset],
+          },
+          options: { backgroundColor: "green" },
+          plugins: [
+            twColorsPlugin(
+              {
+                content: [],
+                theme: {
+                  colors: {
+                    red: "red",
+                    "red-500": "#ef4444",
+                    blue: "blue",
+                  },
+                },
+              },
+              { backgroundColor: color },
+              { invalidColorHandling },
+            ),
+          ],
+        })
+
+        expect(chart.options.backgroundColor).toBe(expected)
+        expect(fallbackDataset.backgroundColor).toBe(expected)
+        expect(explicitDataset.backgroundColor).toBe("blue")
+
+        const [bar] = chart.getDatasetMeta(0).data
+        if (!(bar instanceof BarElement)) {
+          throw new TypeError("Expected a bar element")
+        }
+
+        const { x, y } = bar.getCenterPoint()
+        const pixel = chart.ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1)
+        const expectedPixel =
+          color === "red" ? [255, 0, 0, 255] : [239, 68, 68, 255]
+
+        expect([...pixel.data]).toEqual(expectedPixel)
+
+        delete fallbackDataset.backgroundColor
+        explicitDataset.backgroundColor = "RED"
+        chart.options.backgroundColor = "green"
+
+        expect(() => {
+          chart.update()
+        }).not.toThrow()
+        expect(chart.options.backgroundColor).toBe(expected)
+        expect(fallbackDataset.backgroundColor).toBe(expected)
+        expect(explicitDataset.backgroundColor).toBe("RED")
+        expect(warn).not.toHaveBeenCalled()
+      })
+    },
+  )
 })

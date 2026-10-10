@@ -92,7 +92,7 @@ class TailwindColorsParser {
     return (
       this.getPaletteColor(color) === undefined &&
       !utils.isHex(color) &&
-      !utils.isNamedColor(color) &&
+      !utils.isNativeColorKeyword(color) &&
       this.getAlphaColor(value) === undefined
     )
   }
@@ -121,6 +121,8 @@ class TailwindColorsParser {
     if (utils.isHex(color) || utils.isNamedColor(color)) {
       return formatColor(parseColor(color))
     }
+
+    if (utils.isNativeColorKeyword(color)) return value
 
     if (reportInvalidColor === undefined) {
       const path = index === undefined ? "color" : `color[${index}]`

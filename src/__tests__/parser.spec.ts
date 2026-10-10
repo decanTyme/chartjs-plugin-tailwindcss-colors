@@ -30,6 +30,9 @@ describe("Parser", () => {
     "color-mix-brand",
     "brand-light-dark",
     "light-dark-brand",
+    "RED",
+    "CanvasText",
+    "WindowText",
   ])("resolves configured alias %s containing a CSS color name", (color) => {
     const configuredParser = new TailwindColorsParser({
       content: [],
@@ -55,6 +58,24 @@ describe("Parser", () => {
       "rgb(59 130 246 / 0.75)",
     ])
     expect(colors).toEqual([color, "red-500", "blue-500/75"])
+  })
+
+  test.each([
+    "RED",
+    "RebeccaPurple",
+    "CanvasText",
+    "\tCanvasText\n",
+    "WindowText",
+  ])("preserves native CSS keyword %s in scalars and arrays", (color) => {
+    const reportInvalidColor = jest.fn()
+
+    expect(parser.isInvalidColor(color)).toBe(false)
+    expect(parser.parse(color)).toBe(color)
+    expect(parser.parse([color, "red-500"], reportInvalidColor)).toEqual([
+      color,
+      "#ef4444",
+    ])
+    expect(reportInvalidColor).not.toHaveBeenCalled()
   })
 })
 
