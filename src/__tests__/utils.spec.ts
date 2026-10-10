@@ -1,6 +1,12 @@
 import type * as ColorUtils from "../utils"
 
-import { hasValidAlpha, isHex, isNamedColor, isParsableString } from "../utils"
+import {
+  hasValidAlpha,
+  isHex,
+  isNamedColor,
+  isNativeColorKeyword,
+  isParsableString,
+} from "../utils"
 
 interface TestArgs {
   color: string
@@ -23,8 +29,39 @@ describe("Parsable string validator recognises native CSS colors", () => {
     "color-mix(in srgb, red 50%, blue)",
     "light-dark(rgb(1 2 3), rgb(4 5 6))",
     "\tTrAnSpArEnT\n",
+    "currentColor",
+    "oklch(60% 0.2 30)",
+    "var(--chart-color)",
   ])("skips native CSS color %s", (color) => {
     expect(isParsableString(color)).toBe(false)
+  })
+})
+
+describe("Native CSS keyword validator", () => {
+  test.each([
+    "red",
+    "RED",
+    "RebeccaPurple",
+    "CanvasText",
+    "canvastext",
+    "\tCanvasText\n",
+    "WindowText",
+    "transparent",
+    "currentColor",
+  ])("recognises %s without resolving a palette alias", (color) => {
+    expect(isNativeColorKeyword(color)).toBe(true)
+  })
+
+  test.each([
+    "constructor",
+    "__proto__",
+    "__esModule",
+    "default",
+    "CanvasText/50",
+    "RED/50",
+    "canvastext-brand",
+  ])("does not treat %s as a native keyword", (color) => {
+    expect(isNativeColorKeyword(color)).toBe(false)
   })
 })
 

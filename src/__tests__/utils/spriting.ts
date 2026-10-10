@@ -70,8 +70,13 @@ function measureText(text: string): TextMetrics {
     actualBoundingBoxDescent: 0,
     actualBoundingBoxLeft: 0,
     actualBoundingBoxRight: 0,
+    alphabeticBaseline: 0,
+    emHeightAscent: 0,
+    emHeightDescent: 0,
     fontBoundingBoxAscent: 0,
     fontBoundingBoxDescent: 0,
+    hangingBaseline: 0,
+    ideographicBaseline: 0,
   }
 }
 

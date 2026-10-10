@@ -100,6 +100,26 @@ Now if a chart's parsable option is not configured, it will fallback to the valu
 
 > **NOTE**: Since this plugin is still on its initial release, there might be other overlooked color options left to be parsed (also, bugs). As such, feedback is highly encouraged!
 
+### Invalid Color Handling
+
+An optional third argument controls values that the plugin cannot resolve:
+
+```js
+const plugin = twColorsPlugin(
+  twConfig,
+  {},
+  {
+    invalidColorHandling: "warn", // default; also accepts "throw" or "ignore"
+  },
+)
+```
+
+- `"warn"`: Converts valid colors and preserves unresolved values, with one warning per chart and invalid value. Warnings include the option path and array index when applicable.
+- `"throw"`: Throws an error identifying the unresolved value and its location. An invalid array entry prevents that color array from being replaced.
+- `"ignore"`: Converts valid colors and silently preserves unresolved values.
+
+Native color strings, CSS functions, gradients, and patterns remain under Chart.js and browser handling. This option diagnoses plugin color values; it does not validate browser support for native CSS syntax.
+
 ## Why did I even make this?
 
 I absolutely _love_ how fast I can prototype things with TailwindCSS. However, keeping my Chart.js component's colors consistent with my TailwindCSS config has been pretty much a hassle, to say the least. While you can just use TailwindCSS's `resolveConfig` [helper function](https://tailwindcss.com/docs/configuration#referencing-in-java-script), it is far more intuitive and convenient to just use TailwindCSS color classes directly rather than something like `fullConfig.theme.colors.red[500]`. What's more, it doesn't even handle opacity, which is something I use all the time.

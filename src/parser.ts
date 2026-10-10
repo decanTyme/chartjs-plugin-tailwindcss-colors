@@ -4,11 +4,7 @@ import type { RecursiveKeyValuePair } from "tailwindcss/types/config"
 import resolveConfig from "tailwindcss/resolveConfig"
 import invariant from "tiny-invariant"
 
-import type {
-  Maybe,
-  TailwindColorGroup,
-  TwColorValidatorOptions,
-} from "./types"
+import type { ColorResult, Maybe, TailwindColorGroup } from "./types"
 
 import { flattenColorPalette, formatColor, parseColor } from "./color"
 import * as utils from "./utils"
@@ -28,67 +24,37 @@ class TailwindColorsParser {
     this.config = config
   }
 
-  public parse<T extends string[] | string>(value: T): T
-  public parse(value: string[] | string): string[] | string {
-    if (Array.isArray(value)) {
-      return value.map((v) => this.parse(v))
-    }
-
-    if (!utils.isParsableString(value)) return value
-
-    const alphaColor = this.getAlphaColor(value)
-
-    if (alphaColor !== undefined) {
-      return formatColor({
-        ...parseColor(alphaColor.color),
-        alpha: alphaColor.alpha,
-      })
-    }
+  /**
+   * Resolves a color once, leaving invalid-value handling to the plugin.
+   */
+  public resolve(value: string): ColorResult {
+    if (!utils.isParsableString(value)) return { kind: "native" }
 
     const color = value.trim()
-    const paletteColor = this.getPaletteColor(color)
 
-    if (paletteColor !== undefined) return paletteColor
+    if (color.includes("/")) {
+      const alphaColor = this.getAlphaColor(color)
 
-    return formatColor(parseColor(color))
-  }
-
-  /**
-   * Checks if a given color/value is valid, and
-   * whether it should to be parsed.
-   */
-  public isParsable(
-    value: unknown,
-    { strict = false, hex, named }: TwColorValidatorOptions = {},
-  ): value is string[] | string {
-    if (!value) return false
-
-    if (!strict) {
-      // Parse each array entry; unsupported values fail during conversion.
-      if (utils.isValidArray(value)) return true
-
-      if (!utils.isParsableString(value)) return false
-
-      if (hex) {
-        return utils.isHex(value)
+      if (alphaColor !== undefined) {
+        return {
+          kind: "converted",
+          value: formatColor({
+            ...parseColor(alphaColor.color),
+            alpha: alphaColor.alpha,
+          }),
+        }
       }
-
-      if (named) {
-        return utils.isNamedColor(value)
-      }
-
-      // Ignore hex and named colors without a valid alpha
-      return (
-        this.getPaletteColor(value.trim()) !== undefined ||
-        this.getAlphaColor(value) !== undefined
-      )
     }
 
-    // Strictly from the specified config
-    return (
-      utils.isParsableString(value) &&
-      this.getPaletteColor(value.trim()) !== undefined
-    )
+    const paletteColor = this.getPaletteColor(color)
+
+    if (paletteColor !== undefined) {
+      return { kind: "converted", value: paletteColor }
+    }
+
+    return utils.isHex(color) || utils.isNativeColorKeyword(color)
+      ? { kind: "native" }
+      : { kind: "invalid" }
   }
 
   private getPaletteColor(value: string): string | undefined {
