@@ -19,7 +19,10 @@ export interface TwColorsPluginOptions {
   invalidColorHandling?: InvalidColorHandling
 }
 
-export type InvalidColorReporter = (value: string, index?: number) => void
+export type ColorResult =
+  | { kind: "converted"; value: string }
+  | { kind: "invalid" }
+  | { kind: "native" }
 
 export interface ParsableOptions extends Record<string, string[] | string> {
   color: string
@@ -37,27 +40,6 @@ export interface Color {
   mode: "hsl" | "rgb"
   values: string[]
   alpha?: number | string
-}
-
-export interface TwColorValidatorOptions {
-  /**
-   * @default false
-   */
-  strict?: boolean
-
-  /**
-   * If `true` and `strict` is `false`, hex values are also parsed.
-   *
-   * @default false
-   */
-  hex?: boolean
-
-  /**
-   * If `true` and `strict` is `false`, named colors are also parsed.
-   *
-   * @default false
-   */
-  named?: boolean
 }
 
 // Bring back types from stub `@types/tailwindcss`

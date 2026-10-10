@@ -133,6 +133,34 @@ describe("Plugin handles untrusted color values", () => {
     expect(warn).toHaveBeenCalledTimes(1)
   })
 
+  test("preserves native hex and named colors in scalars and arrays", () => {
+    const colors = ["#c0824066", "bisque"]
+    const dataset = {
+      data: [1, 2],
+      backgroundColor: colors,
+      borderColor: "#c0824066",
+    }
+    const chart = acquireChart({
+      type: "bar",
+      data: { labels: ["A", "B"], datasets: [dataset] },
+      options: { color: "bisque" },
+      plugins: [plugin],
+    })
+
+    expect(dataset.backgroundColor).toEqual(colors)
+    expect(dataset.borderColor).toBe("#c0824066")
+    expect(chart.options.color).toBe("bisque")
+    expect(colors).toEqual(["#c0824066", "bisque"])
+
+    dataset.backgroundColor = colors
+    chart.update()
+
+    expect(dataset.backgroundColor).toEqual(colors)
+    expect(dataset.borderColor).toBe("#c0824066")
+    expect(chart.options.color).toBe("bisque")
+    expect(warn).not.toHaveBeenCalled()
+  })
+
   test("preserves unsupported palette opacity in scriptable colors", () => {
     const scriptablePlugin = twColorsPlugin({
       content: [],

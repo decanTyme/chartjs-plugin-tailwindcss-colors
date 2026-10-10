@@ -11,6 +11,7 @@ import type {
 } from "./types"
 
 import TailwindColorsParser from "./parser"
+import { isValidArray } from "./utils"
 
 const parsableOptions = [
   "color",
@@ -29,8 +30,10 @@ const parsableOptions = [
 const twColorsPlugin = (
   tailwindConfig: TailwindConfig,
   defaults: Partial<ParsableOptions> = {},
-  { invalidColorHandling = "warn" }: TwColorsPluginOptions = {},
+  options: TwColorsPluginOptions = {},
 ): Plugin => {
+  const { invalidColorHandling = "warn" } = options
+
   const parser = new TailwindColorsParser(tailwindConfig)
   const warnedColors = new WeakMap<Chart, Set<string>>()
 
@@ -67,17 +70,31 @@ const twColorsPlugin = (
     value: unknown,
     path: string,
   ): string[] | string | undefined => {
-    if (parser.isParsable(value)) {
-      if (typeof value === "string") return parser.parse(value)
+    const resolveString = (
+      color: string,
+      colorPath: string,
+    ): string | undefined => {
+      const result = parser.resolve(color)
 
-      return parser.parse(value, (invalidColor, index) => {
-        const location = index === undefined ? path : `${path}[${index}]`
-        reportInvalidColor(chart, invalidColor, location)
-      })
+      if (result.kind === "converted") return result.value
+      if (result.kind === "invalid") {
+        reportInvalidColor(chart, color, colorPath)
+      }
+
+      // Undefined tells scalar callers to skip assignment. Returning the original
+      // color could copy an inherited fallback onto the dataset as an explicit
+      // option, preventing later chart-default changes from reaching it.
+      return undefined
     }
 
-    if (parser.isInvalidColor(value)) {
-      reportInvalidColor(chart, value, path)
+    if (typeof value === "string") return resolveString(value, path)
+
+    if (isValidArray(value)) {
+      // Every array position needs a color, so keep the original entry when
+      // resolveString has no replacement.
+      return value.map(
+        (color, index) => resolveString(color, `${path}[${index}]`) ?? color,
+      )
     }
 
     return undefined
