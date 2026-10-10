@@ -1,7 +1,7 @@
 {
   "name": "chartjs-plugin-tailwindcss-colors",
   "version": "0.2.5",
-  "author": "Danry Parens Patriae Ague <ague.danryparenspatriae@gmail.com>",
+  "author": "Danry Ague <contact@danry.dev>",
   "description": "Colorize your Chart.js components using TailwindCSS!",
   "license": "MIT",
   "source": "src/index.ts",
@@ -55,9 +55,9 @@
     "default": "./dist/index.cjs"
   },
   "dependencies": {
-    "color-name": "^2.0.0",
-    "lodash": "^4.17.21",
-    "tiny-invariant": "^1.3.1"
+    "color-name": "^2.1.1",
+    "lodash": "^4.18.1",
+    "tiny-invariant": "^1.3.3"
   },
   "devDependencies": {
     "@electron/remote": "^2.1.3",

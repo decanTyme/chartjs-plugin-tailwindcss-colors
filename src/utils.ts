@@ -2,28 +2,49 @@ import Colors from "color-name"
 
 import type { NamedColor } from "./types"
 
-const VALID_HEX = /^#([\da-f]{3}|[\da-f]{6})([\da-f]{2})?/i
-const VALID_TW_COLOR_CLASS = /^[a-z]+-\d{2,3}(?![\w-]+)/i
-const VALID_COLOR_FORM = `${VALID_HEX.source}|${VALID_TW_COLOR_CLASS.source}`
-const VALID_ALPHA = /\/(?=(\b([1-9]|[1-9]\d|100)\b))/i
+export interface ColorWithAlpha {
+  color: string
+  alpha: number
+}
+
+const VALID_HEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/i
+const VALID_TW_COLOR_CLASS = /^[a-z]+-\d{2,3}$/i
+const VALID_ALPHA = /^(?:[1-9]\d?|100)$/
+const NATIVE_CSS_COLOR =
+  /^\s*(?:(?:rgba?|hsla?|hwb|(?:ok)?lab|(?:ok)?lch|color(?:-mix)?|light-dark)\(|transparent\s*$)/i
 
 export const isParsableString = (value: unknown): value is string =>
   typeof value === "string" &&
-  // No need to parse these as chart.js can readily accept it
-  !/rgba?|hsla?|transparent/i.test(value)
+  // Chart.js accepts native CSS colors without conversion.
+  !NATIVE_CSS_COLOR.test(value)
 
 export const isValidArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((v) => typeof v === "string")
 
 export const isHex = (value: string): boolean => VALID_HEX.test(value)
 export const isNamedColor = (value: string): value is NamedColor =>
-  value in Colors
+  Object.hasOwn(Colors, value) && Array.isArray(Colors[value as NamedColor])
 
 /**
- * Checks first if the color is in a valid form, then
- * checks if it has a valid `alpha` color channel.
+ * Validates the color and opacity together, returning both so callers
+ * can reuse them without splitting the input again.
  */
+export const parseAlpha = (value: string): ColorWithAlpha | undefined => {
+  const parts = value.trim().split("/")
+
+  if (parts.length !== 2) return undefined
+
+  const [color, alpha] = parts
+
+  if (
+    !VALID_ALPHA.test(alpha) ||
+    !(isNamedColor(color) || isHex(color) || VALID_TW_COLOR_CLASS.test(color))
+  ) {
+    return undefined
+  }
+
+  return { color, alpha: Number.parseInt(alpha, 10) / 100 }
+}
+
 export const hasValidAlpha = (value: string): boolean =>
-  // TODO There should be room for improvement here
-  (isNamedColor(value.split("/")[0]) && VALID_ALPHA.test(value)) || // named colors
-  new RegExp(`(?:${VALID_COLOR_FORM})${VALID_ALPHA.source}`).test(value)
+  parseAlpha(value) !== undefined

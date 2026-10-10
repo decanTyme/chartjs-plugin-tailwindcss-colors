@@ -36,16 +36,21 @@ class TailwindColorsParser {
 
     if (!utils.isParsableString(value)) return value
 
-    if (utils.hasValidAlpha(value)) {
-      const [color, alpha] = value.split("/")
+    const alphaColor = this.getAlphaColor(value)
 
+    if (alphaColor !== undefined) {
       return formatColor({
-        ...parseColor(this.colorPalette[color.trim()] ?? color),
-        alpha: Number.parseInt(alpha, 10) / 100,
+        ...parseColor(alphaColor.color),
+        alpha: alphaColor.alpha,
       })
     }
 
-    return this.colorPalette[value.trim()] ?? formatColor(parseColor(value))
+    const color = value.trim()
+    const paletteColor = this.getPaletteColor(color)
+
+    if (paletteColor !== undefined) return paletteColor
+
+    return formatColor(parseColor(color))
   }
 
   /**
@@ -59,8 +64,7 @@ class TailwindColorsParser {
     if (!value) return false
 
     if (!strict) {
-      // Since some colors are stored in arrays, assuming all values
-      // in the array are strings, the array itself is valid
+      // Parse each array entry; unsupported values fail during conversion.
       if (utils.isValidArray(value)) return true
 
       if (!utils.isParsableString(value)) return false
@@ -75,14 +79,38 @@ class TailwindColorsParser {
 
       // Ignore hex and named colors without a valid alpha
       return (
-        Object.hasOwn(this.colorPalette, value) || utils.hasValidAlpha(value)
+        this.getPaletteColor(value.trim()) !== undefined ||
+        this.getAlphaColor(value) !== undefined
       )
     }
 
     // Strictly from the specified config
     return (
-      utils.isParsableString(value) && Object.hasOwn(this.colorPalette, value)
+      utils.isParsableString(value) &&
+      this.getPaletteColor(value.trim()) !== undefined
     )
+  }
+
+  private getPaletteColor(value: string): string | undefined {
+    // Color names must never resolve through the palette's prototype.
+    return Object.hasOwn(this.colorPalette, value)
+      ? this.colorPalette[value]
+      : undefined
+  }
+
+  private getAlphaColor(value: string): utils.ColorWithAlpha | undefined {
+    const alphaColor = utils.parseAlpha(value)
+
+    if (alphaColor === undefined) return undefined
+
+    const { color, alpha } = alphaColor
+    const resolvedColor = (this.getPaletteColor(color) ?? color).trim()
+
+    return utils.isHex(resolvedColor) ||
+      utils.isNamedColor(resolvedColor) ||
+      resolvedColor === "transparent"
+      ? { color: resolvedColor, alpha }
+      : undefined
   }
 }
 
