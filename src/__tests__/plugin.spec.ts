@@ -21,6 +21,33 @@ describe("Plugin works as expected", () => {
   })
 })
 
+describe("Plugin preserves native CSS colors", () => {
+  afterEach(releaseCharts)
+
+  test.each([
+    "color(srgb 1 0 0)",
+    "color-mix(in srgb, red 50%, blue)",
+    "light-dark(rgb(1 2 3), rgb(4 5 6))",
+  ])("preserves %s in arrays during creation and updates", (color) => {
+    const dataset = { data: [1, 2], backgroundColor: [color, "red-500"] }
+
+    const chart = acquireChart({
+      type: "bar",
+      data: { labels: ["A", "B"], datasets: [dataset] },
+      plugins: [plugin],
+    })
+
+    expect(dataset.backgroundColor).toEqual([color, "#ef4444"])
+
+    dataset.backgroundColor = [color, "blue-500/75"]
+
+    expect(() => {
+      chart.update()
+    }).not.toThrow()
+    expect(dataset.backgroundColor).toEqual([color, "rgb(59 130 246 / 0.75)"])
+  })
+})
+
 describe("Plugin handles untrusted color values", () => {
   afterEach(releaseCharts)
 

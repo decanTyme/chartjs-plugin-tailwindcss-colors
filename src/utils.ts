@@ -10,7 +10,8 @@ export interface ColorWithAlpha {
 const VALID_HEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/i
 const VALID_TW_COLOR_CLASS = /^[a-z]+-\d{2,3}$/i
 const VALID_ALPHA = /^(?:[1-9]\d?|100)$/
-const NATIVE_CSS_COLOR = /^\s*(?:(?:rgba?|hsla?)\(|transparent\s*$)/i
+const NATIVE_CSS_COLOR =
+  /^\s*(?:(?:rgba?|hsla?|hwb|(?:ok)?lab|(?:ok)?lch|color(?:-mix)?|light-dark)\(|transparent\s*$)/i
 
 export const isParsableString = (value: unknown): value is string =>
   typeof value === "string" &&

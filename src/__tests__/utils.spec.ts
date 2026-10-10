@@ -13,6 +13,15 @@ describe("Parsable string validator recognises native CSS colors", () => {
     " rgba(1, 2, 3, 0.5) ",
     "hsl(120 100% 50%)",
     " HSLA(120, 100%, 50%, 0.5) ",
+    "hwb(120 0% 0%)",
+    "lab(50% 20 30)",
+    "lch(50% 40 120)",
+    "oklab(50% 0.1 0.1)",
+    "oklch(50% 0.1 120)",
+    "color(srgb 1 0 0)",
+    "\tCOLOR(srgb 1 0 0)\n",
+    "color-mix(in srgb, red 50%, blue)",
+    "light-dark(rgb(1 2 3), rgb(4 5 6))",
     "\tTrAnSpArEnT\n",
   ])("skips native CSS color %s", (color) => {
     expect(isParsableString(color)).toBe(false)

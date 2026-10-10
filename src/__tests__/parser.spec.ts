@@ -24,6 +24,12 @@ describe("Parser", () => {
     "hsl-brand",
     "brand-transparent",
     "transparent-brand",
+    "brand-color",
+    "color-brand",
+    "brand-color-mix",
+    "color-mix-brand",
+    "brand-light-dark",
+    "light-dark-brand",
   ])("resolves configured alias %s containing a CSS color name", (color) => {
     const configuredParser = new TailwindColorsParser({
       content: [],
@@ -33,6 +39,22 @@ describe("Parser", () => {
     expect(configuredParser.isParsable(color)).toBe(true)
     expect(configuredParser.isParsable(color, { strict: true })).toBe(true)
     expect(configuredParser.parse(color)).toBe("#123456")
+  })
+
+  test.each([
+    "color(srgb 1 0 0)",
+    "color-mix(in srgb, red 50%, blue)",
+    "light-dark(rgb(1 2 3), rgb(4 5 6))",
+  ])("preserves native CSS color %s in a mixed array", (color) => {
+    const colors = [color, "red-500", "blue-500/75"]
+
+    expect(parser.isParsable(colors)).toBe(true)
+    expect(parser.parse(colors)).toEqual([
+      color,
+      "#ef4444",
+      "rgb(59 130 246 / 0.75)",
+    ])
+    expect(colors).toEqual([color, "red-500", "blue-500/75"])
   })
 })
 
