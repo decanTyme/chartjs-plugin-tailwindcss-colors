@@ -40,19 +40,20 @@ const twColorsPlugin = (
   const reportInvalidColor = (
     chart: Chart,
     value: string,
-    path: string,
+    getPath: () => string,
   ): void => {
     if (invalidColorHandling === "ignore") return
 
+    let warnings = warnedColors.get(chart)
+    if (invalidColorHandling !== "throw" && warnings?.has(value)) return
+
+    // Format the location and message only when a warning or error is reported.
     const prefix = "[chartjs-plugin-tailwindcss-colors]"
-    const message = `${prefix} Cannot resolve color ${JSON.stringify(value)} at ${path}.`
+    const message = `${prefix} Cannot resolve color ${JSON.stringify(value)} at ${getPath()}.`
 
     if (invalidColorHandling === "throw") {
       throw new Error(message)
     }
-
-    let warnings = warnedColors.get(chart)
-    if (warnings?.has(value)) return
 
     if (warnings === undefined) {
       warnings = new Set()
@@ -68,17 +69,17 @@ const twColorsPlugin = (
   const resolveColor = (
     chart: Chart,
     value: unknown,
-    path: string,
+    getPath: () => string,
   ): string[] | string | undefined => {
     const resolveString = (
       color: string,
-      colorPath: string,
+      getColorPath: () => string,
     ): string | undefined => {
       const result = parser.resolve(color)
 
       if (result.kind === "converted") return result.value
       if (result.kind === "invalid") {
-        reportInvalidColor(chart, color, colorPath)
+        reportInvalidColor(chart, color, getColorPath)
       }
 
       // Undefined means "leave this option alone". Returning the input color could
@@ -87,14 +88,15 @@ const twColorsPlugin = (
       return undefined
     }
 
-    if (typeof value === "string") return resolveString(value, path)
+    if (typeof value === "string") return resolveString(value, getPath)
 
     if (isValidArray(value)) {
       // Keep native colors and invalid colors allowed by warn/ignore as-is.
       // A throw stops map before the caller can assign any converted colors
       // from this array to its color option (for example, dataset.backgroundColor).
       return value.map(
-        (color, index) => resolveString(color, `${path}[${index}]`) ?? color,
+        (color, index) =>
+          resolveString(color, () => `${getPath()}[${index}]`) ?? color,
       )
     }
 
@@ -112,7 +114,7 @@ const twColorsPlugin = (
         const resolvedDefaultColor = resolveColor(
           chart,
           defaultOptColor,
-          `options.${parsableOpt}`,
+          () => `options.${parsableOpt}`,
         )
 
         if (resolvedDefaultColor !== undefined) {
@@ -124,7 +126,7 @@ const twColorsPlugin = (
           const resolvedDatasetColor = resolveColor(
             chart,
             datasetColor,
-            `data.datasets[${datasetIndex}].${parsableOpt}`,
+            () => `data.datasets[${datasetIndex}].${parsableOpt}`,
           )
 
           if (resolvedDatasetColor !== undefined) {
@@ -153,7 +155,7 @@ const twColorsPlugin = (
         const resolvedDatasetColor = resolveColor(
           chart,
           metaDatasetColor,
-          `data.datasets[${args.index}].${parsableOpt} (resolved)`,
+          () => `data.datasets[${args.index}].${parsableOpt} (resolved)`,
         )
 
         if (resolvedDatasetColor !== undefined) {
@@ -173,7 +175,8 @@ const twColorsPlugin = (
           const resolvedElementColor = resolveColor(
             chart,
             elementColor,
-            `data.datasets[${args.index}].${parsableOpt} (data index ${index})`,
+            () =>
+              `data.datasets[${args.index}].${parsableOpt} (data index ${index})`,
           )
 
           if (resolvedElementColor !== undefined) {
