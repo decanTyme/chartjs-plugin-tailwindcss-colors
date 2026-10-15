@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.6](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.5...v0.2.6) (2026-10-15)
+
+
+### Features
+
+* Make invalid color handling configurable ([#73](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/73)) ([34cdc01](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/34cdc014781ce39f27021f2d8e7d0aace4937550))
+
+
+### Bug Fixes
+
+* Safely handle invalid color inputs ([#70](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/70)) ([c089f3b](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/c089f3b520d958b84e47e737ce4f4c7e62ccc563))
+
 ## [0.2.5](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.4...v0.2.5) (2026-04-11)
 
 
