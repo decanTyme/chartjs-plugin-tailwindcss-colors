@@ -81,17 +81,18 @@ const twColorsPlugin = (
         reportInvalidColor(chart, color, colorPath)
       }
 
-      // Undefined tells scalar callers to skip assignment. Returning the original
-      // color could copy an inherited fallback onto the dataset as an explicit
-      // option, preventing later chart-default changes from reaching it.
+      // Undefined means "leave this option alone". Returning the input color could
+      // copy a chart default onto a dataset as an explicit color, so later changes
+      // to that chart default would no longer reach the dataset's color option.
       return undefined
     }
 
     if (typeof value === "string") return resolveString(value, path)
 
     if (isValidArray(value)) {
-      // Every array position needs a color, so keep the original entry when
-      // resolveString has no replacement.
+      // Keep native colors and invalid colors allowed by warn/ignore as-is.
+      // A throw stops map before the caller can assign any converted colors
+      // from this array to its color option (for example, dataset.backgroundColor).
       return value.map(
         (color, index) => resolveString(color, `${path}[${index}]`) ?? color,
       )
@@ -108,26 +109,26 @@ const twColorsPlugin = (
         const chartDefaultColor = get(chart.options, parsableOpt) as ValidValues
         const defaultOptColor = defaults[parsableOpt] ?? chartDefaultColor
 
-        const parsedDefaultColor = resolveColor(
+        const resolvedDefaultColor = resolveColor(
           chart,
           defaultOptColor,
           `options.${parsableOpt}`,
         )
 
-        if (parsedDefaultColor !== undefined) {
-          set(chart.options, parsableOpt, parsedDefaultColor)
+        if (resolvedDefaultColor !== undefined) {
+          set(chart.options, parsableOpt, resolvedDefaultColor)
         }
 
         chart.config.data.datasets.forEach((dataset, datasetIndex) => {
-          const color = get(dataset, parsableOpt, defaultOptColor)
-          const parsedColor = resolveColor(
+          const datasetColor = get(dataset, parsableOpt, defaultOptColor)
+          const resolvedDatasetColor = resolveColor(
             chart,
-            color,
+            datasetColor,
             `data.datasets[${datasetIndex}].${parsableOpt}`,
           )
 
-          if (parsedColor !== undefined) {
-            set(dataset, parsableOpt, parsedColor)
+          if (resolvedDatasetColor !== undefined) {
+            set(dataset, parsableOpt, resolvedDatasetColor)
           }
         })
       })
@@ -143,40 +144,40 @@ const twColorsPlugin = (
 
         if (!metaDataset) return
 
-        const metaDatasetOptionsColor = get(
+        const metaDatasetColor = get(
           metaDataset.options,
           parsableOpt,
           defaultOptColor,
         )
 
-        const parsedDatasetColor = resolveColor(
+        const resolvedDatasetColor = resolveColor(
           chart,
-          metaDatasetOptionsColor,
+          metaDatasetColor,
           `data.datasets[${args.index}].${parsableOpt} (resolved)`,
         )
 
-        if (parsedDatasetColor !== undefined) {
-          set(metaDataset.options, parsableOpt, parsedDatasetColor)
+        if (resolvedDatasetColor !== undefined) {
+          set(metaDataset.options, parsableOpt, resolvedDatasetColor)
         }
 
         const currentDataset = chart.data.datasets[args.index]
 
         currentDataset.data.forEach((_, index) => {
           const currentElement = args.meta.data[index]
-          const resolvedColor = get(
+          const elementColor = get(
             currentElement.options,
             parsableOpt,
             defaultOptColor,
           )
 
-          const parsedColor = resolveColor(
+          const resolvedElementColor = resolveColor(
             chart,
-            resolvedColor,
+            elementColor,
             `data.datasets[${args.index}].${parsableOpt} (data index ${index})`,
           )
 
-          if (parsedColor !== undefined) {
-            set(currentElement.options, parsableOpt, parsedColor)
+          if (resolvedElementColor !== undefined) {
+            set(currentElement.options, parsableOpt, resolvedElementColor)
           }
         })
       })

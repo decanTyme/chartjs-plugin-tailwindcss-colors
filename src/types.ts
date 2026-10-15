@@ -12,7 +12,11 @@ export type InvalidColorHandling = "ignore" | "throw" | "warn"
 
 export interface TwColorsPluginOptions {
   /**
-   * How to handle color values that the plugin cannot resolve.
+   * How to handle invalid colors.
+   * `warn` keeps them as-is and warns once per chart and color.
+   * `ignore` keeps them as-is without warnings.
+   * `throw` throws an error. If a color array contains an invalid entry,
+   * none of the converted colors from that array are applied to the chart.
    *
    * @default "warn"
    */

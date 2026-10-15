@@ -102,23 +102,27 @@ Now if a chart's parsable option is not configured, it will fallback to the valu
 
 ### Invalid Color Handling
 
-An optional third argument controls values that the plugin cannot resolve:
+By default, the plugin warns when it encounters an invalid color such as `red-500d`. To change this behavior, pass an options object as the third argument:
 
 ```js
 const plugin = twColorsPlugin(
   twConfig,
   {},
   {
-    invalidColorHandling: "warn", // default; also accepts "throw" or "ignore"
+    invalidColorHandling: "warn", // or "throw" / "ignore"
   },
 )
 ```
 
-- `"warn"`: Converts valid colors and preserves unresolved values, with one warning per chart and invalid value. Warnings include the option path and array index when applicable.
-- `"throw"`: Throws an error identifying the unresolved value and its location. An invalid array entry prevents that color array from being replaced.
-- `"ignore"`: Converts valid colors and silently preserves unresolved values.
+- `"warn"` (default): Leaves invalid colors as-is and continues converting valid colors. Each invalid color produces one warning per chart, including across updates.
+- `"throw"`: Throws an error when an invalid color is found. If it is in a color array, none of the converted colors from that array are applied to the chart.
+- `"ignore"`: Leaves invalid colors as-is and continues converting valid colors, without warnings.
 
-Native color strings, CSS functions, gradients, and patterns remain under Chart.js and browser handling. This option diagnoses plugin color values; it does not validate browser support for native CSS syntax.
+For example, with `backgroundColor: ["red-500", "red-500d"]`, `"warn"` and `"ignore"` apply `["#ef4444", "red-500d"]` to `backgroundColor`. With `"throw"`, the plugin throws an error and leaves `backgroundColor` as `["red-500", "red-500d"]`.
+
+Warnings and errors include the color option's path and the array or data index when applicable.
+
+Native CSS colors are passed through unchanged. Whether they render correctly depends on Chart.js and your browser.
 
 ## Why did I even make this?
 
