@@ -4,18 +4,31 @@ import tailwindConfig from "./tailwind.config"
 
 const parser = new TailwindColorsParser(tailwindConfig)
 
-describe("Parser", () => {
+describe("Parser resolves configured colors and opacity", () => {
   test.each`
-    color                          | output
-    ${"transparent"}               | ${"transparent"}
-    ${"black"}                     | ${"#000"}
-    ${"slate-700"}                 | ${"#334155"}
-    ${"main"}                      | ${"#5a65f6"}
-    ${"green-400/50"}              | ${"rgb(74 222 128 / 0.5)"}
-    ${["choco-300", "crimson/50"]} | ${["#6a533b", "rgb(220 20 60 / 0.5)"]}
-  `("`$color`", ({ color, output }) => {
-    expect(parser.parse(color)).toStrictEqual(output)
-  })
+    color             | output
+    ${"black"}        | ${"#000"}
+    ${"slate-700"}    | ${"#334155"}
+    ${"yellow-50"}    | ${"#fefce8"}
+    ${"red-100"}      | ${"#fee2e2"}
+    ${"main"}         | ${"#5a65f6"}
+    ${"choco-50"}     | ${"#987654"}
+    ${"choco-300"}    | ${"#6a533b"}
+    ${"stone-50"}     | ${"#fafaf9"}
+    ${"green-900"}    | ${"#14532d"}
+    ${"green-400/50"} | ${"rgb(74 222 128 / 0.5)"}
+    ${"crimson/50"}   | ${"rgb(220 20 60 / 0.5)"}
+    ${"stone-50/30"}  | ${"rgb(250 250 249 / 0.3)"}
+    ${"#3b82f6/75"}   | ${"rgb(59 130 246 / 0.75)"}
+  `(
+    "resolves $color",
+    ({ color, output }: { color: string; output: string }) => {
+      expect(parser.resolve(color)).toEqual({
+        kind: "converted",
+        value: output,
+      })
+    },
+  )
 
   test.each([
     "brand-rgb",
@@ -30,35 +43,62 @@ describe("Parser", () => {
     "color-mix-brand",
     "brand-light-dark",
     "light-dark-brand",
+    "RED",
+    "CanvasText",
+    "WindowText",
   ])("resolves configured alias %s containing a CSS color name", (color) => {
     const configuredParser = new TailwindColorsParser({
       content: [],
       theme: { colors: { [color]: "#123456" } },
     })
 
-    expect(configuredParser.isParsable(color)).toBe(true)
-    expect(configuredParser.isParsable(color, { strict: true })).toBe(true)
-    expect(configuredParser.parse(color)).toBe("#123456")
+    expect(configuredParser.resolve(color)).toEqual({
+      kind: "converted",
+      value: "#123456",
+    })
   })
 
-  test.each([
-    "color(srgb 1 0 0)",
-    "color-mix(in srgb, red 50%, blue)",
-    "light-dark(rgb(1 2 3), rgb(4 5 6))",
-  ])("preserves native CSS color %s in a mixed array", (color) => {
-    const colors = [color, "red-500", "blue-500/75"]
+  test("resolves configured aliases that shadow Object.prototype", () => {
+    const configuredParser = new TailwindColorsParser({
+      content: [],
+      theme: { colors: { constructor: "#123456", toString: "#654321" } },
+    })
 
-    expect(parser.isParsable(colors)).toBe(true)
-    expect(parser.parse(colors)).toEqual([
-      color,
-      "#ef4444",
-      "rgb(59 130 246 / 0.75)",
-    ])
-    expect(colors).toEqual([color, "red-500", "blue-500/75"])
+    expect(configuredParser.resolve("constructor")).toEqual({
+      kind: "converted",
+      value: "#123456",
+    })
+    expect(configuredParser.resolve("toString")).toEqual({
+      kind: "converted",
+      value: "#654321",
+    })
   })
 })
 
-describe("Parser handles invalid color input", () => {
+describe("Parser recognizes native CSS colors", () => {
+  test.each([
+    "rgb(1 2 3)",
+    "color(srgb 1 0 0)",
+    "color-mix(in srgb, red 50%, blue)",
+    "light-dark(rgb(1 2 3), rgb(4 5 6))",
+    "transparent",
+    "currentColor",
+    "bisque",
+    "#fff",
+    "#fff8",
+    "#c08240",
+    "#c0824066",
+    "RED",
+    "RebeccaPurple",
+    "CanvasText",
+    "\tCanvasText\n",
+    "WindowText",
+  ])("leaves %s to the browser", (color) => {
+    expect(parser.resolve(color)).toEqual({ kind: "native" })
+  })
+})
+
+describe("Parser identifies invalid colors without choosing a handling mode", () => {
   test.each([
     "constructor",
     "toString",
@@ -73,35 +113,27 @@ describe("Parser handles invalid color input", () => {
     "#fff/50.5",
     "red-999/50",
     "not-a-color",
-  ])("rejects %s before automatic conversion", (color) => {
-    expect(parser.isParsable(color)).toBe(false)
-    expect(() => parser.parse(color)).toThrow()
+    "orange-90",
+    "pink-250",
+    "indigo-0",
+    "mango-200",
+    "",
+    " ",
+    "emerald-",
+    "purple-cyan",
+    "slate-0",
+    "#cyan-900",
+    "#cyan-900/55",
+    "##cyan-900/55",
+    "b69576",
+    "##b69576",
+    "b69576/",
+    "zinc",
+  ])("identifies %s as invalid", (color) => {
+    expect(parser.resolve(color)).toEqual({ kind: "invalid" })
   })
 
-  test("does not partially convert an array with an invalid entry", () => {
-    const colors = ["red-500", "not-a-color", "__proto__/50", "crimson/50"]
-
-    expect(() => parser.parse(colors)).toThrow("Invalid value: not-a-color")
-    expect(colors).toEqual([
-      "red-500",
-      "not-a-color",
-      "__proto__/50",
-      "crimson/50",
-    ])
-  })
-
-  test("preserves configured color aliases that shadow Object.prototype", () => {
-    const configuredParser = new TailwindColorsParser({
-      content: [],
-      theme: { colors: { constructor: "#123456", toString: "#654321" } },
-    })
-
-    expect(configuredParser.isParsable("constructor")).toBe(true)
-    expect(configuredParser.parse("constructor")).toBe("#123456")
-    expect(configuredParser.parse("toString")).toBe("#654321")
-  })
-
-  test("rejects palette values that cannot be converted to RGB with opacity", () => {
+  test("identifies palette values that cannot be converted to RGB with opacity", () => {
     const configuredParser = new TailwindColorsParser({
       content: [],
       theme: {
@@ -112,97 +144,15 @@ describe("Parser handles invalid color input", () => {
       },
     })
 
-    expect(configuredParser.parse("custom-500")).toBe("var(--chart-color)")
-    expect(configuredParser.isParsable("custom-500/50")).toBe(false)
-    expect(() => configuredParser.parse("custom-500/50")).toThrow()
-    expect(() => configuredParser.parse("custom-600/50")).toThrow()
-  })
-})
-
-describe("Validator is working with configured colors only (strict)", () => {
-  test.each`
-    color            | output   | status
-    ${"black"}       | ${true}  | ${"valid"}
-    ${"yellow-50"}   | ${true}  | ${"valid"}
-    ${"red-100"}     | ${true}  | ${"valid"}
-    ${"transparent"} | ${false} | ${"skipped"}
-    ${"orange-90"}   | ${false} | ${"invalid"}
-    ${"pink-250"}    | ${false} | ${"invalid"}
-    ${"indigo-0"}    | ${false} | ${"invalid"}
-    ${"#c08240"}     | ${false} | ${"invalid"}
-  `("if `$color` is $status", ({ color, output }) => {
-    expect(parser.isParsable(color, { strict: true })).toBe(output)
-  })
-})
-
-describe("Validator is working (non-strict)", () => {
-  test("If arrays with valid values should be parsed", () => {
-    expect(parser.isParsable(["red-600", "#3b82f6/75"])).toBe(true)
-  })
-
-  test.each`
-    color            | output   | status
-    ${"black"}       | ${true}  | ${"valid"}
-    ${"transparent"} | ${false} | ${"skipped"}
-    ${""}            | ${false} | ${"invalid"}
-  `("if `$color` is $status", ({ color, output }) => {
-    expect(parser.isParsable(color)).toBe(output)
-  })
-
-  test.each`
-    value              | output   | status
-    ${"stone-50"}      | ${true}  | ${"be"}
-    ${"stone-50/30"}   | ${true}  | ${"be"}
-    ${"green-900"}     | ${true}  | ${"be"}
-    ${" "}             | ${false} | ${"not be"}
-    ${"bisque"}        | ${false} | ${"not be"}
-    ${"#c08240"}       | ${false} | ${"not be"}
-    ${"#c0824066"}     | ${false} | ${"not be"}
-    ${"emerald-"}      | ${false} | ${"not be"}
-    ${"purple-cyan"}   | ${false} | ${"not be"}
-    ${"slate-0"}       | ${false} | ${"not be"}
-    ${"#cyan-900"}     | ${false} | ${"not be"}
-    ${"#cyan-900/55"}  | ${false} | ${"not be"}
-    ${"##cyan-900/55"} | ${false} | ${"not be"}
-    ${"b69576"}        | ${false} | ${"not be"}
-    ${"##b69576"}      | ${false} | ${"not be"}
-    ${"b69576/"}       | ${false} | ${"not be"}
-  `("if `$value` should $status parsed", ({ value, output }) => {
-    expect(parser.isParsable(value)).toBe(output)
-  })
-
-  test.each`
-    color             | output   | status
-    ${"#c08240"}      | ${true}  | ${"is"}
-    ${"#c0824066"}    | ${true}  | ${"is"}
-    ${"#cyan-900"}    | ${false} | ${"is not"}
-    ${"#cyan-900/55"} | ${false} | ${"is not"}
-  `(
-    "If `$color` $status parsed when the `hex` flag is passed",
-    ({ color, output }) => {
-      expect(parser.isParsable(color, { hex: true })).toBe(output)
-    },
-  )
-
-  test.each`
-    color       | output   | status
-    ${"bisque"} | ${true}  | ${"is"}
-    ${"zinc"}   | ${false} | ${"is not"}
-  `(
-    "If `$color` $status parsed when the `named` flag is passed",
-    ({ color, output }) => {
-      expect(parser.isParsable(color, { named: true })).toBe(output)
-    },
-  )
-})
-
-describe("Validator is working with extended colors (strict)", () => {
-  test.each`
-    color          | output   | status
-    ${"main"}      | ${true}  | ${"valid"}
-    ${"choco-50"}  | ${true}  | ${"valid"}
-    ${"mango-200"} | ${false} | ${"invalid"}
-  `("if `$color` is $status", ({ color, output }) => {
-    expect(parser.isParsable(color, { strict: true })).toBe(output)
+    expect(configuredParser.resolve("custom-500")).toEqual({
+      kind: "converted",
+      value: "var(--chart-color)",
+    })
+    expect(configuredParser.resolve("custom-500/50")).toEqual({
+      kind: "invalid",
+    })
+    expect(configuredParser.resolve("custom-600/50")).toEqual({
+      kind: "invalid",
+    })
   })
 })

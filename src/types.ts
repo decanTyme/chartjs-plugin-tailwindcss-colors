@@ -8,6 +8,26 @@ export type ValidValues = Scriptable<string, AnyObject> | string[] | string
 
 export type NamedColor = keyof typeof Colors
 
+export type InvalidColorHandling = "ignore" | "throw" | "warn"
+
+export interface TwColorsPluginOptions {
+  /**
+   * How to handle invalid colors.
+   * `warn` keeps them as-is and warns once per chart and color.
+   * `ignore` keeps them as-is without warnings.
+   * `throw` throws an error. If a color array contains an invalid entry,
+   * none of the converted colors from that array are applied to the chart.
+   *
+   * @default "warn"
+   */
+  invalidColorHandling?: InvalidColorHandling
+}
+
+export type ColorResult =
+  | { kind: "converted"; value: string }
+  | { kind: "invalid" }
+  | { kind: "native" }
+
 export interface ParsableOptions extends Record<string, string[] | string> {
   color: string
   borderColor: string
@@ -24,27 +44,6 @@ export interface Color {
   mode: "hsl" | "rgb"
   values: string[]
   alpha?: number | string
-}
-
-export interface TwColorValidatorOptions {
-  /**
-   * @default false
-   */
-  strict?: boolean
-
-  /**
-   * If `true` and `strict` is `false`, hex values are also parsed.
-   *
-   * @default false
-   */
-  hex?: boolean
-
-  /**
-   * If `true` and `strict` is `false`, named colors are also parsed.
-   *
-   * @default false
-   */
-  named?: boolean
 }
 
 // Bring back types from stub `@types/tailwindcss`
