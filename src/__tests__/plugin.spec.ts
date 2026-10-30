@@ -1,4 +1,4 @@
-import type { ChartDataset } from "chart.js"
+import type { ChartDataset, ScriptableContext } from "chart.js"
 
 import { BarElement, Chart } from "chart.js"
 
@@ -8,6 +8,15 @@ import twColorsPlugin from ".."
 import twConfig from "./tailwind.config"
 
 const plugin = twColorsPlugin(twConfig)
+
+const chartTypesWithoutDatasetElement = [
+  "bar",
+  "bubble",
+  "doughnut",
+  "pie",
+  "polarArea",
+  "scatter",
+] as const
 
 describe("Plugin works as expected", () => {
   describe.each([
@@ -23,6 +32,48 @@ describe("Plugin works as expected", () => {
   ])("`%s`", (name) => {
     specsFromFixtures(name, [plugin], { wait: { fail: 30_000 } })()
   })
+})
+
+describe("Plugin updates scriptable colors", () => {
+  afterEach(releaseCharts)
+
+  test.each(chartTypesWithoutDatasetElement)(
+    "updates scriptable %s colors without replacing the callback",
+    (type) => {
+      let colors = ["red-500", "blue-500/50"]
+      const backgroundColor = ({
+        dataIndex,
+      }: ScriptableContext<typeof type>): string => colors[dataIndex]
+
+      const dataset = {
+        data:
+          type === "bubble" || type === "scatter"
+            ? [
+                { x: 1, y: 1, r: 8 },
+                { x: 2, y: 2, r: 8 },
+              ]
+            : [1, 2],
+        backgroundColor,
+      }
+
+      const chart = acquireChart({
+        type,
+        data: { labels: ["A", "B"], datasets: [dataset] },
+        options: { plugins: { legend: { display: false } } },
+        plugins: [twColorsPlugin(twConfig)],
+      })
+
+      colors = ["green-600/75", "rgb(1 2 3)"]
+      chart.update()
+
+      expect(
+        chart
+          .getDatasetMeta(0)
+          .data.map((element) => element.options.backgroundColor),
+      ).toEqual(["rgb(22 163 74 / 0.75)", "rgb(1 2 3)"])
+      expect(dataset.backgroundColor).toBe(backgroundColor)
+    },
+  )
 })
 
 describe("Plugin preserves native CSS colors", () => {
@@ -63,6 +114,45 @@ describe("Plugin handles untrusted color values", () => {
     releaseCharts()
     jest.restoreAllMocks()
   })
+
+  test.each(["warn", "ignore", "throw"] as const)(
+    "applies %s handling to invalid scriptable colors during updates",
+    (invalidColorHandling) => {
+      let color = "red-500"
+      const chart = acquireChart({
+        type: "bar",
+        data: {
+          labels: ["A", "B"],
+          datasets: [{ data: [1, 2], backgroundColor: (): string => color }],
+        },
+        plugins: [twColorsPlugin(twConfig, {}, { invalidColorHandling })],
+      })
+
+      color = "not-a-color"
+      const message =
+        '[chartjs-plugin-tailwindcss-colors] Cannot resolve color "not-a-color" at data.datasets[0].backgroundColor (data index 0).'
+
+      let updateError: unknown
+      try {
+        chart.update()
+        chart.update()
+      } catch (error) {
+        updateError = error
+      }
+
+      expect(updateError).toEqual(
+        invalidColorHandling === "throw" ? new Error(message) : undefined,
+      )
+      expect(
+        chart
+          .getDatasetMeta(0)
+          .data.map((element) => element.options.backgroundColor),
+      ).toEqual([color, color])
+      expect(warn.mock.calls).toEqual(
+        invalidColorHandling === "warn" ? [[message]] : [],
+      )
+    },
+  )
 
   test("warns once per chart and value during creation and updates", () => {
     const color = "constructor/50"

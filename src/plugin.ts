@@ -144,22 +144,23 @@ const twColorsPlugin = (
 
         const metaDataset = args.meta.dataset
 
-        if (!metaDataset) return
+        // Charts can have individual bars, arcs, or points without a dataset element.
+        if (metaDataset) {
+          const metaDatasetColor = get(
+            metaDataset.options,
+            parsableOpt,
+            defaultOptColor,
+          )
 
-        const metaDatasetColor = get(
-          metaDataset.options,
-          parsableOpt,
-          defaultOptColor,
-        )
+          const resolvedDatasetColor = resolveColor(
+            chart,
+            metaDatasetColor,
+            () => `data.datasets[${args.index}].${parsableOpt} (resolved)`,
+          )
 
-        const resolvedDatasetColor = resolveColor(
-          chart,
-          metaDatasetColor,
-          () => `data.datasets[${args.index}].${parsableOpt} (resolved)`,
-        )
-
-        if (resolvedDatasetColor !== undefined) {
-          set(metaDataset.options, parsableOpt, resolvedDatasetColor)
+          if (resolvedDatasetColor !== undefined) {
+            set(metaDataset.options, parsableOpt, resolvedDatasetColor)
+          }
         }
 
         const currentDataset = chart.data.datasets[args.index]
