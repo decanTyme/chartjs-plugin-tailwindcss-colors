@@ -1,6 +1,6 @@
 # chartjs-plugin-tailwindcss-colors
 
-![pnpm current](https://img.shields.io/badge/pnpm-v10-blue)
+![pnpm current](https://img.shields.io/badge/pnpm-v12-blue)
 ![chart.js peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/chart.js)
 ![tailwindcss peer dependency version](https://img.shields.io/npm/dependency-version/chartjs-plugin-tailwindcss-colors/peer/tailwindcss)
 ![npm type definitions](https://img.shields.io/npm/types/chartjs-plugin-tailwindcss-colors)

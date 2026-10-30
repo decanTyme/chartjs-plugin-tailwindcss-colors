@@ -18,6 +18,8 @@ If there's any other details that may be related to the bug, it is encouraged to
 
 ## Local development
 
+Development uses the pnpm version pinned in `package.json`. Dependency checks fail when the installed packages are out of date; run `pnpm install` explicitly before running scripts again.
+
 Run `pnpm install` to install all the libraries, then run `pnpm dev` to build and run tests as you make changes.
 
 ## Pull requests

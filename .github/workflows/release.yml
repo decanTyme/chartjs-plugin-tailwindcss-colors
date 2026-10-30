@@ -23,7 +23,9 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/setup@v1
+        with:
+          install: false
         if: ${{ steps.release.outputs.release_created }}
 
       - name: Setup Node
@@ -35,7 +37,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
         if: ${{ steps.release.outputs.release_created }}
 
       - name: Stage NPM release
