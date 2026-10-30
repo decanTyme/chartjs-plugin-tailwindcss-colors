@@ -60,7 +60,7 @@ describe("Plugin updates scriptable colors", () => {
         type,
         data: { labels: ["A", "B"], datasets: [dataset] },
         options: { plugins: { legend: { display: false } } },
-        plugins: [twColorsPlugin(twConfig)],
+        plugins: [plugin],
       })
 
       colors = ["green-600/75", "rgb(1 2 3)"]

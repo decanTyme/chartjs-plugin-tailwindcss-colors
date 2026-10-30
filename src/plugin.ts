@@ -163,10 +163,7 @@ const twColorsPlugin = (
           }
         }
 
-        const currentDataset = chart.data.datasets[args.index]
-
-        currentDataset.data.forEach((_, index) => {
-          const currentElement = args.meta.data[index]
+        args.meta.data.forEach((currentElement, index) => {
           const elementColor = get(
             currentElement.options,
             parsableOpt,
