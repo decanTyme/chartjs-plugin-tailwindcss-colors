@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.6...v0.2.7) (2026-10-30)
+
+
+### Bug Fixes
+
+* Handle object-form datasets when resolving element colors ([#79](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/79)) ([63f083b](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/63f083b5231fd24c622e477c4c53e9da9e5436e3))
+* Resolve scriptable colors for charts without dataset elements ([#76](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/issues/76)) ([313b9d7](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/commit/313b9d726dd9b3a42273ecb47fcba9f6e537a2c0))
+
 ## [0.2.6](https://github.com/decanTyme/chartjs-plugin-tailwindcss-colors/compare/v0.2.5...v0.2.6) (2026-10-15)
 
 
