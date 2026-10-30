@@ -1,2 +1,5 @@
+minimumReleaseAge: 4320
+verifyDepsBeforeRun: error
+
 allowBuilds:
   electron: true
