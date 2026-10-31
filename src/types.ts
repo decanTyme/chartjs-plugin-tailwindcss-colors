@@ -23,10 +23,11 @@ export interface TwColorsPluginOptions {
   invalidColorHandling?: InvalidColorHandling
 }
 
-export type ColorResult =
+export type ColorResult = Readonly<
   | { kind: "converted"; value: string }
   | { kind: "invalid" }
   | { kind: "native" }
+>
 
 export interface ParsableOptions extends Record<string, string[] | string> {
   color: string

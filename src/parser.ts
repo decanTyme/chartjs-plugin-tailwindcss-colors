@@ -9,9 +9,14 @@ import type { ColorResult, Maybe, TailwindColorGroup } from "./types"
 import { flattenColorPalette, formatColor, parseColor } from "./color"
 import * as utils from "./utils"
 
+const maxCachedColors = 4096
+const nativeResult: ColorResult = Object.freeze({ kind: "native" })
+const invalidResult: ColorResult = Object.freeze({ kind: "invalid" })
+
 class TailwindColorsParser {
   public config: TailwindConfig
-  public colorPalette: TailwindColorGroup
+  readonly #colorPalette: TailwindColorGroup
+  readonly #cache = new Map<string, ColorResult>()
 
   public constructor(config: TailwindConfig) {
     const colors = {
@@ -20,16 +25,34 @@ class TailwindColorsParser {
 
     invariant(colors, "TailwindCSS theme colors is undefined!")
 
-    this.colorPalette = flattenColorPalette(colors)
+    // Freeze our snapshot without changing the caller's configuration.
+    this.#colorPalette = Object.freeze(flattenColorPalette(colors))
     this.config = config
   }
 
   /**
-   * Resolves a color once, leaving invalid-value handling to the plugin.
+   * Reuses immutable results for this palette, leaving invalid-value handling
+   * to the plugin so warnings and errors keep their chart-specific locations.
    */
   public resolve(value: string): ColorResult {
-    if (!utils.isParsableString(value)) return { kind: "native" }
+    if (!utils.isParsableString(value)) return nativeResult
 
+    const cache = this.#cache
+    const cached = cache.get(value)
+
+    if (cached !== undefined) return cached
+
+    const result = Object.freeze(this.resolveUncached(value))
+
+    // Start a fresh batch at the limit so later colors can still be reused.
+    if (cache.size === maxCachedColors) cache.clear()
+
+    cache.set(value, result)
+
+    return result
+  }
+
+  private resolveUncached(value: string): ColorResult {
     const color = value.trim()
 
     if (color.includes("/")) {
@@ -53,15 +76,15 @@ class TailwindColorsParser {
     }
 
     return utils.isHex(color) || utils.isNativeColorKeyword(color)
-      ? { kind: "native" }
-      : { kind: "invalid" }
+      ? nativeResult
+      : invalidResult
   }
 
   private getPaletteColor(value: string): string | undefined {
+    const palette = this.#colorPalette
+
     // Color names must never resolve through the palette's prototype.
-    return Object.hasOwn(this.colorPalette, value)
-      ? this.colorPalette[value]
-      : undefined
+    return Object.hasOwn(palette, value) ? palette[value] : undefined
   }
 
   private getAlphaColor(value: string): utils.ColorWithAlpha | undefined {
