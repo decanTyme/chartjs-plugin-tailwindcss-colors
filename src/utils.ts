@@ -1,6 +1,6 @@
 import Colors from "color-name"
 
-import type { NamedColor } from "./types"
+import type { NamedColor, TailwindColorGroup } from "./types"
 
 export interface ColorWithAlpha {
   color: string
@@ -84,7 +84,10 @@ export const isNativeColorKeyword = (value: string): boolean => {
  * Validates the color and opacity together, returning both so callers
  * can reuse them without splitting the input again.
  */
-export const parseAlpha = (value: string): ColorWithAlpha | undefined => {
+export const parseAlpha = (
+  value: string,
+  palette?: TailwindColorGroup,
+): ColorWithAlpha | undefined => {
   const parts = value.trim().split("/")
 
   if (parts.length !== 2) return undefined
@@ -93,7 +96,12 @@ export const parseAlpha = (value: string): ColorWithAlpha | undefined => {
 
   if (
     !VALID_ALPHA.test(alpha) ||
-    !(isNamedColor(color) || isHex(color) || VALID_TW_COLOR_CLASS.test(color))
+    !(
+      isNamedColor(color) ||
+      isHex(color) ||
+      VALID_TW_COLOR_CLASS.test(color) ||
+      (palette !== undefined && Object.hasOwn(palette, color))
+    )
   ) {
     return undefined
   }

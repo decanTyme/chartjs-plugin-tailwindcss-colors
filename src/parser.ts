@@ -88,7 +88,7 @@ class TailwindColorsParser {
   }
 
   private getAlphaColor(value: string): utils.ColorWithAlpha | undefined {
-    const alphaColor = utils.parseAlpha(value)
+    const alphaColor = utils.parseAlpha(value, this.#colorPalette)
 
     if (alphaColor === undefined) return undefined
 

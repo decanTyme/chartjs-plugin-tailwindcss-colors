@@ -12,7 +12,7 @@ module.exports = {
             "#3b82f6/75",
             "choco-200",
             "navy",
-            "purple-900/60",
+            "brand-primary/60",
             "orange/25",
           ],
         },
