@@ -4,6 +4,93 @@ import tailwindConfig from "./tailwind.config"
 
 const parser = new TailwindColorsParser(tailwindConfig)
 
+describe("Parser keeps palette snapshots and results immutable", () => {
+  test.each([
+    {
+      color: "red-500",
+      expected: { kind: "converted", value: "#ef4444" },
+    },
+    { color: "rgb(1 2 3)", expected: { kind: "native" } },
+    { color: "not-a-color", expected: { kind: "invalid" } },
+  ])(
+    "protects the result of $color from caller mutation",
+    ({ color, expected }) => {
+      const result = parser.resolve(color)
+
+      expect(Object.isFrozen(result)).toBe(true)
+      expect(Reflect.set(result, "kind", "invalid")).toBe(false)
+      expect(Reflect.set(result, "value", "#000000")).toBe(false)
+      expect(parser.resolve(color)).toBe(result)
+      expect(parser.resolve(color)).toEqual(expected)
+    },
+  )
+
+  test("keeps the original palette when caller configuration changes", () => {
+    const colors = { brand: "#123456", accent: "#abcdef" }
+    const config = { content: [], theme: { colors } }
+    const original = new TailwindColorsParser(config)
+
+    original.resolve("brand")
+    colors.brand = "#654321"
+    colors.accent = "#fedcba"
+
+    const replacement = new TailwindColorsParser(config)
+
+    expect(original.resolve("brand")).toEqual({
+      kind: "converted",
+      value: "#123456",
+    })
+    expect(original.resolve("accent")).toEqual({
+      kind: "converted",
+      value: "#abcdef",
+    })
+    expect(replacement.resolve("brand")).toEqual({
+      kind: "converted",
+      value: "#654321",
+    })
+    expect(replacement.resolve("accent")).toEqual({
+      kind: "converted",
+      value: "#fedcba",
+    })
+  })
+
+  test("keeps case-sensitive aliases distinct across repeated lookups", () => {
+    const configured = new TailwindColorsParser({
+      content: [],
+      theme: { colors: { RED: "#123456", red: "#654321" } },
+    })
+
+    for (let index = 0; index < 2; index++) {
+      expect(configured.resolve("RED")).toEqual({
+        kind: "converted",
+        value: "#123456",
+      })
+      expect(configured.resolve("red")).toEqual({
+        kind: "converted",
+        value: "#654321",
+      })
+    }
+  })
+
+  test("resolves diverse colors after the cache has filled", () => {
+    const configured = new TailwindColorsParser(tailwindConfig)
+
+    for (let index = 0; index < 5000; index++) {
+      const color = `#${index.toString(16).padStart(6, "0")}/50`
+
+      expect(configured.resolve(color)).toEqual({
+        kind: "converted",
+        value: `rgb(0 ${Math.floor(index / 256)} ${index % 256} / 0.5)`,
+      })
+    }
+
+    expect(configured.resolve("#000000/50")).toEqual({
+      kind: "converted",
+      value: "rgb(0 0 0 / 0.5)",
+    })
+  })
+})
+
 describe("Parser resolves configured colors and opacity", () => {
   test.each`
     color             | output
@@ -43,7 +130,6 @@ describe("Parser resolves configured colors and opacity", () => {
     "color-mix-brand",
     "brand-light-dark",
     "light-dark-brand",
-    "RED",
     "CanvasText",
     "WindowText",
   ])("resolves configured alias %s containing a CSS color name", (color) => {

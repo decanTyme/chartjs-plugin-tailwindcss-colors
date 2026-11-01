@@ -3,6 +3,10 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "module": "ESNext",
+    // TODO: Revisit ES2022 for a future major release after defining and testing
+    // the supported browser baseline. This emits native private fields, which
+    // older browsers cannot parse.
+    // "target": "ES2022",
     "moduleResolution": "Bundler",
     "isolatedModules": true,
     "resolveJsonModule": true

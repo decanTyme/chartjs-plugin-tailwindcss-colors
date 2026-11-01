@@ -79,27 +79,33 @@ describe("Plugin updates scriptable colors", () => {
 describe("Plugin preserves native CSS colors", () => {
   afterEach(releaseCharts)
 
-  test.each([
-    "color(srgb 1 0 0)",
-    "color-mix(in srgb, red 50%, blue)",
-    "light-dark(rgb(1 2 3), rgb(4 5 6))",
-  ])("preserves %s in arrays during creation and updates", (color) => {
-    const dataset = { data: [1, 2], backgroundColor: [color, "red-500"] }
+  test("preserves native CSS functions in arrays during creation and updates", () => {
+    const colors = [
+      "color(srgb 1 0 0)",
+      "color-mix(in srgb, red 50%, blue)",
+      "light-dark(rgb(1 2 3), rgb(4 5 6))",
+    ]
+
+    const dataset = {
+      data: [1, 2, 3, 4],
+      backgroundColor: [...colors, "red-500"],
+    }
 
     const chart = acquireChart({
       type: "bar",
-      data: { labels: ["A", "B"], datasets: [dataset] },
+      data: { labels: ["A", "B", "C", "D"], datasets: [dataset] },
       plugins: [plugin],
     })
 
-    expect(dataset.backgroundColor).toEqual([color, "#ef4444"])
+    expect(dataset.backgroundColor).toEqual([...colors, "#ef4444"])
 
-    dataset.backgroundColor = [color, "blue-500/75"]
+    dataset.backgroundColor = [...colors, "blue-500/75"]
+    chart.update()
 
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
-    expect(dataset.backgroundColor).toEqual([color, "rgb(59 130 246 / 0.75)"])
+    expect(dataset.backgroundColor).toEqual([
+      ...colors,
+      "rgb(59 130 246 / 0.75)",
+    ])
   })
 })
 
@@ -179,9 +185,7 @@ describe("Plugin handles untrusted color values", () => {
     dataset.backgroundColor = color
     dataset.borderColor = "blue-500/75"
 
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
+    chart.update()
     expect(dataset.backgroundColor).toBe(color)
     expect(dataset.borderColor).toBe("rgb(59 130 246 / 0.75)")
     expect(warn).toHaveBeenCalledTimes(1)
@@ -216,9 +220,7 @@ describe("Plugin handles untrusted color values", () => {
 
     dataset.backgroundColor = colors
 
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
+    chart.update()
     expect(dataset.backgroundColor).toEqual(expected)
     expect(warn).toHaveBeenCalledTimes(1)
   })
@@ -273,9 +275,7 @@ describe("Plugin handles untrusted color values", () => {
       plugins: [scriptablePlugin],
     })
 
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
+    chart.update()
     expect(warn).toHaveBeenCalledWith(
       expect.stringContaining('"custom-500/50"'),
     )
@@ -307,9 +307,8 @@ describe("Plugin handles untrusted color values", () => {
 
     expect(dataset.backgroundColor).toEqual(["#ef4444", "not-a-color"])
     expect(dataset.borderColor).toBe("red-999/50")
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
+
+    chart.update()
     expect(warn).not.toHaveBeenCalled()
   })
 
@@ -403,9 +402,8 @@ describe("Plugin handles untrusted color values", () => {
     expect(dataset.backgroundColor).toEqual(nativeColors)
     expect(dataset.borderColor).toBe("crimson")
     expect(chart.options.color).toBe("#123456")
-    expect(() => {
-      chart.update()
-    }).not.toThrow()
+
+    chart.update()
     expect(warn).not.toHaveBeenCalled()
   })
 
@@ -466,9 +464,7 @@ describe("Plugin handles untrusted color values", () => {
       scalarDataset.backgroundColor = "rEbEcCaPuRpLe"
       arrayDataset.backgroundColor = ["WindowText", "blue-500/75"]
 
-      expect(() => {
-        chart.update()
-      }).not.toThrow()
+      chart.update()
       expect(scalarDataset.backgroundColor).toBe("rEbEcCaPuRpLe")
       expect(arrayDataset.backgroundColor).toEqual([
         "WindowText",
@@ -532,9 +528,7 @@ describe("Plugin handles untrusted color values", () => {
         explicitDataset.backgroundColor = "RED"
         chart.options.backgroundColor = "green"
 
-        expect(() => {
-          chart.update()
-        }).not.toThrow()
+        chart.update()
         expect(chart.options.backgroundColor).toBe(expected)
         expect(fallbackDataset.backgroundColor).toBe(expected)
         expect(explicitDataset.backgroundColor).toBe("RED")
