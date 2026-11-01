@@ -93,20 +93,22 @@ describe("Parser keeps palette snapshots and results immutable", () => {
 
 describe("Parser resolves configured colors and opacity", () => {
   test.each`
-    color             | output
-    ${"black"}        | ${"#000"}
-    ${"slate-700"}    | ${"#334155"}
-    ${"yellow-50"}    | ${"#fefce8"}
-    ${"red-100"}      | ${"#fee2e2"}
-    ${"main"}         | ${"#5a65f6"}
-    ${"choco-50"}     | ${"#987654"}
-    ${"choco-300"}    | ${"#6a533b"}
-    ${"stone-50"}     | ${"#fafaf9"}
-    ${"green-900"}    | ${"#14532d"}
-    ${"green-400/50"} | ${"rgb(74 222 128 / 0.5)"}
-    ${"crimson/50"}   | ${"rgb(220 20 60 / 0.5)"}
-    ${"stone-50/30"}  | ${"rgb(250 250 249 / 0.3)"}
-    ${"#3b82f6/75"}   | ${"rgb(59 130 246 / 0.75)"}
+    color                 | output
+    ${"black"}            | ${"#000"}
+    ${"slate-700"}        | ${"#334155"}
+    ${"yellow-50"}        | ${"#fefce8"}
+    ${"red-100"}          | ${"#fee2e2"}
+    ${"main"}             | ${"#5a65f6"}
+    ${"main/50"}          | ${"rgb(90 101 246 / 0.5)"}
+    ${"brand-primary/60"} | ${"rgb(88 28 135 / 0.6)"}
+    ${"choco-50"}         | ${"#987654"}
+    ${"choco-300"}        | ${"#6a533b"}
+    ${"stone-50"}         | ${"#fafaf9"}
+    ${"green-900"}        | ${"#14532d"}
+    ${"green-400/50"}     | ${"rgb(74 222 128 / 0.5)"}
+    ${"crimson/50"}       | ${"rgb(220 20 60 / 0.5)"}
+    ${"stone-50/30"}      | ${"rgb(250 250 249 / 0.3)"}
+    ${"#3b82f6/75"}       | ${"rgb(59 130 246 / 0.75)"}
   `(
     "resolves $color",
     ({ color, output }: { color: string; output: string }) => {
@@ -142,6 +144,10 @@ describe("Parser resolves configured colors and opacity", () => {
       kind: "converted",
       value: "#123456",
     })
+    expect(configuredParser.resolve(`${color}/50`)).toEqual({
+      kind: "converted",
+      value: "rgb(18 52 86 / 0.5)",
+    })
   })
 
   test("resolves configured aliases that shadow Object.prototype", () => {
@@ -157,6 +163,14 @@ describe("Parser resolves configured colors and opacity", () => {
     expect(configuredParser.resolve("toString")).toEqual({
       kind: "converted",
       value: "#654321",
+    })
+    expect(configuredParser.resolve("constructor/50")).toEqual({
+      kind: "converted",
+      value: "rgb(18 52 86 / 0.5)",
+    })
+    expect(configuredParser.resolve("toString/50")).toEqual({
+      kind: "converted",
+      value: "rgb(101 67 33 / 0.5)",
     })
   })
 })
@@ -198,6 +212,8 @@ describe("Parser identifies invalid colors without choosing a handling mode", ()
     "#fff/50/extra",
     "#fff/50.5",
     "red-999/50",
+    "main/0",
+    "brand-primary/50/extra",
     "not-a-color",
     "orange-90",
     "pink-250",
@@ -224,20 +240,20 @@ describe("Parser identifies invalid colors without choosing a handling mode", ()
       content: [],
       theme: {
         colors: {
-          "custom-500": "var(--chart-color)",
-          "custom-600": "rgb(1 2 3)",
+          brand: "var(--chart-color)",
+          accent: "rgb(1 2 3)",
         },
       },
     })
 
-    expect(configuredParser.resolve("custom-500")).toEqual({
+    expect(configuredParser.resolve("brand")).toEqual({
       kind: "converted",
       value: "var(--chart-color)",
     })
-    expect(configuredParser.resolve("custom-500/50")).toEqual({
+    expect(configuredParser.resolve("brand/50")).toEqual({
       kind: "invalid",
     })
-    expect(configuredParser.resolve("custom-600/50")).toEqual({
+    expect(configuredParser.resolve("accent/50")).toEqual({
       kind: "invalid",
     })
   })
